@@ -22,7 +22,7 @@ public class Test
 			int x, y;
 			System.out.println("Coordonnées de la case : ");
 			x = Clavier.lire_int() - 1;
-			y = CLavier.lire_int() - 1;
+			y = Clavier.lire_int() - 1;
 			
 			plateau.getCase(x,y).ajouterZone(1);
 			System.out.println(plateau);
@@ -37,7 +37,7 @@ public class Test
 			int x, y;
 			System.out.println("Coordonnées de la case : ");
 			x = Clavier.lire_int() - 1;
-			y = CLavier.lire_int() - 1;
+			y = Clavier.lire_int() - 1;
 			
 			plateau.getCase(x,y).ajouterSommet("Test");
 			System.out.println(plateau);

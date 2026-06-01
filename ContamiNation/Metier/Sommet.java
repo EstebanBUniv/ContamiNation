@@ -12,4 +12,9 @@ public class Sommet
 		this.lstVoisins = new Sommet[8];
 		this.estBase = false;
 	}
+	
+	public String toString ()
+	{
+		return this.symbole;
+	}
 }

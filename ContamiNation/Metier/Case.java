@@ -32,7 +32,7 @@ public class Case
 	
 	public String toString()
 	{
-		return "(" + this.posX + "," + this.posY + ")";
+		return "(" + this.posX + "," + this.posY + ";" + this.zone + ";" + this.sommet + ")";
 	}
 	
 }
