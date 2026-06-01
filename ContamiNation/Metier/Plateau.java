@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Plateau
 {
-    private final ArrayList<Sommets> SOMMETS = new ArrayList<Sommets>();
+    private final ArrayList<Sommet> SOMMETS = new ArrayList<Sommet>();
    
     private int largeur;
     private int hauteur;
@@ -27,5 +27,5 @@ public class Plateau
         return this.tabCases[indice];
     }
     
-    
+
 }
