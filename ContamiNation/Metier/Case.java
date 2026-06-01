@@ -29,4 +29,10 @@ public class Case
 	{
 		this.sommet = new Sommet(symbole);
 	}
+	
+	public String toString()
+	{
+		return "(" + this.posX + "," + this.posY + ")";
+	}
+	
 }

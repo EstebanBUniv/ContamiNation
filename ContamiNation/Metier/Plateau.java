@@ -13,7 +13,7 @@ public class Plateau
 
 	private void creaCase()
     {
-        for (int i = 0; i<this.hauteur; i++ )
+        for (int i = 0; i < this.hauteur; i++ )
         {
             for(int j = 0; j < this.largeur; j++)
             {
@@ -43,7 +43,7 @@ public class Plateau
     {
         String res = "";
 
-        for (int i = 0; i<this.hauteur; i++ )
+        for (int i = 0; i < this.hauteur; i++ )
         {
             for(int j = 0; j < this.largeur; j++)
             {
