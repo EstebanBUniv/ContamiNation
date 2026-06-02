@@ -20,6 +20,8 @@ public class Case
 	public void ajouterZone(int zone) { this.zone = zone; }
 	
 	public boolean verifZone()        { return this.zone != 0; }
+
+	public void supprimerZone() { this.zone = 0; }
 	
 	public void ajouterSommet(String symbole) { this.sommet = new Sommet(symbole); }
 	
