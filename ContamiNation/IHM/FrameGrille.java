@@ -48,4 +48,9 @@ public class FrameGrille extends JFrame
 	{
 		return ctrl.getCase(lig, col);
 	}
+
+	public void fermer()
+	{
+		this.dispose();
+	}
 }
