@@ -66,6 +66,53 @@ public class Plateau
 		
 		this.tabCases[x][y].ajouterZone(numZone);
 	}
+	
+	public void relierTousLesSommets()
+	{
+		for (int i = 0; i < this.hauteur; i++)
+		{
+			for(int j = 0; j < this.largeur; j++)
+			{
+				Sommet sommetCourant = this.tabCases[i][j].getSommet();
+				
+				if (sommetCourant != null)
+				{
+					chercherVoisins(i, j, sommetCourant);
+				}
+			}
+		}
+	}
+	
+	private void chercherVoisins(int x, int y, Sommet sommetCourant)
+	{
+		int[][] directions = {
+			{-1, 0}, {1, 0}, {0, -1}, {0, 1}, 
+			{-1, -1}, {-1, 1}, {1, -1}, {1, 1}
+		};
+		
+		for (int i = 0; i < directions.length; i++)
+		{
+			int dx = directions[i][0];
+			int dy = directions[i][1];
+			
+			int xCherche = x + dx;
+			int yCherche = y + dy;
+			
+			boolean continuer = true;
+			while (xCherche >= 0 && xCherche < this.hauteur && yCherche >= 0 && yCherche < this.largeur && continuer)
+			{
+				Sommet sommetTrouve = this.tabCases[xCherche][yCherche].getSommet();
+				
+				if (sommetTrouve != null)
+				{
+					sommetCourant.ajouterVoisin(i, sommetTrouve);
+					continuer = false; 
+				}
+				xCherche += dx;
+				yCherche += dy;
+			}
+		}
+	}
 
 	public String toString()
 	{

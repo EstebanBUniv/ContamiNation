@@ -37,6 +37,11 @@ public class Case
 		this.sommet = new Sommet(symbole);
 	}
 	
+	public Sommet getSommet()
+	{
+		return this.sommet;
+	}
+	
 	public String toString()
 	{
 		return "(" + this.posX + "," + this.posY + ";" + this.zone + ";" + this.sommet + ")";
