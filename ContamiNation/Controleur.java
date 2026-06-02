@@ -38,4 +38,9 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 
+	public Case getCase(int lig, int col)
+	{
+		return this.plateau.getCase(lig, col);
+	}
+
 }
