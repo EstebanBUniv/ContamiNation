@@ -26,14 +26,14 @@ public class Plateau
 		}
 	}
 	
-	public static Plateau creerPlateau(int col, int lig, int nbCouleur, Controleur ctrl)
+	public static Plateau creerPlateau(int lig, int col, int nbCouleur, Controleur ctrl)
 	{
 		if ( col <= 0 || lig <= 0 || nbCouleur <=1)
 				return null;
-		return new Plateau(col, lig, nbCouleur, ctrl);
+		return new Plateau(lig, col, nbCouleur, ctrl);
 	}
 
-	private Plateau(int col, int lig, int nbCouleur, Controleur ctrl)
+	private Plateau(int lig, int col, int nbCouleur, Controleur ctrl)
 	{
 		this.ctrl = ctrl;
 		
@@ -131,7 +131,7 @@ public class Plateau
 		{
 			for(int col = 0; col < this.col; col++)
 			{
-				this.ctrl.initBtn(this.tabCases[lig][col] + "", col, lig) ;
+				this.ctrl.initBtn(this.tabCases[lig][col] + "", lig, col) ;
 			}
 		}
 	}

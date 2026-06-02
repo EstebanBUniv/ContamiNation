@@ -20,10 +20,10 @@ public class Controleur
 		new Controleur();
 	}
 
-	public void creerPlateau(int hauteur, int largeur, int nbCouleur)
+	public void creerPlateau(int lig, int col, int nbCouleur)
 	{
-		this.plateau = Plateau.creerPlateau( hauteur, largeur, nbCouleur, this);
-		this.grille = new FrameGrille(this, hauteur, largeur);
+		this.plateau = Plateau.creerPlateau( lig, col, nbCouleur, this);
+		this.grille = new FrameGrille(this, lig, col);
 		this.plateau.initBtn();
 	}
 	
