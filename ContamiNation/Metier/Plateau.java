@@ -24,7 +24,14 @@ public class Plateau
 		}
 	}
 	
-	public Plateau(int largeur, int hauteur, int nbCouleur)
+	public static Plateau creerPlateau(int largeur, int hauteur, int nbCouleur)
+	{
+		if ( largeur <= 0 || hauteur <= 0 || nbCouleur <=1)
+				return null;
+		return new Plateau(largeur, hauteur, nbCouleur);
+	}
+
+	private Plateau(int largeur, int hauteur, int nbCouleur)
 	{
 		this.largeur   = largeur;
 		this.hauteur   = hauteur;
@@ -117,6 +124,9 @@ public class Plateau
 	public String toString()
 	{
 		String res = "";
+
+		if (this == null)
+			return "Une erreur a été commise pendant la création du plateau";
 
 		for (int i = 0; i < this.hauteur; i++ )
 		{
