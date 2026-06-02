@@ -11,12 +11,16 @@ public class PanelPlateau extends JPanel implements ActionListener
 	private JTextField        txtHauteur;
 	private JTextField        txtCouleur;
 
-	private JButton btnCreer;
-	private JButton btnAnnuler;
+	private JButton           btnCreer;
+	private JButton           btnAnnuler;
 
-	public PanelPlateau()
+	private FramePlateau      frmMaman;
+
+	public PanelPlateau(FramePlateau frmMaman)
 	{
 		JPanel panelBtn;
+		
+		this.frmMaman = frmMaman;
 
 		this.setLayout(new GridLayout(7, 1));
 		
@@ -76,13 +80,15 @@ public class PanelPlateau extends JPanel implements ActionListener
 		{
 			try
 			{
-				largeur = Integer.parseInt(this.txtLargeur.getText());
-				hauteur = Integer.parseInt(this.txtHauteur.getText());
-				nbCouleur = Integer.parseInt(this.txtHauteur.getText());
+				largeur   = Integer.parseInt(this.txtLargeur.getText());
+				hauteur   = Integer.parseInt(this.txtHauteur.getText());
+				nbCouleur = Integer.parseInt(this.txtCouleur.getText());
 
 				System.out.println(largeur + "," + hauteur + "," + nbCouleur);
 			}
 			catch(Exception exc){System.out.println("Erreur");}
+
+			this.frmMaman.creerPlateau( hauteur, largeur, nbCouleur);
 		}
 	}
 }
