@@ -78,18 +78,12 @@ public class PanelPlateau extends JPanel implements ActionListener
 
 		if (e.getSource() == this.btnCreer)
 		{
-			if (! (this.txtLargeur.getText() == null || this.txtHauteur.getText() == null || this.txtCouleur.getText() == null))
+			if ( this.txtLargeur.getText().matches ( "[0-9]+" ) && this.txtHauteur.getText().matches ( "[0-9]+" ) && this.txtCouleur.getText().matches ( "[0-9]+" ))
 			{	
-				try
-				{
-					largeur   = Integer.parseInt(this.txtLargeur.getText());
-					hauteur   = Integer.parseInt(this.txtHauteur.getText());
-					nbCouleur = Integer.parseInt(this.txtCouleur.getText());
-
-					System.out.println(largeur + "," + hauteur + "," + nbCouleur);
-				}
-				catch(Exception exc){System.out.println("Erreur");}
-
+				largeur   = Integer.parseInt(this.txtLargeur.getText());
+				hauteur   = Integer.parseInt(this.txtHauteur.getText());
+				nbCouleur = Integer.parseInt(this.txtCouleur.getText());
+				System.out.println(largeur + "," + hauteur + "," + nbCouleur);
 				this.frmMaman.creerPlateau( hauteur, largeur, nbCouleur);
 			}
 		}

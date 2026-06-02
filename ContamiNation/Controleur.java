@@ -22,7 +22,7 @@ public class Controleur
 
     public void creerPlateau(int hauteur, int largeur, int nbCouleur)
     {
-        this.plateau = new Plateau( hauteur, largeur, nbCouleur);
+        this.plateau = Plateau.creerPlateau( hauteur, largeur, nbCouleur);
 
         System.out.println(this.plateau);
     }

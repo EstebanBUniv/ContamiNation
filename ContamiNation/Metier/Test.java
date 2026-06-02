@@ -12,7 +12,7 @@ public class Test
 		hauteur = Clavier.lire_int();
 		nbCouleur = Clavier.lire_int();
 		
-		Plateau plateau = new Plateau(largeur, hauteur, nbCouleur);
+		Plateau plateau =  Plateau.creerPlateau(largeur, hauteur, nbCouleur);
 		System.out.println(plateau);
 		
 		boolean continuer = true;
