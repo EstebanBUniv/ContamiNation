@@ -6,37 +6,53 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-public class PanelGrille extends JPanel
+public class PanelGrille extends JPanel implements ActionListener
 {
-	private JButton[][] tabLbl;
+	private JButton[][] tabBtn;
+	private FrameGrille frameMere;
 	
-	public PanelGrille(int hauteur, int largeur)
+	public PanelGrille(int hauteur, int largeur, FrameGrille frameMere)
 	{
 		this.setLayout(new GridLayout(hauteur,largeur));
+		this.frameMere = frameMere;
 		/*-------------------------------*/
 		/* Création des composants       */
 		/*-------------------------------*/
-		this.tabLbl = new JButton[hauteur][largeur];
+		this.tabBtn = new JButton[hauteur][largeur];
 		
 
 		/*-------------------------------*/
 		/* Positionnement des composants */
 		/*-------------------------------*/
-		for(int i = 0; i < tabLbl.length; i++)
+		for(int i = 0; i < tabBtn.length; i++)
 		{
-			for (int j = 0; j < tabLbl[i].length; j++)
+			for (int j = 0; j < tabBtn[i].length; j++)
 			{
-				this.tabLbl[i][j] = new JButton();
-				this.tabLbl[i][j].setOpaque(false);
-				this.tabLbl[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+				this.tabBtn[i][j] = new JButton();
+				this.tabBtn[i][j].setOpaque(false);
+				this.tabBtn[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-				this.add(this.tabLbl[i][j]);
+				this.add(this.tabBtn[i][j]);
 			}
 		}
+		
+		for (int lig = 0; lig < this.tabBtn.length;lig++)
+			for (int col = 0; col < this.tabBtn[0].length;col++)
+				this.tabBtn[lig][col].addActionListener(this);
 	}
 	
-	public void initBtn (String valeur, int hauteur, int largeur)
+	public void initBtn (String valeur, int lig, int col)
 	{
-		this.tabLbl[hauteur][largeur].setText(valeur);
+		this.tabBtn[lig][col].setText(valeur);
 	}
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		for (int lig = 0; lig < this.tabBtn.length;lig++)
+			for (int col = 0; col < this.tabBtn[0].length;col++)
+				if (e.getSource() == this.tabBtn[lig][col])
+					frameMere.ajouterZone(lig, col);
+	
+	}
+
 }

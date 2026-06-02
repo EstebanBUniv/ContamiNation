@@ -52,7 +52,7 @@ public class Plateau
 		return this.tabCases[x][y];
 	}
 	
-	public void ajouterZone (int x, int y, int numZone)
+	public void ajouterZone (int y, int x, int numZone)
 	{
 		if (this.tabCases[x][y].getZone() != 0 )
 			return;
@@ -69,7 +69,7 @@ public class Plateau
 					
 							this.tabCases[x][y].ajouterZone(numZone);
 					else 
-						this.ajouterZone(x, y, numZone + 1);
+						this.ajouterZone(y, x, numZone + 1);
 					return;
 				}
 			}
