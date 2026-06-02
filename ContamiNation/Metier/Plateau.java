@@ -127,11 +127,11 @@ public class Plateau
 	
 	public void initBtn()
 	{
-		for (int i = 0; i < this.hauteur; i++ )
+		for (int lig = 0; lig < this.hauteur; lig++ )
 		{
-			for(int j = 0; j < this.largeur; j++)
+			for(int col = 0; col < this.largeur; col++)
 			{
-				this.ctrl.initBtn(this.tabCases[i][j] + "", i, j) ;
+				this.ctrl.initBtn(this.tabCases[lig][col] + "", col, lig) ;
 			}
 		}
 	}

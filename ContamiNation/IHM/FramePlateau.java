@@ -25,6 +25,7 @@ public class FramePlateau extends JFrame
 
 	public void creerPlateau( int hauteur, int largeur, int nbCouleur)
 	{
+		this.dispose();
 		this.ctrl.creerPlateau(hauteur, largeur, nbCouleur);
 	}
 }
