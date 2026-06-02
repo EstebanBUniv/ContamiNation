@@ -1,18 +1,21 @@
 package ContamiNation.IHM;
+import  ContamiNation.Controleur;
 
 import javax.swing.*;
 
 public class FramePlateau extends JFrame
 {
 	private PanelPlateau panel;
+	private Controleur   ctrl;
 
-	public FramePlateau()
+	public FramePlateau(Controleur ctrl)
 	{
 		this.setTitle   ("ContamiNation");            
     	this.setSize    (500,500);             
     	this.setLocation( 20,200); 
-
-		this.panel = new PanelPlateau();
+		
+		this.ctrl = ctrl;
+		this.panel = new PanelPlateau(this);
 
 		this.add(panel);
 
@@ -20,9 +23,8 @@ public class FramePlateau extends JFrame
         this.setVisible(true);
 	}
 
-	public static void main(String [] args)    
-    { 
-        new FramePlateau();                 
-    }
-
+	public void creerPlateau( int hauteur, int largeur, int nbCouleur)
+	{
+		this.ctrl.creerPlateau(hauteur, largeur, nbCouleur);
+	}
 }
