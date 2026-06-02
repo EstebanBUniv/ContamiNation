@@ -8,15 +8,15 @@ import javax.swing.*;
 
 public class PanelGrille extends JPanel
 {
-	private JLabel[][] tabLbl;
+	private JButton[][] tabLbl;
 	
-	public PanelGrille()
+	public PanelGrille(int hauteur, int largeur)
 	{
-		this.setLayout(new GridLayout(10,10)); //a modifier
+		this.setLayout(new GridLayout(hauteur,largeur));
 		/*-------------------------------*/
 		/* Création des composants       */
 		/*-------------------------------*/
-		this.tabLbl = new JLabel[10][10]; //a modifier
+		this.tabLbl = new JButton[hauteur][largeur];
 		
 
 		/*-------------------------------*/
@@ -26,12 +26,17 @@ public class PanelGrille extends JPanel
 		{
 			for (int j = 0; j < tabLbl[i].length; j++)
 			{
-				this.tabLbl[i][j] = new JLabel();
-				this.tabLbl[i][j].setOpaque(true);
+				this.tabLbl[i][j] = new JButton();
+				this.tabLbl[i][j].setOpaque(false);
 				this.tabLbl[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
 				this.add(this.tabLbl[i][j]);
 			}
 		}
+	}
+	
+	public void initBtn (String valeur, int hauteur, int largeur)
+	{
+		this.tabLbl[hauteur][largeur].setText(valeur);
 	}
 }

@@ -1,4 +1,4 @@
-package ContamiNation.Metier;
+/*package ContamiNation.Metier;
 import iut.algo.*;
 
 
@@ -49,4 +49,4 @@ public class Test
 			System.out.println(plateau);
 		}
 	}
-}
+}*/

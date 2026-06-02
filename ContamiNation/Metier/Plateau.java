@@ -1,17 +1,19 @@
 package ContamiNation.Metier;
 
 import java.util.ArrayList;
+import ContamiNation.Controleur;
 
 public class Plateau
 {
 	private final ArrayList<Sommet> SOMMETS = new ArrayList<Sommet>();
-   
-	private int      largeur;
-	private int      hauteur;
-	private int      nbCouleur;
-	private String[] couleurs;
-	private int      tailleCases;
-	private Case[][] tabCases;
+	
+	private Controleur ctrl;
+	private int        largeur;
+	private int        hauteur;
+	private int        nbCouleur;
+	private String[]   couleurs;
+	private int        tailleCases;
+	private Case[][]   tabCases;
 
 	private void creaCase()
 	{
@@ -24,15 +26,17 @@ public class Plateau
 		}
 	}
 	
-	public static Plateau creerPlateau(int largeur, int hauteur, int nbCouleur)
+	public static Plateau creerPlateau(int largeur, int hauteur, int nbCouleur, Controleur ctrl)
 	{
 		if ( largeur <= 0 || hauteur <= 0 || nbCouleur <=1)
 				return null;
-		return new Plateau(largeur, hauteur, nbCouleur);
+		return new Plateau(largeur, hauteur, nbCouleur, ctrl);
 	}
 
-	private Plateau(int largeur, int hauteur, int nbCouleur)
+	private Plateau(int largeur, int hauteur, int nbCouleur, Controleur ctrl)
 	{
+		this.ctrl = ctrl;
+		
 		this.largeur   = largeur;
 		this.hauteur   = hauteur;
 		this.nbCouleur = nbCouleur;
@@ -117,6 +121,17 @@ public class Plateau
 				}
 				xCherche += dx;
 				yCherche += dy;
+			}
+		}
+	}
+	
+	public void initBtn()
+	{
+		for (int i = 0; i < this.hauteur; i++ )
+		{
+			for(int j = 0; j < this.largeur; j++)
+			{
+				this.ctrl.initBtn(this.tabCases[i][j] + "", i, j) ;
 			}
 		}
 	}

@@ -1,5 +1,7 @@
 ./IHM/FramePlateau.java
 ./IHM/PanelPlateau.java
+./IHM/FrameGrille.java
+./IHM/PanelGrille.java
 
 ./Metier/Plateau.java
 ./Metier/Case.java
