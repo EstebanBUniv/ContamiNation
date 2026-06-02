@@ -16,16 +16,19 @@ public class Test
 		boolean continuer = true;
 		while (continuer)
 		{
-			System.out.println("Voulez-vous continuer ?");
-			continuer = Clavier.lireString().equals("oui");
-			
+			System.out.println(" --Test ajout de Zone-- ");
+			System.out.println("Donnez le numéro de zone : ");
+			int numeroZone = Clavier.lire_int();
 			int x, y;
 			System.out.println("Coordonnées de la case : ");
 			x = Clavier.lire_int() - 1;
 			y = Clavier.lire_int() - 1;
 			
-			plateau.getCase(x,y).ajouterZone(1);
+			plateau.ajouterZone(x,y,numeroZone);
 			System.out.println(plateau);
+			
+			System.out.println("Voulez-vous continuer ?");
+			continuer = Clavier.lireString().equals("oui");
 		}
 		
 		continuer = true;

@@ -20,6 +20,11 @@ public class Case
 		this.zone = zone;
 	}
 	
+	public int getZone()
+	{
+		return this.zone;
+	}
+	
 	public boolean verifZone()
 	{
 		return this.zone != 0;

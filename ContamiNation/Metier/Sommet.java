@@ -7,10 +7,10 @@ public class Sommet
 	
 	public Sommet (String symbole)
 	{
-		this.symbole = symbole;
-		this.couleur = null;
+		this.symbole    = symbole;
+		this.couleur    = null;
 		this.lstVoisins = new Sommet[8];
-		this.estBase = false;
+		this.estBase    = false;
 	}
 	
 	public String toString ()
