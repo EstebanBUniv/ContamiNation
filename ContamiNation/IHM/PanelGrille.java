@@ -11,14 +11,14 @@ public class PanelGrille extends JPanel implements ActionListener
 	private JButton[][] tabBtn;
 	private FrameGrille frameMere;
 	
-	public PanelGrille(int hauteur, int largeur, FrameGrille frameMere)
+	public PanelGrille(int ligne, int colonne, FrameGrille frameMere)
 	{
-		this.setLayout(new GridLayout(hauteur,largeur));
+		this.setLayout(new GridLayout(ligne, colonne));
 		this.frameMere = frameMere;
 		/*-------------------------------*/
 		/* Création des composants       */
 		/*-------------------------------*/
-		this.tabBtn = new JButton[hauteur][largeur];
+		this.tabBtn = new JButton[ligne][colonne];
 		
 
 		/*-------------------------------*/
