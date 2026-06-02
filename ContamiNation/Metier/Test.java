@@ -45,6 +45,7 @@ public class Test
 			y = Clavier.lire_int() - 1;
 			
 			plateau.getCase(x,y).ajouterSommet("Test");
+			plateau.relierTousLesSommets();
 			System.out.println(plateau);
 		}
 	}
