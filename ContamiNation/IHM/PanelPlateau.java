@@ -7,8 +7,8 @@ import javax.swing.*;
 
 public class PanelPlateau extends JPanel implements ActionListener
 {
-	private JTextField        txtLargeur;
-	private JTextField        txtHauteur;
+	private JTextField        txtCol;
+	private JTextField        txtLig;
 	private JTextField        txtCouleur;
 
 	private JButton           btnCreer;
@@ -29,8 +29,8 @@ public class PanelPlateau extends JPanel implements ActionListener
 		/*-------------------------------*/
 		panelBtn = new JPanel();
 
-		this.txtLargeur = new JTextField();
-		this.txtHauteur = new JTextField();
+		this.txtCol = new JTextField();
+		this.txtLig = new JTextField();
 		this.txtCouleur = new JTextField();
 
 		this.btnAnnuler = new JButton("Annuler");
@@ -39,10 +39,10 @@ public class PanelPlateau extends JPanel implements ActionListener
 		/*-------------------------------*/
 		/* Positionnement des composants */
 		/*-------------------------------*/
-		this.add(new JLabel("Entrez la largeur : "));
-		this.add(this.txtLargeur);
-		this.add(new JLabel("Entrez la hauteur : "));
-		this.add(this.txtHauteur);
+		this.add(new JLabel("Entrez le nombres de colonnes : "));
+		this.add(this.txtCol);
+		this.add(new JLabel("Entrez le nombres de lignes : "));
+		this.add(this.txtLig);
 		this.add(new JLabel("Combien de couleurs voulez-vous : "));
 		this.add(this.txtCouleur);
 
@@ -54,9 +54,9 @@ public class PanelPlateau extends JPanel implements ActionListener
 		/* Activation des composants      */
 		/* ------------------------------ */
         this.btnAnnuler.addActionListener(this);
-		this.btnCreer.addActionListener(this);
-		this.txtLargeur.addActionListener(this);
-		this.txtHauteur.addActionListener(this);
+		this.btnCreer  .addActionListener(this);
+		this.txtCol    .addActionListener(this);
+		this.txtLig    .addActionListener(this);
 		this.txtCouleur.addActionListener(this);
 
 		
@@ -64,27 +64,27 @@ public class PanelPlateau extends JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		Integer largeur   = null;
-		Integer hauteur   = null;
+		Integer col   = null;
+		Integer lig   = null;
 		Integer nbCouleur = null;
 		
 		
 		if (e.getSource() == this.btnAnnuler)
 		{
-			this.txtLargeur.setText("");
-			this.txtHauteur.setText("");
+			this.txtCol.setText("");
+			this.txtLig.setText("");
 			this.txtCouleur.setText("");
 		}
 
 		if (e.getSource() == this.btnCreer)
 		{
-			if ( this.txtLargeur.getText().matches ( "[0-9]+" ) && this.txtHauteur.getText().matches ( "[0-9]+" ) && this.txtCouleur.getText().matches ( "[0-9]+" ))
+			if ( this.txtCol.getText().matches ( "[0-9]+" ) && this.txtLig.getText().matches ( "[0-9]+" ) && this.txtCouleur.getText().matches ( "[0-9]+" ))
 			{	
-				largeur   = Integer.parseInt(this.txtLargeur.getText());
-				hauteur   = Integer.parseInt(this.txtHauteur.getText());
+				col   = Integer.parseInt(this.txtCol.getText());
+				lig   = Integer.parseInt(this.txtLig.getText());
 				nbCouleur = Integer.parseInt(this.txtCouleur.getText());
-				System.out.println(largeur + "," + hauteur + "," + nbCouleur);
-				this.frmMaman.creerPlateau( hauteur, largeur, nbCouleur);
+				System.out.println(col + "," + lig + "," + nbCouleur);
+				this.frmMaman.creerPlateau( lig, col, nbCouleur);
 			}
 		}
 	}

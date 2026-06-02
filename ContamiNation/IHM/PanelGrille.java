@@ -24,19 +24,19 @@ public class PanelGrille extends JPanel implements ActionListener
 		/*-------------------------------*/
 		/* Positionnement des composants */
 		/*-------------------------------*/
-		for(int i = 0; i < tabBtn.length; i++)
+		for(int lig = 0; lig < tabBtn.length; lig++)
 		{
-			for (int j = 0; j < tabBtn[i].length; j++)
+			for (int col = 0; col < tabBtn[lig].length; col++)
 			{
-				this.tabBtn[i][j] = new JButton();
-				this.tabBtn[i][j].setOpaque(false);
-				this.tabBtn[i][j].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+				this.tabBtn[lig][col] = new JButton();
+				this.tabBtn[lig][col].setOpaque(false);
+				this.tabBtn[lig][col].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-				this.add(this.tabBtn[i][j]);
+				this.add(this.tabBtn[lig][col]);
 			}
 		}
 		
-		for (int lig = 0; lig < this.tabBtn.length;lig++)
+		for (int lig = 0; lig < this.tabBtn.length; lig++)
 			for (int col = 0; col < this.tabBtn[0].length;col++)
 				this.tabBtn[lig][col].addActionListener(this);
 	}

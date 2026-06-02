@@ -11,7 +11,7 @@ public class FrameGrille extends JFrame
 	private Controleur  ctrl;
 	private JTextField  txtNumZone;
 
-	public FrameGrille(Controleur ctrl, int hauteur, int largeur)
+	public FrameGrille(Controleur ctrl, int lig, int col)
 	{
 		this.setTitle   ("ContamiNation");
 		this.setSize    (500,500);
@@ -19,7 +19,7 @@ public class FrameGrille extends JFrame
 		
 		this.ctrl = ctrl;
 
-		this.panel = new PanelGrille(hauteur, largeur, this);
+		this.panel = new PanelGrille(lig, col, this);
 		
 		this.txtNumZone = new JTextField(10);
 		
@@ -31,14 +31,14 @@ public class FrameGrille extends JFrame
 		this.setVisible(true);
 	}
 	
-	public void initBtn (String valeur, int hauteur, int largeur)
+	public void initBtn (String valeur, int lig, int col)
 	{
-		this.panel.initBtn(valeur, hauteur, largeur);
+		this.panel.initBtn(valeur, lig, col);
 	}
 	
-	public void ajouterZone (int hauteur, int largeur)
+	public void ajouterZone (int lig, int col)
 	{
 		if ( this.txtNumZone.getText().matches( "[0-9]+" ))
-			this.ctrl.ajouterZone(hauteur, largeur, Integer.parseInt(this.txtNumZone.getText()));
+			this.ctrl.ajouterZone(lig, col, Integer.parseInt(this.txtNumZone.getText()));
 	}
 }
