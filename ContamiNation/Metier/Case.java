@@ -2,49 +2,34 @@ package ContamiNation.Metier;
 
 public class Case
 {
-	private final int posX;
-	private final int posY;
+	private final int posLig;
+	private final int posCol;
 	
 	private Sommet    sommet;
 	private int       zone;
 	
 	
-	public Case (int x, int y)
+	public Case (int lig, int col)
 	{
-		this.posX   = x;
-		this.posY   = y;
-		this.zone   = 0;
-		this.sommet = null;
+		this.posLig   = lig;
+		this.posCol   = col;
+		this.zone     = 0;
+		this.sommet   = null;
 	}
 	
-	public void ajouterZone(int zone)
-	{
-		this.zone = zone;
-	}
+	public void ajouterZone(int zone) { this.zone = zone; }
 	
-	public int getZone()
-	{
-		return this.zone;
-	}
+	public boolean verifZone()        { return this.zone != 0; }
 	
-	public boolean verifZone()
-	{
-		return this.zone != 0;
-	}
+	public void ajouterSommet(String symbole) { this.sommet = new Sommet(symbole); }
 	
-	public void ajouterSommet(String symbole)
-	{
-		this.sommet = new Sommet(symbole);
-	}
+	public int getZone()      { return this.zone; }
 	
-	public Sommet getSommet()
-	{
-		return this.sommet;
-	}
+	public Sommet getSommet() { return this.sommet; }
 	
 	public String toString()
 	{
-		return "(" + this.posX + "," + this.posY + ";" + this.zone + ";" + this.sommet + ")";
+		return "(" + this.posLig + "," + this.posCol + ";" + this.zone + ";" + this.sommet + ")";
 	}
 	
 }

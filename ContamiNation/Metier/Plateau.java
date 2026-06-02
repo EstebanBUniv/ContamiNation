@@ -8,8 +8,8 @@ public class Plateau
 	private final ArrayList<Sommet> SOMMETS = new ArrayList<Sommet>();
 	
 	private Controleur ctrl;
-	private int        largeur;
-	private int        hauteur;
+	private int        col;
+	private int        lig;
 	private int        nbCouleur;
 	private String[]   couleurs;
 	private int        tailleCases;
@@ -17,72 +17,72 @@ public class Plateau
 
 	private void creaCase()
 	{
-		for (int i = 0; i < this.hauteur; i++ )
+		for (int i = 0; i < this.lig; i++ )
 		{
-			for(int j = 0; j < this.largeur; j++)
+			for(int j = 0; j < this.col; j++)
 			{
 				this.tabCases[i][j] = new Case(i,j);
 			}
 		}
 	}
 	
-	public static Plateau creerPlateau(int largeur, int hauteur, int nbCouleur, Controleur ctrl)
+	public static Plateau creerPlateau(int col, int lig, int nbCouleur, Controleur ctrl)
 	{
-		if ( largeur <= 0 || hauteur <= 0 || nbCouleur <=1)
+		if ( col <= 0 || lig <= 0 || nbCouleur <=1)
 				return null;
-		return new Plateau(largeur, hauteur, nbCouleur, ctrl);
+		return new Plateau(col, lig, nbCouleur, ctrl);
 	}
 
-	private Plateau(int largeur, int hauteur, int nbCouleur, Controleur ctrl)
+	private Plateau(int col, int lig, int nbCouleur, Controleur ctrl)
 	{
 		this.ctrl = ctrl;
 		
-		this.largeur   = largeur;
-		this.hauteur   = hauteur;
+		this.col   = col;
+		this.lig   = lig;
 		this.nbCouleur = nbCouleur;
 
 		this.couleurs    = new String[this.nbCouleur];
 		this.tailleCases = 50;
-		this.tabCases    = new Case[this.hauteur][this.largeur];
+		this.tabCases    = new Case[this.lig][this.col];
 		this.creaCase();
 	}
 
-	public Case getCase(int x, int y)
+	public Case getCase(int lig, int col)
 	{
-		return this.tabCases[x][y];
+		return this.tabCases[lig][col];
 	}
 	
-	public void ajouterZone (int y, int x, int numZone)
+	public void ajouterZone (int lig, int col, int numZone)
 	{
-		if (this.tabCases[x][y].getZone() != 0 )
+		if (this.tabCases[lig][col].getZone() != 0 )
 			return;
-		for (int i = 0; i < this.hauteur; i++ )
+		for (int i = 0; i < this.lig; i++ )
 		{
-			for(int j = 0; j < this.largeur; j++)
+			for(int j = 0; j < this.col; j++)
 			{
 				if (this.tabCases[i][j].getZone() == numZone)
 				{
-					 if ( (x > 0 ? this.tabCases[x - 1][y].getZone() == numZone : false) ||
-					     (x < this.hauteur - 1 ? this.tabCases[x + 1][y].getZone() == numZone : false) ||
-					     (y > 0 ? this.tabCases[x][y - 1].getZone() == numZone : false) ||
-					     (y < this.largeur - 1 ? this.tabCases[x][y + 1].getZone() == numZone : false) )
+					 if ( (lig > 0 ? this.tabCases[lig - 1][col].getZone() == numZone : false) ||
+					     (lig < this.lig - 1 ? this.tabCases[lig + 1][col].getZone() == numZone : false) ||
+					     (col > 0 ? this.tabCases[lig][col - 1].getZone() == numZone : false) ||
+					     (col < this.col - 1 ? this.tabCases[lig][col + 1].getZone() == numZone : false) )
 					
-							this.tabCases[x][y].ajouterZone(numZone);
+							this.tabCases[lig][col].ajouterZone(numZone);
 					else 
-						this.ajouterZone(y, x, numZone + 1);
+						this.ajouterZone(lig, col, numZone + 1);
 					return;
 				}
 			}
 		}
 		
-		this.tabCases[x][y].ajouterZone(numZone);
+		this.tabCases[lig][col].ajouterZone(numZone);
 	}
 	
 	public void relierTousLesSommets()
 	{
-		for (int i = 0; i < this.hauteur; i++)
+		for (int i = 0; i < this.lig; i++)
 		{
-			for(int j = 0; j < this.largeur; j++)
+			for(int j = 0; j < this.col; j++)
 			{
 				Sommet sommetCourant = this.tabCases[i][j].getSommet();
 				
@@ -94,7 +94,7 @@ public class Plateau
 		}
 	}
 	
-	private void chercherVoisins(int x, int y, Sommet sommetCourant)
+	private void chercherVoisins(int lig, int col, Sommet sommetCourant)
 	{
 		int[][] directions = {
 			{-1, 0}, {1, 0}, {0, -1}, {0, 1}, 
@@ -103,33 +103,33 @@ public class Plateau
 		
 		for (int i = 0; i < directions.length; i++)
 		{
-			int dx = directions[i][0];
-			int dy = directions[i][1];
+			int dLig = directions[i][0];
+			int dCol = directions[i][1];
 			
-			int xCherche = x + dx;
-			int yCherche = y + dy;
+			int ligCherche = lig + dLig;
+			int colCherche = col + dCol;
 			
 			boolean continuer = true;
-			while (xCherche >= 0 && xCherche < this.hauteur && yCherche >= 0 && yCherche < this.largeur && continuer)
+			while (ligCherche >= 0 && ligCherche < this.lig && colCherche >= 0 && colCherche < this.col && continuer)
 			{
-				Sommet sommetTrouve = this.tabCases[xCherche][yCherche].getSommet();
+				Sommet sommetTrouve = this.tabCases[ligCherche][colCherche].getSommet();
 				
 				if (sommetTrouve != null)
 				{
 					sommetCourant.ajouterVoisin(i, sommetTrouve);
 					continuer = false; 
 				}
-				xCherche += dx;
-				yCherche += dy;
+				ligCherche += dLig;
+				colCherche += dCol;
 			}
 		}
 	}
 	
 	public void initBtn()
 	{
-		for (int lig = 0; lig < this.hauteur; lig++ )
+		for (int lig = 0; lig < this.lig; lig++ )
 		{
-			for(int col = 0; col < this.largeur; col++)
+			for(int col = 0; col < this.col; col++)
 			{
 				this.ctrl.initBtn(this.tabCases[lig][col] + "", col, lig) ;
 			}
@@ -143,9 +143,9 @@ public class Plateau
 		if (this == null)
 			return "Une erreur a été commise pendant la création du plateau";
 
-		for (int i = 0; i < this.hauteur; i++ )
+		for (int i = 0; i < this.lig; i++ )
 		{
-			for(int j = 0; j < this.largeur; j++)
+			for(int j = 0; j < this.col; j++)
 			{
 				res += this.tabCases[i][j] ;
 			}
