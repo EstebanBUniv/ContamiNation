@@ -27,9 +27,15 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 	
-	public void initBtn (String val, int hauteur, int largeur)
+	public void initBtn (String val, int lig, int col)
 	{
-		this.grille.initBtn(val, hauteur, largeur);
+		this.grille.initBtn(val, lig, col);
+	}
+	
+	public void ajouterZone (int lig, int col, int numZone)
+	{
+		this.plateau.ajouterZone(lig, col, numZone);
+		this.plateau.initBtn();
 	}
 
 }
