@@ -1,4 +1,6 @@
+package ContamiNation.Metier;
 import iut.algo.*;
+
 
 public class Test
 {

@@ -1,3 +1,5 @@
+package ContamiNation.Metier;
+
 import java.util.ArrayList;
 
 public class Plateau
