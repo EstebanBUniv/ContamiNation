@@ -56,7 +56,7 @@ public class Plateau
 					
 							this.tabCases[x][y].ajouterZone(numZone);
 					else 
-						this.tabCases[x][y].ajouterZone(numZone + 1);
+						this.ajouterZone(x, y, numZone + 1);
 					return;
 				}
 			}
