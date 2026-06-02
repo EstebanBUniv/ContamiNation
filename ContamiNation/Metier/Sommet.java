@@ -1,3 +1,5 @@
+package ContamiNation.Metier;
+
 public class Sommet
 {
 	private String symbole;

@@ -1,3 +1,5 @@
+package ContamiNation.Metier;
+
 public class Case
 {
 	private final int posX;
