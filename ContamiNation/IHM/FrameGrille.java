@@ -1,5 +1,7 @@
 package ContamiNation.IHM;
 
+import ContamiNation.Metier.Case;
+
 import javax.swing.*;
 import java.awt.BorderLayout;
 import ContamiNation.Controleur;
@@ -40,5 +42,10 @@ public class FrameGrille extends JFrame
 	{
 		if ( this.txtNumZone.getText().matches( "[0-9]+" ))
 			this.ctrl.ajouterZone(lig, col, Integer.parseInt(this.txtNumZone.getText()));
+	}
+
+	public Case getCase(int lig, int col)
+	{
+		return ctrl.getCase(lig, col);
 	}
 }

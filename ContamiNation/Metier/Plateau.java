@@ -63,9 +63,9 @@ public class Plateau
 				if (this.tabCases[i][j].getZone() == numZone)
 				{
 					 if ( (lig > 0 ? this.tabCases[lig - 1][col].getZone() == numZone : false) ||
-					     (lig < this.lig - 1 ? this.tabCases[lig + 1][col].getZone() == numZone : false) ||
-					     (col > 0 ? this.tabCases[lig][col - 1].getZone() == numZone : false) ||
-					     (col < this.col - 1 ? this.tabCases[lig][col + 1].getZone() == numZone : false) )
+					      (lig < this.lig - 1 ? this.tabCases[lig + 1][col].getZone() == numZone : false) ||
+					      (col > 0 ? this.tabCases[lig][col - 1].getZone() == numZone : false) ||
+					      (col < this.col - 1 ? this.tabCases[lig][col + 1].getZone() == numZone : false) )
 					
 							this.tabCases[lig][col].ajouterZone(numZone);
 					else 
