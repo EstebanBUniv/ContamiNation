@@ -21,7 +21,7 @@ public class FrameGrille extends JFrame
 		
 		this.ctrl = ctrl;
 
-		this.panel = new PanelGrille(lig, col, this);
+		this.panel = new PanelGrille(lig, col, this.ctrl, true);
 		
 		this.txtNumZone = new JTextField(10);
 		
@@ -52,5 +52,8 @@ public class FrameGrille extends JFrame
 	public void fermer()
 	{
 		this.dispose();
+		this.ctrl.OuvrirSommet();
 	}
+	
+	public PanelGrille getPanel() { return this.panel; }
 }

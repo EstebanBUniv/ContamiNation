@@ -1,173 +1,216 @@
 package ContamiNation.IHM;
 
-import ContamiNation.Metier.Case;
+import ContamiNation.Controleur;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Frame;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.*;
 
 import javax.swing.*;
-import java.awt.Image;
 
 public class PanelGrille extends JPanel implements ActionListener, MouseListener
 {
-	//private int r = 0;
-	//private int g = 0;
-	//private int b = 0;	
-	
 	Color[] tabCouleurs = {
-    new Color(255, 255, 255),  // Blanc
-    new Color(0, 255, 0),      // Vert
-    new Color(0, 0, 255),      // Bleu
-    new Color(255, 255, 0),    // Jaune
-    new Color(255, 165, 0),    // Orange
-    new Color(255, 192, 203),  // Rose
-    new Color(128, 0, 128),    // Violet
-    new Color(0, 255, 255),    // Cyan
-    new Color(165, 42, 42),    // Marron
-    new Color(128, 128, 128),  // Gris
-    new Color(0, 128, 0),      // Vert foncé
-    new Color(0, 0, 128),      // Bleu marine
-    new Color(255, 215, 0),    // Or
-    new Color(64, 224, 208),   // Turquoise
-    new Color(220, 20, 60)     // Crimson
+		new Color(255, 255, 255),
+		new Color(0, 255, 0),
+		new Color(0, 0, 255),
+		new Color(255, 255, 0),
+		new Color(255, 165, 0),
+		new Color(255, 192, 203),
+		new Color(128, 0, 128),
+		new Color(0, 255, 255),
+		new Color(165, 42, 42),
+		new Color(128, 128, 128),
+		new Color(0, 128, 0),
+		new Color(0, 0, 128),
+		new Color(255, 215, 0),
+		new Color(64, 224, 208),
+		new Color(220, 20, 60)
 	};
 
 	private JButton[][] tabBtn;
-	private FrameGrille frameMere;
-	private JPanel panelGrille;
-	private JPanel panelBoutton;
+	private Controleur  ctrl;
+	private boolean     modeZone;
+	private JPanel      panelGrille;
+	private JPanel      panelBoutton;
 
 	private JButton valider;
 	private JButton annuler;
 	
-	public PanelGrille(int ligne, int colonne, FrameGrille frameMere)
+	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone)
 	{
 		this.setLayout(new BorderLayout());
 
-		this.panelGrille = new JPanel();
-		this.panelGrille.setLayout(new GridLayout(ligne, colonne));
-		this.frameMere = frameMere;
-		/*-------------------------------*/
-		/* Création des composants       */
-		/*-------------------------------*/
-		this.tabBtn = new JButton[ligne][colonne];
-		
+		this.ctrl     = ctrl;
+		this.modeZone = modeZone;
 
-		/*-------------------------------*/
-		/* Positionnement des composants */
-		/*-------------------------------*/
-		for(int lig = 0; lig < tabBtn.length; lig++)
+		this.panelGrille = new JPanel(new GridLayout(ligne, colonne));
+		this.tabBtn      = new JButton[ligne][colonne];
+
+		for (int lig = 0; lig < this.tabBtn.length; lig++)
 		{
-			for (int col = 0; col < tabBtn[lig].length; col++)
+			for (int col = 0; col < this.tabBtn[lig].length; col++)
 			{
 				JButton button = new JButton();
+				button.setBackground(Color.WHITE);
+				button.setOpaque(true);
+				button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+				button.addMouseListener(this);
+				button.addActionListener(this);
 
-				button.setBackground(new Color(255, 255, 255));
-				
 				this.tabBtn[lig][col] = button;
-				this.tabBtn[lig][col].setOpaque(true);
-				this.tabBtn[lig][col].setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
-				this.tabBtn[lig][col].addMouseListener(this);
-
-				this.panelGrille.add(this.tabBtn[lig][col]);
+				this.panelGrille.add(button);
 			}
 		}
 
-		this.annuler      = new JButton("Annuler");
-		this.valider      = new JButton("Valider");
+		this.add(this.panelGrille, BorderLayout.CENTER);
 
-		this.panelBoutton = new JPanel();
+		if (this.modeZone)
+		{
+			this.annuler = new JButton("Annuler");
+			this.valider = new JButton("Valider");
 
-		this.panelBoutton.add(this.valider);
-		this.panelBoutton.add(this.annuler);
+			this.panelBoutton = new JPanel();
+			this.panelBoutton.add(this.valider);
+			this.panelBoutton.add(this.annuler);
 
-		this.add(this.panelBoutton, BorderLayout.SOUTH);
-		this.add(this.panelGrille);
-		
-		this.valider.addActionListener(this);
-		this.annuler.addActionListener(this);
+			this.add(this.panelBoutton, BorderLayout.SOUTH);
 
-		for (int lig = 0; lig < this.tabBtn.length; lig++)
-			for (int col = 0; col < this.tabBtn[0].length;col++)
-				this.tabBtn[lig][col].addActionListener(this);
+			this.valider.addActionListener(this);
+			this.annuler.addActionListener(this);
+		}
 	}
-	
-	public void initBtn (String valeur, int lig, int col)
+
+	public JButton getButton(int lig, int col)
+	{
+		return this.tabBtn[lig][col];
+	}
+
+	public int getNbLig()
+	{
+		return this.tabBtn.length;
+	}
+
+	public int getNbCol()
+	{
+		return this.tabBtn[0].length;
+	}
+
+	public JButton getButtonAtPoint(Point p)
+	{
+		Component c = SwingUtilities.getDeepestComponentAt(this.panelGrille, p.x, p.y); // Prend le composant des coordonnées précises
+		if (c instanceof JButton) // Vérifie si c'est un bouton
+			return (JButton)c; // Le transforme en bouton si c'est le cas
+		return null;
+	}
+
+	public void initBtn(String valeur, int lig, int col)
 	{
 		this.tabBtn[lig][col].setText(valeur);
+
+		int zone = this.ctrl.getCase(lig, col).getZone();
+		if (zone >= 0 && zone < this.tabCouleurs.length)
+			this.tabBtn[lig][col].setBackground(this.tabCouleurs[zone]);
+
+		if (this.ctrl.getCase(lig, col).getSommet() != null)
+		{
+			String symbole = this.ctrl.getCase(lig, col).getSommet().getSymbole();
+			String chemin = "./images/symboles/symbole_" + symbole + ".png";
+			ImageIcon iconOriginal = new ImageIcon(chemin);
+
+			if (iconOriginal.getIconWidth() > 0) // Vérifie si l'image existe (plus grand que 0 pixel)
+			{
+				Image img = iconOriginal.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Réduit la taille de l'image 
+				this.tabBtn[lig][col].setIcon(new ImageIcon(img)); // Pose l'image sur le bouton
+			}
+		}
+		else
+		{
+			this.tabBtn[lig][col].setIcon(null); // Supprime l'image sinon
+		}
 	}
 	
 	public void actionPerformed(ActionEvent e)
 	{
-		for (int lig = 0; lig < this.tabBtn.length;lig++)
-			for (int col = 0; col < this.tabBtn[0].length;col++)
-				if (e.getSource() == this.tabBtn[lig][col])
-				{
-					this.frameMere.ajouterZone(lig, col);
-
-					int indCouleur = this.frameMere.getCase(lig, col).getZone();
-					//this.tabBtn[lig][col].setBackground(nextColor());
-					this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
-				}
-		
-		if (e.getSource() == this.valider)
+		if (this.modeZone)
 		{
-			for (int lig = 0; lig < this.tabBtn.length;lig++)
-				for (int col = 0; col < this.tabBtn[0].length;col++)
-					if (this.frameMere.getCase(lig, col).getZone() == 0){ return; }
+			for (int lig = 0; lig < this.tabBtn.length; lig++)
+			{
+				for (int col = 0; col < this.tabBtn[0].length; col++)
+				{
+					if (e.getSource() == this.tabBtn[lig][col])
+					{
+						Frame top = (Frame)SwingUtilities.getWindowAncestor(this); // Permet de récupérer sa frame actuelle
+						if (top instanceof FrameGrille)
+						{
+							((FrameGrille)top).ajouterZone(lig, col);
 
-			this.frameMere.fermer();
+							int indCouleur = this.ctrl.getCase(lig, col).getZone();
+							this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
+						}
+					}
+				}
+			}
+		}
+		
+		if (this.modeZone && e.getSource() == this.valider)
+		{
+			for (int lig = 0; lig < this.tabBtn.length; lig++)
+			{
+				for (int col = 0; col < this.tabBtn[0].length; col++)
+				{
+					if (this.ctrl.getCase(lig, col).getZone() == 0)
+						return;
+				}
+			}
+
+			Frame top = (Frame)SwingUtilities.getWindowAncestor(this); // Permet de récupérer sa frame actuelle
+			if (top instanceof FrameGrille)
+				((FrameGrille)top).fermer();
 		}
 
-		if (e.getSource() == this.annuler)
+		if (this.modeZone && e.getSource() == this.annuler)
 		{
-			for (int lig = 0; lig < this.tabBtn.length;lig++)
-				for (int col = 0; col < this.tabBtn[0].length;col++)
+			for (int lig = 0; lig < this.tabBtn.length; lig++)
+			{
+				for (int col = 0; col < this.tabBtn[0].length; col++)
 				{
-					this.frameMere.getCase(lig, col).supprimerZone();
-
-					int indCouleur = this.frameMere.getCase(lig, col).getZone();
-
-					this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
-					this.initBtn(this.frameMere.getCase(lig, col).toString() + "", lig, col);
+					this.ctrl.getCase(lig, col).supprimerZone();
+					this.tabBtn[lig][col].setBackground(this.tabCouleurs[0]);
+					this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
 				}
+			}
 		}
 	}
 
 	public void mousePressed(MouseEvent e)
 	{
+		if (!this.modeZone) return;
+
 		if (e.getButton() == MouseEvent.BUTTON3)
 		{
-			for (int lig = 0; lig < this.tabBtn.length;lig++)
-				for (int col = 0; col < this.tabBtn[0].length;col++)
+			for (int lig = 0; lig < this.tabBtn.length; lig++)
+			{
+				for (int col = 0; col < this.tabBtn[0].length; col++)
+				{
 					if (e.getSource() == this.tabBtn[lig][col])
 					{
-						this.frameMere.getCase(lig, col).supprimerZone();
-
-						int indCouleur = this.frameMere.getCase(lig, col).getZone();
-						//this.tabBtn[lig][col].setBackground(nextColor());
-						this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
-						this.initBtn(this.frameMere.getCase(lig, col).toString() + "", lig, col);
+						this.ctrl.getCase(lig, col).supprimerZone();
+						this.tabBtn[lig][col].setBackground(this.tabCouleurs[0]);
+						this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
 					}
+				}
+			}
 		}
 	}
 
-	/*private Color nextColor()
-	{
-		Color c = new Color(r, g, b);
-
-		r = (r + 67) % 256;
-		g = (g + 113) % 256;
-		b = (b + 193) % 256;
-
-		return c;
-	}*/
-
-	public void mouseExited(MouseEvent e) {return;}
-	public void mouseEntered(MouseEvent e) {return;}
-	public void mouseReleased(MouseEvent e) {return;}
-	public void mouseClicked(MouseEvent e) {return;}
-
+	public void mouseExited  (MouseEvent e) {}
+	public void mouseEntered (MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+	public void mouseClicked (MouseEvent e) {}
 }
