@@ -51,40 +51,24 @@ public class Enregistrement
 		{
 			Scanner sc = new Scanner(new FileInputStream("carte_num_" + numPlateau + ".data"));
 
-			int lig       = Integer.parseInt(sc.nextLine().trim());
-			int col       = Integer.parseInt(sc.nextLine().trim());
-			int nbCouleur = Integer.parseInt(sc.nextLine().trim());
+			int lig       = Integer.parseInt(sc.next());
+			int col       = Integer.parseInt(sc.next());
+			int nbCouleur = Integer.parseInt(sc.next());
 
 			plateau = Plateau.creerPlateau(lig, col, nbCouleur, ctrl);
 
-			while (sc.hasNextLine())
+			while (sc.hasNext())
 			{
-				String ligne = sc.nextLine().trim();
-				if (ligne.isEmpty()) continue; // ignore les lignes vides
+				int ligCase  = Integer.parseInt(sc.next());
+				int colCase  = Integer.parseInt(sc.next());
+				int zoneCase = Integer.parseInt(sc.next());
 
-				String[] parties = ligne.split("\t");
+				plateau.ajouterZone(ligCase, colCase, zoneCase);
 
-				for (String partie : parties)
-				{
-					partie = partie.trim();
-					if (partie.isEmpty()) continue;
-
-					// Format attendu depuis toString() de Case : "(lig,col;zone;sommet)"
-					partie = partie.replace("(", "").replace(")", "");
-					String[] vals = partie.split("[;,]");
-
-					int ligCase  = Integer.parseInt(vals[0].trim());
-					int colCase  = Integer.parseInt(vals[1].trim());
-					int zoneCase = Integer.parseInt(vals[2].trim());
-
-					plateau.ajouterZone(ligCase, colCase, zoneCase);
-
-					String sommetCase = vals[3].trim();
-					if (!sommetCase.equals("null") && !sommetCase.isEmpty())
-						plateau.ajouterSommet(ligCase, colCase, sommetCase);
-				}
+				String sommetCase = sc.next();
+				if (!sommetCase.equals("null"))
+					plateau.ajouterSommet(ligCase, colCase, sommetCase);
 			}
-
 			sc.close();
 		}
 		catch (Exception e) { e.printStackTrace(); }

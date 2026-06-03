@@ -204,9 +204,12 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				{
 					for (int col = 0; col < this.tabBtn[0].length; col++)
 					{
-						this.ctrl.getCase(lig, col).supprimerZone();
-						this.tabBtn[lig][col].setBackground(Color.WHITE);
-						this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
+						if (e.getSource() == this.tabBtn[lig][col])
+						{
+							this.ctrl.getCase(lig, col).supprimerZone();
+							this.tabBtn[lig][col].setBackground(Color.WHITE);
+							this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
+						}
 					}
 				}
 			}
