@@ -11,31 +11,41 @@ public class FrameSommet extends JFrame
 	private PanelGrille panelGrille;
 	private PanelSommet panelOutils;
 	private Controleur  ctrl;
+	private PanelArrete panelArrete;
 
 	public FrameSommet(Controleur ctrl, int lig, int col)
 	{
-		this.setTitle("ContamiNation - Sommets");
-		this.setSize(900, 700);
 		this.ctrl = ctrl;
-
-		JPanel glass = new JPanel(null);
-		glass.setOpaque(false);
-		this.setGlassPane(glass);
 
 		this.panelGrille = new PanelGrille(lig, col, ctrl, false);
 		this.panelOutils = new PanelSommet(this);
+		this.panelArrete = new PanelArrete(this.ctrl);
 
+		// Nouveau JLayeredPane indépendant (pas this.getLayeredPane() !)
+		JLayeredPane layeredPane = new JLayeredPane();
+		this.panelGrille.setBounds(0, 0, 700, 700);
+		this.panelArrete.setBounds(0, 0, 700, 700);
+		this.panelArrete.setOpaque(false);
+
+		layeredPane.add(this.panelGrille, JLayeredPane.DEFAULT_LAYER);
+		layeredPane.add(this.panelArrete, JLayeredPane.PALETTE_LAYER);
+		layeredPane.setPreferredSize(new Dimension(700, 700));
+
+		this.setTitle("ContamiNation - Sommets");
+		this.setSize(900, 700);
 		this.setLayout(new BorderLayout());
-		this.add(this.panelGrille, BorderLayout.CENTER);
+		this.add(layeredPane, BorderLayout.CENTER);
 		this.add(this.panelOutils, BorderLayout.EAST);
-
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+		this.revalidate();
+		this.repaint();
 	}
 
 	public void initBtn(String valeur, int lig, int col)
 	{
 		this.panelGrille.initBtn(valeur, lig, col);
+		this.panelArrete.repaint();
 	}
 
 	public Case getCase(int lig, int col)
@@ -57,4 +67,6 @@ public class FrameSommet extends JFrame
 	{
 		return (JPanel)this.getGlassPane();
 	}
+
+	public PanelGrille getPanel(){return this.panelGrille;}
 }

@@ -69,6 +69,6 @@ public class Controleur
 
 	public JButton getButton(int lig, int col)
 	{
-		return this.grille.getPanel().getButton(lig, col);
+		return this.frameSommet.getPanel().getButton(lig, col);
 	}
 }

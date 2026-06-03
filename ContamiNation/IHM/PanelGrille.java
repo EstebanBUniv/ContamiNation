@@ -38,13 +38,13 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private boolean     modeZone;
 	private JPanel      panelGrille;
 	private JPanel      panelBoutton;
-	private PanelArrete panelArrete;
 
 	private JButton valider;
 	private JButton annuler;
 	
 	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone)
 	{
+		
 		this.setLayout(new BorderLayout());
 
 		this.ctrl     = ctrl;
@@ -53,8 +53,8 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		this.panelGrille = new JPanel(new GridLayout(ligne, colonne));
 		this.tabBtn      = new JButton[ligne][colonne];
 
-		this.panelArrete = new PanelArrete(this.ctrl);
-		this.panelArrete.setLayout(new OverlayLayout(this));
+
+	
 
 		for (int lig = 0; lig < this.tabBtn.length; lig++)
 		{
@@ -138,7 +138,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 			this.tabBtn[lig][col].setIcon(null); // Supprime l'image sinon
 		}
 
-		this.panelArrete.paintComponent(this.getGraphics());
 	}
 	
 	public void actionPerformed(ActionEvent e)
