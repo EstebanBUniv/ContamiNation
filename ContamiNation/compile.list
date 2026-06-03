@@ -2,6 +2,8 @@
 ./IHM/PanelPlateau.java
 ./IHM/FrameGrille.java
 ./IHM/PanelGrille.java
+./IHM/FrameSommet.java
+./IHM/PanelSommet.java
 
 ./Metier/Plateau.java
 ./Metier/Case.java

@@ -2,12 +2,11 @@ package ContamiNation.Metier;
 
 public class Case
 {
-	private final int posLig;
-	private final int posCol;
+	private int       posLig;
+	private int       posCol;
 	
 	private Sommet    sommet;
 	private int       zone;
-	
 	
 	public Case (int lig, int col)
 	{
@@ -26,6 +25,9 @@ public class Case
 	public void ajouterSommet(String symbole) { this.sommet = new Sommet(symbole); }
 	
 	public int getZone()      { return this.zone; }
+	
+	public int getLig() { return this.posLig; }
+	public int getCol() { return this.posCol; }
 	
 	public Sommet getSommet() { return this.sommet; }
 	

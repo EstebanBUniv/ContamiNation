@@ -13,9 +13,8 @@ public class FramePlateau extends JFrame
 		this.setSize    (500,500);
 		this.setLocation( 20,200); 
 		
-		this.ctrl = ctrl;
+		this.ctrl  = ctrl;
 		this.panel = new PanelPlateau(this);
-		
 		
 		this.add(panel);
 

@@ -14,13 +14,13 @@ public class PanelPlateau extends JPanel implements ActionListener
 	private JButton           btnCreer;
 	private JButton           btnAnnuler;
 
-	private FramePlateau      frmMaman;
+	private FramePlateau      frameMere;
 
-	public PanelPlateau(FramePlateau frmMaman)
+	public PanelPlateau(FramePlateau frameMere)
 	{
 		JPanel panelBtn;
 		
-		this.frmMaman = frmMaman;
+		this.frameMere = frameMere;
 
 		this.setLayout(new GridLayout(7, 1));
 		
@@ -29,8 +29,8 @@ public class PanelPlateau extends JPanel implements ActionListener
 		/*-------------------------------*/
 		panelBtn = new JPanel();
 
-		this.txtCol = new JTextField();
-		this.txtLig = new JTextField();
+		this.txtCol     = new JTextField();
+		this.txtLig     = new JTextField();
 		this.txtCouleur = new JTextField();
 
 		this.btnAnnuler = new JButton("Annuler");
@@ -53,7 +53,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 		 /* ------------------------------ */
 		/* Activation des composants      */
 		/* ------------------------------ */
-        this.btnAnnuler.addActionListener(this);
+		this.btnAnnuler.addActionListener(this);
 		this.btnCreer  .addActionListener(this);
 		this.txtCol    .addActionListener(this);
 		this.txtLig    .addActionListener(this);
@@ -64,8 +64,8 @@ public class PanelPlateau extends JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		Integer col   = null;
-		Integer lig   = null;
+		Integer col       = null;
+		Integer lig       = null;
 		Integer nbCouleur = null;
 		
 		
@@ -80,11 +80,12 @@ public class PanelPlateau extends JPanel implements ActionListener
 		{
 			if ( this.txtCol.getText().matches ( "[0-9]+" ) && this.txtLig.getText().matches ( "[0-9]+" ) && this.txtCouleur.getText().matches ( "[0-9]+" ))
 			{	
-				col   = Integer.parseInt(this.txtCol.getText());
-				lig   = Integer.parseInt(this.txtLig.getText());
+				col       = Integer.parseInt(this.txtCol.getText());
+				lig       = Integer.parseInt(this.txtLig.getText());
 				nbCouleur = Integer.parseInt(this.txtCouleur.getText());
 				System.out.println(col + "," + lig + "," + nbCouleur);
-				this.frmMaman.creerPlateau( lig, col, nbCouleur);
+				
+				this.frameMere.creerPlateau( lig, col, nbCouleur);
 			}
 		}
 	}
