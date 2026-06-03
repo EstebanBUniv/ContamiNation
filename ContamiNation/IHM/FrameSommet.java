@@ -61,7 +61,11 @@ public class FrameSommet extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == this.btnSave)
+		{
 			this.ctrl.enregistrer();
+			this.dispose();
+			ctrl.ouvrirJeu();
+		}
 	}
 
 	public void initBtn(String valeur, int lig, int col)

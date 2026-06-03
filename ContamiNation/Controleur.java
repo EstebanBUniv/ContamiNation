@@ -9,6 +9,7 @@ public class Controleur
 	private FrameMenu    frame;
 	private FrameGrille  grille;
 	private FrameSommet  frameSommet;
+	private FrameJeu     frameJeu;
 
 	private Plateau      plateau;
 
@@ -91,4 +92,6 @@ public class Controleur
 		this.grille = new FrameGrille(this, this.plateau.getLig(), this.plateau.getCol());
 		this.plateau.initBtn();
 	}
+
+	public void ouvrirJeu(){ this.frameJeu = new FrameJeu(this); }
 }
