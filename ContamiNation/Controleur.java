@@ -78,7 +78,7 @@ public class Controleur
 	{
 		this.plateau = Enregistrement.Recuperer(0, this);
 		
-		this.frameSommet = new FrameSommet(this, this.plateau.getLig(), this.plateau.getCol());
+		this.grille = new FrameGrille(this, this.plateau.getLig(), this.plateau.getCol());
 		this.plateau.initBtn();
 	}
 }
