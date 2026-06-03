@@ -20,6 +20,16 @@ public class Sommet
 	{
 		this.lstVoisins[direction] = voisin;
 	}
+
+
+	public void retirerVoisin(Sommet s)
+	{
+		for (int i = 0; i < this.lstVoisins.length; i++)
+		{
+			if (this.lstVoisins[i] == s)
+				this.lstVoisins[i] = null;
+    	}
+	}
 	
 	public String toString ()
 	{
