@@ -30,6 +30,7 @@ public class Case
 	public int getCol() { return this.posCol; }
 	
 	public Sommet getSommet() { return this.sommet; }
+	public void   supprimerSommet() { this.sommet = null;}
 	
 	public String toString()
 	{

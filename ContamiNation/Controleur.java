@@ -54,6 +54,12 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 	
+	public void supprimerSommet(int lig, int col)
+	{
+		this.plateau.getCase(lig, col).supprimerSommet();
+		this.plateau.initBtn();
+	}
+
 	public void ajouterSommet(int lig, int col, String symbole)
 	{
 		this.plateau.ajouterSommet(lig, col, symbole);
