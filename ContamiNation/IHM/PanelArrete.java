@@ -3,7 +3,9 @@ package ContamiNation.IHM;
 import ContamiNation.Controleur;
 import ContamiNation.Metier.*;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import java.awt.BasicStroke;
 
 public class PanelArrete extends JPanel
 {
@@ -20,6 +22,12 @@ public class PanelArrete extends JPanel
     {
         super.paintComponent(g);
 
+		Graphics2D g2d = (Graphics2D) g;
+
+		float epaisseur = 3.0f;
+    	BasicStroke trait = new BasicStroke(epaisseur);
+		g2d.setStroke(trait);
+
         for (int lig = 0; lig < ctrl.getLig(); lig++)
         {
             for (int col = 0; col < ctrl.getCol(); col++)
@@ -33,7 +41,7 @@ public class PanelArrete extends JPanel
                     {
                         if (lstVoisins[i] != null)
                         {
-                            g.drawLine(
+                            g2d.drawLine(
                                 ctrl.getButton(lig, col).getX() + ctrl.getButton(lig, col).getWidth() / 2,
                                 ctrl.getButton(lig, col).getY() + ctrl.getButton(lig, col).getHeight() / 2,
                                 ctrl.getButton(lstVoisins[i].getLigSommet(), lstVoisins[i].getColSommet()).getX() + ctrl.getButton(lig, col).getWidth() / 2,
