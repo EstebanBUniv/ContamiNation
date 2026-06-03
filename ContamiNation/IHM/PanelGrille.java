@@ -6,17 +6,19 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.*;
 import java.awt.Image;
 
 public class PanelGrille extends JPanel implements ActionListener, MouseListener
 {
-	//private int r = 0;
-	//private int g = 0;
-	//private int b = 0;	
+	private int r = 0;
+	private int g = 0;
+	private int b = 0;	
 	
-	Color[] tabCouleurs = {
+	/*Color[] tabCouleurs = {
     new Color(255, 255, 255),  // Blanc
     new Color(0, 255, 0),      // Vert
     new Color(0, 0, 255),      // Bleu
@@ -32,7 +34,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
     new Color(255, 215, 0),    // Or
     new Color(64, 224, 208),   // Turquoise
     new Color(220, 20, 60)     // Crimson
-	};
+	};*/
 
 	private JButton[][] tabBtn;
 	private FrameGrille frameMere;
@@ -41,6 +43,9 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	private JButton valider;
 	private JButton annuler;
+
+	private Map<Integer, Color> couleursZones = new HashMap<>();
+
 	
 	public PanelGrille(int ligne, int colonne, FrameGrille frameMere)
 	{
@@ -107,9 +112,11 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				{
 					this.frameMere.ajouterZone(lig, col);
 
-					int indCouleur = this.frameMere.getCase(lig, col).getZone();
-					//this.tabBtn[lig][col].setBackground(nextColor());
-					this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
+					//int indCouleur = this.frameMere.getCase(lig, col).getZone();
+					//this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
+
+					int numZone = this.frameMere.getCase(lig, col).getZone();
+					this.tabBtn[lig][col].setBackground(getCouleurZone(numZone));
 				}
 		
 		if (e.getSource() == this.valider)
@@ -130,7 +137,8 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 					int indCouleur = this.frameMere.getCase(lig, col).getZone();
 
-					this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
+					this.tabBtn[lig][col].setBackground(Color.WHITE);
+					//this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
 					this.initBtn(this.frameMere.getCase(lig, col).toString() + "", lig, col);
 				}
 		}
@@ -146,15 +154,18 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 					{
 						this.frameMere.getCase(lig, col).supprimerZone();
 
-						int indCouleur = this.frameMere.getCase(lig, col).getZone();
-						//this.tabBtn[lig][col].setBackground(nextColor());
-						this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
+						//int indCouleur = this.frameMere.getCase(lig, col).getZone();
+						
+						int numZone = this.frameMere.getCase(lig, col).getZone();
+						this.tabBtn[lig][col].setBackground(getCouleurZone(numZone));
+						
+						//this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
 						this.initBtn(this.frameMere.getCase(lig, col).toString() + "", lig, col);
 					}
 		}
 	}
 
-	/*private Color nextColor()
+	private Color nextColor()
 	{
 		Color c = new Color(r, g, b);
 
@@ -163,11 +174,24 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		b = (b + 193) % 256;
 
 		return c;
-	}*/
+	}
 
-	public void mouseExited(MouseEvent e) {return;}
-	public void mouseEntered(MouseEvent e) {return;}
+	private Color getCouleurZone(int numZone)
+	{
+		if ( numZone == 0 )
+			return Color.WHITE;
+		
+		if (!couleursZones.containsKey(numZone))
+		{
+			couleursZones.put(numZone, nextColor());
+		}
+
+		return couleursZones.get(numZone);
+	}
+
+	public void mouseExited  (MouseEvent e) {return;}
+	public void mouseEntered (MouseEvent e) {return;}
 	public void mouseReleased(MouseEvent e) {return;}
-	public void mouseClicked(MouseEvent e) {return;}
+	public void mouseClicked (MouseEvent e) {return;}
 
 }
