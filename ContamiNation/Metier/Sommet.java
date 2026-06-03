@@ -6,6 +6,8 @@ public class Sommet
 	private String couleur;
 	private Sommet[] lstVoisins;
 	private boolean  estBase;
+	private Case     case;
+	
 	
 	public Sommet (String symbole)
 	{
