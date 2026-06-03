@@ -34,8 +34,6 @@ public class Sommet
 	{
 		return this.caseSommet.getCol();
 	}
-	
-	public String toString ()
 
 	public void retirerVoisin(Sommet s)
 
