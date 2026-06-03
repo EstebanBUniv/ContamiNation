@@ -74,9 +74,9 @@ public class Controleur
 		this.plateau.enregistrer();
 	}
 	
-	public void charger()
+	public void charger(int num)
 	{
-		this.plateau = Enregistrement.Recuperer(0, this);
+		this.plateau = Enregistrement.Recuperer(num, this);
 		
 		this.frameSommet = new FrameSommet(this, this.plateau.getLig(), this.plateau.getCol());
 		this.plateau.initBtn();

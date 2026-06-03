@@ -6,6 +6,8 @@
 ./IHM/PanelSommet.java
 ./IHM/PanelMenu.java
 ./IHM/FrameMenu.java
+./IHM/FrameParametre.java
+./IHM/PanelParametre.java
 
 ./Metier/Plateau.java
 ./Metier/Case.java

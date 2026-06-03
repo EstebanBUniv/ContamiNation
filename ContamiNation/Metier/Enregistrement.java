@@ -23,11 +23,12 @@ public class Enregistrement
 	{
 		try
 		{
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("carte_num_" + this.plateau.getNumero() + ".data"), "UTF8"));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("./niveaux/carte_num_" + this.plateau.getNumero() + ".data"), "UTF8"));
 			
 			pw.println(this.plateau.getLig());
 			pw.println(this.plateau.getCol());
 			pw.println(this.plateau.getNbCouleur());
+			pw.println(this.plateau.getNom());
 			
 			for (int lig = 0; lig < this.plateau.getLig(); lig++)
 			{
@@ -49,13 +50,17 @@ public class Enregistrement
 
 		try
 		{
-			Scanner sc = new Scanner(new FileInputStream("carte_num_" + numPlateau + ".data"));
+			Scanner sc = new Scanner(new FileInputStream("./niveaux/carte_num_" + numPlateau + ".data"));
 
-			int lig       = Integer.parseInt(sc.nextLine().trim());
-			int col       = Integer.parseInt(sc.nextLine().trim());
-			int nbCouleur = Integer.parseInt(sc.nextLine().trim());
+			int    lig       = Integer.parseInt(sc.nextLine().trim());
+			int    col       = Integer.parseInt(sc.nextLine().trim());
+			int    nbCouleur = Integer.parseInt(sc.nextLine().trim());
+			String nom       = sc.nextLine().trim();
+
 
 			plateau = Plateau.creerPlateau(lig, col, nbCouleur, ctrl);
+
+			plateau.setNom(nom);
 
 			while (sc.hasNextLine())
 			{

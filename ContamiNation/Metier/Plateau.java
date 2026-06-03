@@ -16,6 +16,7 @@ public class Plateau
 	private int        tailleCases;
 	private Case[][]   tabCases;
 	private int        numPlateau;
+	private String     nom;
 
 	private void creaCase()
 	{
@@ -57,9 +58,16 @@ public class Plateau
 	public int getNbCouleur() { return this.nbCouleur; }
 	public int getNumero()    { return this.numPlateau;}
 	
+	public String getNom()    { return this.nom; }
+	
 	public Case getCase(int lig, int col)
 	{
 		return this.tabCases[lig][col];
+	}
+
+	public void setNom(String nom)
+	{
+		this.nom = nom;
 	}
 	
 	public void ajouterSommet(int lig, int col, String symbole)
