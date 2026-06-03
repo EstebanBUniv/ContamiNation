@@ -56,7 +56,8 @@ public class Controleur
 	
 	public void supprimerSommet(int lig, int col)
 	{
-		this.plateau.getCase(lig, col).supprimerSommet();
+		this.plateau.supprimerSommet(lig, col);
+		this.plateau.relierTousLesSommets();
 		this.plateau.initBtn();
 	}
 
