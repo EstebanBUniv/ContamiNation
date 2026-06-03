@@ -8,5 +8,6 @@
 ./Metier/Plateau.java
 ./Metier/Case.java
 ./Metier/Sommet.java
+./Metier/ENregistrement.java
 
 ./Controleur.java

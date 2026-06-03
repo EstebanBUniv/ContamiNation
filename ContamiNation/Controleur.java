@@ -68,5 +68,17 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 	public FrameGrille getGrille() { return this.grille; }
-
+	
+	public void enregistrer()
+	{
+		this.plateau.enregistrer();
+	}
+	
+	public void charger()
+	{
+		this.plateau = Enregistrement.Recuperer(0, this);
+		
+		this.frameSommet = new FrameSommet(this, this.plateau.getLig(), this.plateau.getCol());
+		this.plateau.initBtn();
+	}
 }

@@ -27,4 +27,10 @@ public class FramePlateau extends JFrame
 		this.dispose();
 		this.ctrl.creerPlateau(lig, col, nbCouleur);
 	}
+	
+	public void charger()
+	{
+		this.ctrl.charger();
+		this.dispose();
+	}
 }
