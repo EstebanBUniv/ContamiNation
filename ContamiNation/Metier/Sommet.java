@@ -33,12 +33,6 @@ public class Sommet
 	
 	public String toString ()
 	{
-		String rep = "";
-		for (int i = 0; i < this.lstVoisins.length; i++)
-		{
-			if (this.lstVoisins[i] != null)
-				rep += "" + i;
-		}
-		return rep + this.symbole;
+		return this.symbole;
 	}
 }

@@ -34,7 +34,7 @@ public class Case
 	
 	public String toString()
 	{
-		return "(" + this.posLig + "," + this.posCol + ";" + this.zone + ";" + this.sommet + ")";
+		return this.posLig + "," + this.posCol + "," + this.zone + "," + this.sommet;
 	}
 	
 }
