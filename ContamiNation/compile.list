@@ -13,6 +13,8 @@
 ./Metier/Plateau.java
 ./Metier/Case.java
 ./Metier/Sommet.java
-./Metier/ENregistrement.java
+./Metier/Enregistrement.java
+./Metier/Carte.java
+./Metier/Pioche.java
 
 ./Controleur.java
