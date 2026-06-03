@@ -4,10 +4,12 @@
 ./IHM/PanelGrille.java
 ./IHM/FrameSommet.java
 ./IHM/PanelSommet.java
+./IHM/PanelJeu.java
 
 ./IHM/PanelArrete.java
 ./IHM/PanelMenu.java
 ./IHM/FrameMenu.java
+./IHM/FrameJeu.java
 
 
 ./Metier/Plateau.java
