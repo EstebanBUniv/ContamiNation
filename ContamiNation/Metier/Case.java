@@ -30,10 +30,11 @@ public class Case
 	public int getCol() { return this.posCol; }
 	
 	public Sommet getSommet() { return this.sommet; }
+	public void   supprimerSommet() { this.sommet = null;}
 	
 	public String toString()
 	{
-		return "(" + this.posLig + "," + this.posCol + ";" + this.zone + ";" + this.sommet + ")";
+		return this.posLig + "\t" + this.posCol + "\t" + this.zone + "\t" + this.sommet;
 	}
 	
 }

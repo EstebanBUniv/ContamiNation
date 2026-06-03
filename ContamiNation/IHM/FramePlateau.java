@@ -11,7 +11,8 @@ public class FramePlateau extends JFrame
 	{
 		this.setTitle   ("ContamiNation");
 		this.setSize    (500,500);
-		this.setLocation( 20,200); 
+		this.setLocationRelativeTo(null);
+		//this.setLocation( 20,200); 
 		
 		this.ctrl  = ctrl;
 		this.panel = new PanelPlateau(this);
@@ -26,5 +27,11 @@ public class FramePlateau extends JFrame
 	{
 		this.dispose();
 		this.ctrl.creerPlateau(lig, col, nbCouleur);
+	}
+	
+	public void charger()
+	{
+		this.ctrl.charger();
+		this.dispose();
 	}
 }

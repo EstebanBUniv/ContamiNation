@@ -6,6 +6,7 @@ import ContamiNation.Controleur;
 public class Plateau
 {
 	private final ArrayList<Sommet> SOMMETS = new ArrayList<Sommet>();
+	private static int nbPlateau = 0;
 	
 	private Controleur ctrl;
 	private int        col;
@@ -14,6 +15,7 @@ public class Plateau
 	private String[]   couleurs;
 	private int        tailleCases;
 	private Case[][]   tabCases;
+	private int        numPlateau;
 
 	private void creaCase()
 	{
@@ -45,10 +47,15 @@ public class Plateau
 		this.tailleCases = 50;
 		this.tabCases    = new Case[this.lig][this.col];
 		this.creaCase();
+		
+		this.numPlateau = Plateau.nbPlateau++;
+		
 	}
 	
-	public int getLig() { return this.lig; }
-	public int getCol() { return this.col; }
+	public int getLig()       { return this.lig; }
+	public int getCol()       { return this.col; }
+	public int getNbCouleur() { return this.nbCouleur; }
+	public int getNumero()    { return this.numPlateau;}
 	
 	public Case getCase(int lig, int col)
 	{
@@ -142,6 +149,34 @@ public class Plateau
 				this.ctrl.initBtn(this.tabCases[lig][col] + "", lig, col) ;
 			}
 		}
+	}
+
+
+	public void supprimerSommet(int lig, int col)
+	{
+		Sommet aSupprimer = this.tabCases[lig][col].getSommet();
+
+		if (aSupprimer == null) return;
+
+		// Parcourt toutes les cases et retire aSupprimer des voisins
+		for (int i = 0; i < this.lig; i++)
+		{
+			for (int j = 0; j < this.col; j++)
+			{
+				Sommet s = this.tabCases[i][j].getSommet();
+				if (s != null)
+					s.retirerVoisin(aSupprimer);
+			}
+		}
+
+		// Supprime le sommet de la case
+		this.tabCases[lig][col].supprimerSommet();
+	}
+	
+	public void enregistrer()
+	{
+		Enregistrement save = new Enregistrement(this);
+		save.enregistrer();
 	}
 
 	public String toString()

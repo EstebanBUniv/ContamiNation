@@ -10,38 +10,28 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.event.*;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.*;
 
 public class PanelGrille extends JPanel implements ActionListener, MouseListener
 {
-	Color[] tabCouleurs = {
-		new Color(255, 255, 255),
-		new Color(0, 255, 0),
-		new Color(0, 0, 255),
-		new Color(255, 255, 0),
-		new Color(255, 165, 0),
-		new Color(255, 192, 203),
-		new Color(128, 0, 128),
-		new Color(0, 255, 255),
-		new Color(165, 42, 42),
-		new Color(128, 128, 128),
-		new Color(0, 128, 0),
-		new Color(0, 0, 128),
-		new Color(255, 215, 0),
-		new Color(64, 224, 208),
-		new Color(220, 20, 60)
-	};
-
+	private int r = 0;
+	private int g = 0;
+	private int b = 0;
+ 
 	private JButton[][] tabBtn;
 	private Controleur  ctrl;
 	private boolean     modeZone;
 	private JPanel      panelGrille;
 	private JPanel      panelBoutton;
 
-	private JButton valider;
-	private JButton annuler;
-	
+	private JButton     valider;
+	private JButton     annuler;
+
+	private Map<Integer, Color> couleursZones = new HashMap<>();
+
 	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone)
 	{
 		
@@ -107,9 +97,9 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	public JButton getButtonAtPoint(Point p)
 	{
-		Component c = SwingUtilities.getDeepestComponentAt(this.panelGrille, p.x, p.y); // Prend le composant des coordonnées précises
-		if (c instanceof JButton) // Vérifie si c'est un bouton
-			return (JButton)c; // Le transforme en bouton si c'est le cas
+		Component c = SwingUtilities.getDeepestComponentAt(this.panelGrille, p.x, p.y);
+		if (c instanceof JButton)
+			return (JButton)c;
 		return null;
 	}
 
@@ -118,28 +108,27 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		this.tabBtn[lig][col].setText(valeur);
 
 		int zone = this.ctrl.getCase(lig, col).getZone();
-		if (zone >= 0 && zone < this.tabCouleurs.length)
-			this.tabBtn[lig][col].setBackground(this.tabCouleurs[zone]);
+		this.tabBtn[lig][col].setBackground(getCouleurZone(zone));
 
 		if (this.ctrl.getCase(lig, col).getSommet() != null)
 		{
 			String symbole = this.ctrl.getCase(lig, col).getSommet().getSymbole();
-			String chemin = "./images/symboles/symbole_" + symbole + ".png";
+			String chemin  = "./images/symboles/symbole_" + symbole + ".png";
 			ImageIcon iconOriginal = new ImageIcon(chemin);
 
-			if (iconOriginal.getIconWidth() > 0) // Vérifie si l'image existe (plus grand que 0 pixel)
+			if (iconOriginal.getIconWidth() > 0)
 			{
-				Image img = iconOriginal.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); // Réduit la taille de l'image 
-				this.tabBtn[lig][col].setIcon(new ImageIcon(img)); // Pose l'image sur le bouton
+				Image img = iconOriginal.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+				this.tabBtn[lig][col].setIcon(new ImageIcon(img));
 			}
 		}
 		else
 		{
-			this.tabBtn[lig][col].setIcon(null); // Supprime l'image sinon
+			this.tabBtn[lig][col].setIcon(null);
 		}
 
 	}
-	
+
 	public void actionPerformed(ActionEvent e)
 	{
 		if (this.modeZone)
@@ -150,19 +139,19 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				{
 					if (e.getSource() == this.tabBtn[lig][col])
 					{
-						Frame top = (Frame)SwingUtilities.getWindowAncestor(this); // Permet de récupérer sa frame actuelle
+						Frame top = (Frame)SwingUtilities.getWindowAncestor(this);
 						if (top instanceof FrameGrille)
 						{
 							((FrameGrille)top).ajouterZone(lig, col);
 
 							int indCouleur = this.ctrl.getCase(lig, col).getZone();
-							this.tabBtn[lig][col].setBackground(this.tabCouleurs[indCouleur]);
+							this.tabBtn[lig][col].setBackground(getCouleurZone(indCouleur));
 						}
 					}
 				}
 			}
 		}
-		
+
 		if (this.modeZone && e.getSource() == this.valider)
 		{
 			for (int lig = 0; lig < this.tabBtn.length; lig++)
@@ -174,7 +163,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				}
 			}
 
-			Frame top = (Frame)SwingUtilities.getWindowAncestor(this); // Permet de récupérer sa frame actuelle
+			Frame top = (Frame)SwingUtilities.getWindowAncestor(this);
 			if (top instanceof FrameGrille)
 				((FrameGrille)top).fermer();
 		}
@@ -186,7 +175,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				for (int col = 0; col < this.tabBtn[0].length; col++)
 				{
 					this.ctrl.getCase(lig, col).supprimerZone();
-					this.tabBtn[lig][col].setBackground(this.tabCouleurs[0]);
+					this.tabBtn[lig][col].setBackground(Color.WHITE);
 					this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
 				}
 			}
@@ -195,23 +184,63 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	public void mousePressed(MouseEvent e)
 	{
-		if (!this.modeZone) return;
-
-		if (e.getButton() == MouseEvent.BUTTON3)
+		if (!this.modeZone)
 		{
-			for (int lig = 0; lig < this.tabBtn.length; lig++)
+			if (e.getButton() == MouseEvent.BUTTON3)
 			{
-				for (int col = 0; col < this.tabBtn[0].length; col++)
+				for (int lig = 0; lig < this.tabBtn.length; lig++)
 				{
-					if (e.getSource() == this.tabBtn[lig][col])
+					for (int col = 0; col < this.tabBtn[0].length; col++)
 					{
-						this.ctrl.getCase(lig, col).supprimerZone();
-						this.tabBtn[lig][col].setBackground(this.tabCouleurs[0]);
-						this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
+						if (e.getSource() == this.tabBtn[lig][col])
+						{
+							this.ctrl.supprimerSommet(lig, col);
+						}
+					}
+				}
+			
+			}	
+		}
+		else
+		{
+			if (e.getButton() == MouseEvent.BUTTON3)
+			{
+				for (int lig = 0; lig < this.tabBtn.length; lig++)
+				{
+					for (int col = 0; col < this.tabBtn[0].length; col++)
+					{
+						if (e.getSource() == this.tabBtn[lig][col])
+						{
+							this.ctrl.getCase(lig, col).supprimerZone();
+							this.tabBtn[lig][col].setBackground(Color.WHITE);
+							this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
+						}
 					}
 				}
 			}
 		}
+	}
+
+	private Color nextColor()
+	{
+		Color c = new Color(r, g, b);
+
+		r = (r + 67) % 256;
+		g = (g + 113) % 256;
+		b = (b + 193) % 256;
+
+		return c;
+	}
+
+	private Color getCouleurZone(int numZone)
+	{
+		if (numZone == 0)
+			return Color.WHITE;
+
+		if (!couleursZones.containsKey(numZone))
+			couleursZones.put(numZone, nextColor());
+
+		return couleursZones.get(numZone);
 	}
 
 	public void mouseExited  (MouseEvent e) {}

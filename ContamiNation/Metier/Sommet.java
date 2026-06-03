@@ -36,13 +36,19 @@ public class Sommet
 	}
 	
 	public String toString ()
+
+	public void retirerVoisin(Sommet s)
+
 	{
-		String rep = "";
 		for (int i = 0; i < this.lstVoisins.length; i++)
 		{
-			if (this.lstVoisins[i] != null)
-				rep += "" + i;
-		}
-		return rep + this.symbole;
+			if (this.lstVoisins[i] == s)
+				this.lstVoisins[i] = null;
+    	}
+	}
+	
+	public String toString ()
+	{
+		return this.symbole;
 	}
 }

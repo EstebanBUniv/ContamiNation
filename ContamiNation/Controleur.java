@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class Controleur
 {
-	private FramePlateau frame;
+	private FrameMenu    frame;
 	private FrameGrille  grille;
 	private FrameSommet  frameSommet;
 
@@ -14,7 +14,7 @@ public class Controleur
 
 	public Controleur()
 	{
-		this.frame   = new FramePlateau(this);
+		this.frame = new FrameMenu(this);
 	}
 
 	public static void main (String[] args)
@@ -55,6 +55,13 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 	
+	public void supprimerSommet(int lig, int col)
+	{
+		this.plateau.supprimerSommet(lig, col);
+		this.plateau.relierTousLesSommets();
+		this.plateau.initBtn();
+	}
+
 	public void ajouterSommet(int lig, int col, String symbole)
 	{
 		this.plateau.ajouterSommet(lig, col, symbole);
@@ -70,5 +77,18 @@ public class Controleur
 	public JButton getButton(int lig, int col)
 	{
 		return this.frameSommet.getPanel().getButton(lig, col);
+  }
+	
+	public void enregistrer()
+	{
+		this.plateau.enregistrer();
+	}
+	
+	public void charger()
+	{
+		this.plateau = Enregistrement.Recuperer(0, this);
+		
+		this.grille = new FrameGrille(this, this.plateau.getLig(), this.plateau.getCol());
+		this.plateau.initBtn();
 	}
 }
