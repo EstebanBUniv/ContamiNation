@@ -5,7 +5,7 @@ import ContamiNation.IHM.*;
 
 public class Controleur
 {
-	private FrameMenu frame;
+	private FrameMenu    frame;
 	private FrameGrille  grille;
 	private FrameSommet  frameSommet;
 
