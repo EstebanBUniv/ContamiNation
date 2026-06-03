@@ -13,6 +13,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 
 	private JButton           btnCreer;
 	private JButton           btnAnnuler;
+	private JButton           btnCharger;
 
 	private FramePlateau      frameMere;
 
@@ -22,7 +23,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 		
 		this.frameMere = frameMere;
 
-		this.setLayout(new GridLayout(7, 1));
+		this.setLayout(new GridLayout(8, 1));
 		
 		/*-------------------------------*/
 		/* Création des composants       */
@@ -35,6 +36,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 
 		this.btnAnnuler = new JButton("Annuler");
 		this.btnCreer   = new JButton("Creer");
+		this.btnCharger = new JButton("Charger");
 
 		/*-------------------------------*/
 		/* Positionnement des composants */
@@ -45,6 +47,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 		this.add(this.txtLig);
 		this.add(new JLabel("Combien de couleurs voulez-vous : "));
 		this.add(this.txtCouleur);
+		this.add(this.btnCharger);
 
 		panelBtn.add(this.btnAnnuler);
 		panelBtn.add(this.btnCreer);
@@ -55,6 +58,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 		/* ------------------------------ */
 		this.btnAnnuler.addActionListener(this);
 		this.btnCreer  .addActionListener(this);
+		this.btnCharger.addActionListener(this);
 		this.txtCol    .addActionListener(this);
 		this.txtLig    .addActionListener(this);
 		this.txtCouleur.addActionListener(this);
@@ -88,5 +92,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 				this.frameMere.creerPlateau( lig, col, nbCouleur);
 			}
 		}
+		if (e.getSource() == this.btnCharger)
+			this.frameMere.charger();
 	}
 }
