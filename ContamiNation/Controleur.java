@@ -2,6 +2,7 @@ package ContamiNation;
 
 import ContamiNation.Metier.*;
 import ContamiNation.IHM.*;
+import javax.swing.*;
 
 public class Controleur
 {
@@ -68,6 +69,15 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 	public FrameGrille getGrille() { return this.grille; }
+
+	public int getLig(){return plateau.getLig();}
+
+	public int getCol(){return plateau.getCol();}
+
+	public JButton getButton(int lig, int col)
+	{
+		return this.frameSommet.getPanel().getButton(lig, col);
+  }
 	
 	public void enregistrer()
 	{
