@@ -5,7 +5,7 @@ import ContamiNation.IHM.*;
 
 public class Controleur
 {
-	private FramePlateau frame;
+	private FrameMenu frame;
 	private FrameGrille  grille;
 	private FrameSommet  frameSommet;
 
@@ -13,7 +13,7 @@ public class Controleur
 
 	public Controleur()
 	{
-		this.frame   = new FramePlateau(this);
+		this.frame = new FrameMenu(this);
 	}
 
 	public static void main (String[] args)
