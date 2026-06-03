@@ -37,8 +37,8 @@ public class Plateau
 	{
 		this.ctrl = ctrl;
 		
-		this.col   = col;
-		this.lig   = lig;
+		this.col       = col;
+		this.lig       = lig;
 		this.nbCouleur = nbCouleur;
 
 		this.couleurs    = new String[this.nbCouleur];
@@ -46,10 +46,18 @@ public class Plateau
 		this.tabCases    = new Case[this.lig][this.col];
 		this.creaCase();
 	}
-
+	
+	public int getLig() { return this.lig; }
+	public int getCol() { return this.col; }
+	
 	public Case getCase(int lig, int col)
 	{
 		return this.tabCases[lig][col];
+	}
+	
+	public void ajouterSommet(int lig, int col, String symbole)
+	{
+		this.tabCases[lig][col].ajouterSommet(symbole);
 	}
 	
 	public void ajouterZone (int lig, int col, int numZone)
@@ -139,9 +147,6 @@ public class Plateau
 	public String toString()
 	{
 		String res = "";
-
-		if (this == null)
-			return "Une erreur a été commise pendant la création du plateau";
 
 		for (int i = 0; i < this.lig; i++ )
 		{

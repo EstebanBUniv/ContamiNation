@@ -14,6 +14,12 @@ public class Sommet
 		this.lstVoisins = new Sommet[8];
 		this.estBase    = false;
 	}
+	public String getSymbole() { return this.symbole; }
+	
+	public void ajouterVoisin(int direction, Sommet voisin)
+	{
+		this.lstVoisins[direction] = voisin;
+	}
 	
 	public String toString ()
 	{
@@ -24,10 +30,5 @@ public class Sommet
 				rep += "" + i;
 		}
 		return rep + this.symbole;
-	}
-	
-	public void ajouterVoisin(int direction, Sommet voisin)
-	{
-		this.lstVoisins[direction] = voisin;
 	}
 }
