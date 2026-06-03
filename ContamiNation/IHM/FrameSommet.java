@@ -32,7 +32,6 @@ public class FrameSommet extends JFrame implements ActionListener
 
 		layeredPane.add(this.panelGrille, JLayeredPane.DEFAULT_LAYER);
 		layeredPane.add(this.panelArrete, JLayeredPane.PALETTE_LAYER);
-		layeredPane.setPreferredSize(new Dimension(700, 700));
 		this.btnSave     = new JButton ("Enregistrer");
 
 
