@@ -1,5 +1,7 @@
 package ContamiNation.IHM;
-import  ContamiNation.Controleur;
+
+import ContamiNation.IHM.FrameParametre;
+import ContamiNation.Controleur;
 import javax.swing.*;
 
 public class FramePlateau extends JFrame
@@ -29,9 +31,15 @@ public class FramePlateau extends JFrame
 		this.ctrl.creerPlateau(lig, col, nbCouleur);
 	}
 	
-	public void charger()
+	public void charger(int num)
 	{
-		this.ctrl.charger();
+		this.ctrl.charger(num);
+		this.dispose();
+	}
+
+	public void creerPlateau()
+	{
+		new FrameParametre(ctrl);
 		this.dispose();
 	}
 }

@@ -9,6 +9,8 @@
 ./IHM/PanelArrete.java
 ./IHM/PanelMenu.java
 ./IHM/FrameMenu.java
+./IHM/FrameParametre.java
+./IHM/PanelParametre.java
 ./IHM/FrameJeu.java
 
 
