@@ -44,6 +44,16 @@ public class Sommet
 				this.lstVoisins[i] = null;
     	}
 	}
+
+	public boolean setBase(boolean estBase)
+	{
+		if (!this.estBase)
+		{
+			this.estBase = estBase;
+			return true;
+		}
+		return false;
+	}
 	
 	public String toString ()
 	{
