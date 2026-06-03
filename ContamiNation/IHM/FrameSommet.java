@@ -21,27 +21,35 @@ public class FrameSommet extends JFrame implements ActionListener
 
 		this.panelGrille = new PanelGrille(lig, col, ctrl, false);
 		this.panelOutils = new PanelSommet(this);
-
 		this.panelArrete = new PanelArrete(this.ctrl);
+		this.btnSave     = new JButton("Enregistrer");
 
-		// Nouveau JLayeredPane indépendant (pas this.getLayeredPane() !)
-		JLayeredPane layeredPane = new JLayeredPane();
-		this.panelGrille.setBounds(0, 0, 700, 700);
-		this.panelArrete.setBounds(0, 0, 700, 700);
 		this.panelArrete.setOpaque(false);
 
-		layeredPane.add(this.panelGrille, JLayeredPane.DEFAULT_LAYER);
-		layeredPane.add(this.panelArrete, JLayeredPane.PALETTE_LAYER);
-		this.btnSave     = new JButton ("Enregistrer");
+		JPanel centerPanel = new JPanel(null) { public boolean isOptimizedDrawingEnabled() { return false; } }; // Surcharge d'une méthode
+		centerPanel.add(this.panelArrete); 
+		centerPanel.add(this.panelGrille);
 
+		centerPanel.addComponentListener(new ComponentAdapter()
+		{
+			public void componentResized(ComponentEvent e)
+			{
+				int w = centerPanel.getWidth();
+				int h = centerPanel.getHeight();
+				panelGrille.setBounds(0, 0, w, h);
+				panelArrete.setBounds(0, 0, w, h);
+				panelGrille.revalidate();
+				panelArrete.repaint();
+			}
+		});
 
 		this.setTitle("ContamiNation - Sommets");
 		this.setSize(900, 700);
 		this.setLayout(new BorderLayout());
-		this.add(layeredPane, BorderLayout.CENTER);
-		this.add(this.panelOutils, BorderLayout.EAST);
-		this.add(this.btnSave    , BorderLayout.SOUTH);
-		
+		this.add(centerPanel,       BorderLayout.CENTER);
+		this.add(this.panelOutils,  BorderLayout.EAST);
+		this.add(this.btnSave,      BorderLayout.SOUTH);
+
 		this.btnSave.addActionListener(this);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,7 +57,7 @@ public class FrameSommet extends JFrame implements ActionListener
 		this.revalidate();
 		this.repaint();
 	}
-	
+
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == this.btnSave)
@@ -82,5 +90,8 @@ public class FrameSommet extends JFrame implements ActionListener
 		return (JPanel)this.getGlassPane();
 	}
 
-	public PanelGrille getPanel(){return this.panelGrille;}
+	public PanelGrille getPanel()
+	{
+		return this.panelGrille;
+	}
 }
