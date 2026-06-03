@@ -1,37 +1,43 @@
 package ContamiNation.Metier;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
+
+
 public class Pioche
 {
-	private Carte[] pioche;
+	private List<Carte> pioche;
 	private String[]    nomSymboles = {"Aeroport", "Entrepot", "Hopital", "Laboratoire", "Ville", "Epidemie"};
 
 
-	public pioche ()
+	public Pioche ()
 	{
-		this.pioche = new Carte[12];
-		for (int cpt = 0 ; cpt < this.pioche.length ; cpt++)
+		int nbCarte = 12;
+		this.pioche = new ArrayList<>();
+		for (int cpt = 0 ; cpt < nbCarte ; cpt++)
 		{
 			if( cpt%2 == 1)
 			{
-				this.pioche[cpt] = new Carte(this.nomSymboles[(cpt % this.pioche.length/2)], true);
+				this.pioche.add(new Carte(this.nomSymboles[(cpt % nbCarte/2)], true));
 			}
 			else
 			{
-				this.pioche[cpt] = new Carte(this.nomSymboles[(cpt % this.pioche.length/2)], false);
+				this.pioche.add(new Carte(this.nomSymboles[(cpt % nbCarte/2)], false));
 			}
 		}
 	}
 
 
-	public Carte tirerCarte(int nbCarte)
+	public Carte tirerCarte(int indiceCarte)
 	{
 		Carte carteTire;
 		
-		if (nbCarte <= 0 || nbCarte > this.pioche.length)
+		if (indiceCarte <= 0 || indiceCarte > this.pioche.size())
 			return null;
 		
-		carteTire = this.pioche[nbCarte];
-		this.pioche[nbCarte] = null;
+		carteTire = this.pioche.get(indiceCarte);
+		this.pioche.remove(indiceCarte);
 		
 		return carteTire;
 	}
@@ -39,6 +45,6 @@ public class Pioche
 
 	public void melanger()
 	{
-		this.pioche.shuffle();
+		Collections.shuffle(this.pioche);
 	}
 }
