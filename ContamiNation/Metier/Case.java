@@ -22,7 +22,7 @@ public class Case
 
 	public void supprimerZone() { this.zone = 0; }
 	
-	public void ajouterSommet(String symbole) { this.sommet = new Sommet(symbole); }
+	public void ajouterSommet(String symbole) { this.sommet = new Sommet(symbole, this); }
 	
 	public int getZone()      { return this.zone; }
 	
