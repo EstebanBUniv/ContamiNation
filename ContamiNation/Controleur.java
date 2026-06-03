@@ -2,12 +2,14 @@ package ContamiNation;
 
 import ContamiNation.Metier.*;
 import ContamiNation.IHM.*;
+import javax.swing.*;
 
 public class Controleur
 {
 	private FrameMenu    frame;
 	private FrameGrille  grille;
 	private FrameSommet  frameSommet;
+	private FrameJeu     frameJeu;
 
 	private Plateau      plateau;
 
@@ -68,6 +70,15 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 	public FrameGrille getGrille() { return this.grille; }
+
+	public int getLig(){return plateau.getLig();}
+
+	public int getCol(){return plateau.getCol();}
+
+	public JButton getButton(int lig, int col)
+	{
+		return this.frameSommet.getPanel().getButton(lig, col);
+  }
 	
 	public void enregistrer()
 	{
@@ -78,7 +89,9 @@ public class Controleur
 	{
 		this.plateau = Enregistrement.Recuperer(num, this);
 		
-		this.frameSommet = new FrameSommet(this, this.plateau.getLig(), this.plateau.getCol());
+		this.grille = new FrameGrille(this, this.plateau.getLig(), this.plateau.getCol());
 		this.plateau.initBtn();
 	}
+
+	public void ouvrirJeu(){ this.frameJeu = new FrameJeu(this); }
 }

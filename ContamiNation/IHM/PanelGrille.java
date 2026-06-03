@@ -34,6 +34,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone)
 	{
+		
 		this.setLayout(new BorderLayout());
 
 		this.ctrl     = ctrl;
@@ -41,6 +42,9 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		this.panelGrille = new JPanel(new GridLayout(ligne, colonne));
 		this.tabBtn      = new JButton[ligne][colonne];
+
+
+	
 
 		for (int lig = 0; lig < this.tabBtn.length; lig++)
 		{
@@ -122,6 +126,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		{
 			this.tabBtn[lig][col].setIcon(null);
 		}
+
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -204,9 +209,12 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				{
 					for (int col = 0; col < this.tabBtn[0].length; col++)
 					{
-						this.ctrl.getCase(lig, col).supprimerZone();
-						this.tabBtn[lig][col].setBackground(Color.WHITE);
-						this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
+						if (e.getSource() == this.tabBtn[lig][col])
+						{
+							this.ctrl.getCase(lig, col).supprimerZone();
+							this.tabBtn[lig][col].setBackground(Color.WHITE);
+							this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
+						}
 					}
 				}
 			}
