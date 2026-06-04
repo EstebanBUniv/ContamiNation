@@ -52,6 +52,8 @@ public class Controleur
 	{
 		return this.plateau.getCase(lig, col);
 	}
+	
+	public int getNbVirus() { return this.plateau.getNbVirus(); }
 
 	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
 	

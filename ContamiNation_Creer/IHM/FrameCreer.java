@@ -86,7 +86,6 @@ public class FrameCreer extends JFrame
 	public void changerPanel(JPanel panel)
 	{
 		this.remove(this.panel);
-		
 		this.panel = panel;
 		this.add(this.panel);
 		this.revalidate();

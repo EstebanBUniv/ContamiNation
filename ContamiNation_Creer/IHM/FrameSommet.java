@@ -70,7 +70,7 @@ public class FrameSommet extends JFrame implements ActionListener
 		if (e.getSource() == this.btnSave)
 		{
 			this.ctrl.enregistrer();
-			this.dispose();
+			FrameBase frameBase = new FrameBase(this.ctrl);
 		}
 	}
 
