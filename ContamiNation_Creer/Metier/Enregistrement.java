@@ -82,7 +82,7 @@ public class Enregistrement
 				int colCase  = sc.nextInt();
 				int zoneCase = sc.nextInt();
 				
-				plateau.ajouterZone(ligCase, colCase, zoneCase);
+				plateau.ajouterZoneDirecte(ligCase, colCase, zoneCase);
 				
 				String sommetCase = sc.next();
 				if (!sommetCase.equals("null"))

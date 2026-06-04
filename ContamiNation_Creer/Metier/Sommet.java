@@ -58,6 +58,11 @@ public class Sommet
 				this.lstVoisins[i] = null;
     	}
 	}
+	
+	public void resetVoisins()
+	{
+		this.lstVoisins = new Sommet[8];
+	}
 
 	public boolean setBase(boolean estBase)
 	{
