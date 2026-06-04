@@ -13,7 +13,7 @@ SAE 2.01 | Développement d'une application
 
 public class PanelSommet extends JPanel implements MouseListener, MouseMotionListener, ActionListener
 {
-	private FrameSommet  frameMere;
+	private FrameSommet frameMere;
 	private JLabel[]    tabSymboles;
 	private JButton     btnBase;
 	private String[]    nomSymboles = {"Aeroport", "Entrepot", "Hopital", "Laboratoire", "Ville"};

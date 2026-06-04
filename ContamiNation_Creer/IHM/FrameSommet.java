@@ -41,7 +41,7 @@ public class FrameSommet extends JFrame implements ActionListener
 		// Création des composants //
 		//-------------------------//
 
-		this.panelGrille = new PanelGrille(lig, col, ctrl, false);
+		this.panelGrille = new PanelGrille(lig, col, ctrl, false, this);
 		this.panelOutils = new PanelSommet(this);
 		this.panelArrete = new PanelArrete(this.ctrl);
 		this.btnSave     = new JButton("Enregistrer");
