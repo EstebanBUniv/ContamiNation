@@ -126,12 +126,17 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 				this.rafraichir();
 			}
 		}
+
+		if (e.getSource() == this.btnRenommer)
+			
 		
 		if (e.getSource() == this.btnModifier)
 			this.frameMere.charger(this.fichiersDossier.get(ligne));
+			
 
 		if (e.getSource() == this.btnNouveau)
 			this.frameMere.creerPlateau();
+				
 	}
 
 	public void rafraichir()
