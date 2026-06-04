@@ -123,7 +123,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		if (this.ctrl.getCase(lig, col).getSommet() != null)
 		{
 			String symbole = this.ctrl.getCase(lig, col).getSommet().getSymbole();
-			String chemin  = "./images/symboles/symbole_" + symbole + ".png";
+			String chemin  = "../images/symboles/symbole_" + symbole + ".png";
 			ImageIcon iconOriginal = new ImageIcon(chemin);
 
 			if (iconOriginal.getIconWidth() > 0)

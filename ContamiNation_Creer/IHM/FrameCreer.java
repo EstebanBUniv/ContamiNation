@@ -59,8 +59,16 @@ public class FrameCreer extends JFrame
 
 	public void ajouterZone (int lig, int col)
 	{
-		if ( this.txtNumZone.getText().matches( "[0-9]+" ))
-			this.ctrl.ajouterZone(lig, col, Integer.parseInt(this.txtNumZone.getText()));
+		try
+		{
+			if ( this.txtNumZone.getText().matches( "[0-9]+" ))
+				if (Integer.parseInt(this.txtNumZone.getText()) > 0)
+					this.ctrl.ajouterZone(lig, col, Integer.parseInt(this.txtNumZone.getText()));
+		}
+		catch (NumberFormatException e)
+		{
+			System.out.println("Erreur nombre trop grand");
+		}
 	}
 
 	public void initBtn (String valeur, int lig, int col)
@@ -72,6 +80,7 @@ public class FrameCreer extends JFrame
 	public void fermer()
 	{
 		this.ctrl.ouvrirSommet();
+		this.dispose();
 	}
 
 	public void changerPanel(JPanel panel)
