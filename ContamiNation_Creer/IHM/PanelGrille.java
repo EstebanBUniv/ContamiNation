@@ -1,6 +1,7 @@
 package ContamiNation_Creer.IHM;
 
 import ContamiNation_Creer.Controleur;
+import ContamiNation_Creer.Metier.Sommet;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -29,13 +30,20 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private int r = 0;
 	private int g = 0;
 	private int b = 0;
- 
-	private JButton[][] tabBtn;
-	private Controleur  ctrl;
-	private boolean     modeZone;
-	private JPanel      panelGrille;
-	private JPanel      panelBoutton;
 
+	private int cptVirus = 0;
+ 
+	private JButton[][]  tabBtn;
+	private Controleur   ctrl;
+	private boolean      modeZone;
+	private boolean      modeBase;
+	private JPanel       panelGrille;
+	private JPanel       panelBoutton;
+
+	private JButton      valider;
+	private JButton      annuler;
+
+	private FrameSommet  frameMere;
 	private JButton     btnValider;
 	private JButton     btnAnnuler;
 	private JButton     btnRetour;
@@ -44,13 +52,16 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	private Map<Integer, Color> couleursZones;
 
-	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone)
+	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone, FrameSommet frameMere)
 	{
 		
 		this.setLayout(new BorderLayout());
 
 		this.ctrl      = ctrl;
 		this.modeZone  = modeZone;
+		this.modeBase = false;
+
+		this.frameMere = frameMere;
 
 		this.couleursZones = this.ctrl.getCouleurZone();
 		this.setOpaque(false);
@@ -204,6 +215,30 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				}
 			}
 		}
+		if (this.frameMere != null)
+		{
+			if (this.frameMere.getmodeBase())
+			{
+				for (int lig = 0; lig < this.ctrl.getLig(); lig++)
+				{
+					for (int col = 0; col < this.ctrl.getCol(); col++)
+					{
+						if (e.getSource() == this.tabBtn[lig][col])
+						{
+							Sommet s = ctrl.getCase(lig, col).getSommet();
+
+							if (s != null && this.cptVirus < this.ctrl.getNbVirus() && s.getEstBase() == false)
+							{
+								s.setBase(true);
+								ctrl.getButton(lig, col).setBackground(Color.WHITE);
+								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.cptVirus);
+								this.cptVirus++;
+							}
+						}
+					}
+				}
+			}
+		}
 
 		if ( e.getSource() == this.btnRetour )
 		{
@@ -229,7 +264,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	public void mousePressed(MouseEvent e)
 	{
-		if (!this.modeZone)
+		if (!this.modeZone )
 		{
 			if (e.getButton() == MouseEvent.BUTTON3)
 			{

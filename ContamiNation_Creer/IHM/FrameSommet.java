@@ -25,6 +25,8 @@ public class FrameSommet extends JFrame implements ActionListener
 	private JButton     btnSave;
 	private JButton     btnRetour;
 	private JPanel      panelBouton;
+	private Boolean     modeBase;
+	private int         cptVirus;
 
 	public FrameSommet(Controleur ctrl, int lig, int col)
 	{
@@ -45,6 +47,8 @@ public class FrameSommet extends JFrame implements ActionListener
 		this.btnSave     = new JButton("Enregistrer");
 		this.btnRetour   = new JButton("Retour");
 		this.panelBouton = new JPanel (new GridLayout());
+		this.modeBase = false;
+		this.cptVirus = this.ctrl.getNbVirus();
 
 		this.panelArrete.setOpaque(false);
 
@@ -88,7 +92,7 @@ public class FrameSommet extends JFrame implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == this.btnSave)
+		if (e.getSource() == this.btnSave && this.cptVirus >= this.ctrl.getNbVirus())
 		{
 			this.ctrl.enregistrer();
 			FrameBase frameBase = new FrameBase(this.ctrl);
@@ -112,6 +116,11 @@ public class FrameSommet extends JFrame implements ActionListener
 		return this.ctrl.getCase(lig, col);
 	}
 
+	public boolean getmodeBase()
+	{
+		return this.modeBase;
+	}
+
 	public PanelGrille getPanelGrille()
 	{
 		return this.panelGrille;
@@ -126,4 +135,20 @@ public class FrameSommet extends JFrame implements ActionListener
 	{
 		return (JPanel)this.getGlassPane();
 	}
+
+	public void modeBase(boolean valeur)
+	{
+		this.modeBase = valeur;
+	}
+
+	public int getNbVirus()
+	{
+		return this.cptVirus;
+	}
+
+	public void updateCptVirus(int cptVirus)
+	{
+		this.cptVirus = cptVirus;
+	}
+
 }
