@@ -114,6 +114,11 @@ public class Plateau
 	public void relierTousLesSommets()
 	{
 		for (int i = 0; i < this.lig; i++)
+			for (int j = 0; j < this.col; j++)
+				if (this.tabCases[i][j].getSommet() != null)
+					this.tabCases[i][j].getSommet().resetVoisins();
+			
+		for (int i = 0; i < this.lig; i++)
 		{
 			for(int j = 0; j < this.col; j++)
 			{
@@ -182,6 +187,11 @@ public class Plateau
 		}
 		
 		this.tabCases[lig][col].ajouterZone(numZone);
+	}
+	
+	public void ajouterZoneDirecte(int lig, int col, int zone)
+	{
+		this.tabCases[lig][col].ajouterZone(zone);
 	}
 	
 	public void initBtn()
