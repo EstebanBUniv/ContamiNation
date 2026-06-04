@@ -1,8 +1,8 @@
-package ContamiNation.IHM;
+package ContamiNation_Jouer.IHM;
 
 import javax.swing.JFrame;
 
-import ContamiNation.Controleur;
+import ContamiNation_Jouer.Controleur;
 
 public class FrameJeu extends JFrame
 {
@@ -13,10 +13,12 @@ public class FrameJeu extends JFrame
 	{
 		this.ctrl = ctrl;
 		this.setTitle("ContamiNation");
-		this.setSize(900, 700);
+		this.setSize(600, 300);
 		this.setLocationRelativeTo(null);
 
-		this.panelJeu = new PanelJeu();
+		this.panelJeu = new PanelJeu(this.ctrl, this);
+
+		this.add(this.panelJeu);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
