@@ -41,14 +41,14 @@ public class FrameSommet extends JFrame implements ActionListener
 		// Création des composants //
 		//-------------------------//
 
-		this.panelGrille = new PanelGrille(lig, col, ctrl, false, this);
+		this.cptVirus    = this.ctrl.getNbVirus();
 		this.panelOutils = new PanelSommet(this);
+		this.panelGrille = new PanelGrille(lig, col, ctrl, false, this);
 		this.panelArrete = new PanelArrete(this.ctrl);
 		this.btnSave     = new JButton("Enregistrer");
 		this.btnRetour   = new JButton("Retour");
 		this.panelBouton = new JPanel (new GridLayout());
-		this.modeBase = false;
-		this.cptVirus = this.ctrl.getNbVirus();
+		this.modeBase    = false;
 
 		this.panelArrete.setOpaque(false);
 
@@ -92,10 +92,10 @@ public class FrameSommet extends JFrame implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == this.btnSave && this.cptVirus >= this.ctrl.getNbVirus())
+		if (e.getSource() == this.btnSave && this.cptVirus <= 0)
 		{
 			this.ctrl.enregistrer();
-			FrameBase frameBase = new FrameBase(this.ctrl);
+			this.dispose();
 		}
 
 		if ( e.getSource() == this.btnRetour )
@@ -149,6 +149,7 @@ public class FrameSommet extends JFrame implements ActionListener
 	public void updateCptVirus(int cptVirus)
 	{
 		this.cptVirus = cptVirus;
+		this.panelOutils.updateTexteBouton(this.cptVirus);
 	}
 
 }

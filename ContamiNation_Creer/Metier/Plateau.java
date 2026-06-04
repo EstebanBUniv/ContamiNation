@@ -16,7 +16,7 @@ public class Plateau
 	/*  Attributs de la classe    */
 	/*----------------------------*/
 	
-	private final ArrayList<Sommet> SOMMETS = new ArrayList<Sommet>();
+	private final ArrayList<Sommet> SOMMETS = new ArrayList<Sommet>(); // A quoi il sert ?
 	
 	private Controleur ctrl;
 	private int        col;

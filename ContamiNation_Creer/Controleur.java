@@ -65,6 +65,7 @@ public class Controleur
 	{
 		this.plateau = Plateau.creerPlateau( lig, col, nbCouleur, nomPlateau, this);
 		this.frame.changerPanel(new PanelGrille(lig, col, this, true, this.frameSommet));
+		this.frame.ajouterPanel();
 		this.plateau.initBtn();
 	}
 	
@@ -121,6 +122,7 @@ public class Controleur
 	{
 		this.plateau = Enregistrement.Recuperer(fichier, this);
 		this.frame.changerPanel(new PanelGrille(this.plateau.getLig(), this.plateau.getCol(), this, true, this.frameSommet));
+		this.frame.ajouterPanel();
 		this.plateau.initBtn();
 	}
 	

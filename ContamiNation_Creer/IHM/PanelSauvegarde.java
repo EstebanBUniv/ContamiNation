@@ -30,7 +30,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 	private JButton btnModifier;
 	private JButton btnSupprimer;
 	private JButton btnRenommer;
-	private JButton btnQuitter;	
+	private JButton btnQuitter;
 
 	private JPanel panelTitre;
 	private JPanel panelSauvegarde;
@@ -129,7 +129,8 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		
 		if (e.getSource() == this.btnModifier)
 		{
-			this.frameMere.charger(this.fichiersDossier.get(ligne));
+			if (ligne != -1)
+				this.frameMere.charger(this.fichiersDossier.get(ligne));
 		}
 			
 			

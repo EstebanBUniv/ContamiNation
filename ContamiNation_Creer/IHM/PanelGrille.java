@@ -10,11 +10,9 @@ import java.awt.Component;
 
 import java.awt.Image;
 import java.awt.Point;
-import java.awt.Graphics;
 
 import java.awt.event.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.*;
@@ -31,17 +29,17 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private int g = 0;
 	private int b = 0;
 
-	private int cptVirus = 0;
+	private int cptVirus;
  
 	private JButton[][]  tabBtn;
 	private Controleur   ctrl;
 	private boolean      modeZone;
-	private boolean      modeBase;
+	private boolean      modeBase; // A quoi il sert ?
 	private JPanel       panelGrille;
 	private JPanel       panelBoutton;
 
-	private JButton      valider;
-	private JButton      annuler;
+	private JButton      valider; // A quoi il sert ?
+	private JButton      annuler; // A quoi il sert ?
 
 	private FrameSommet  frameMere;
 	private JButton     btnValider;
@@ -54,12 +52,11 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone, FrameSommet frameMere)
 	{
-		
 		this.setLayout(new BorderLayout());
 
 		this.ctrl      = ctrl;
 		this.modeZone  = modeZone;
-		this.modeBase = false;
+		this.modeBase  = false; // A quoi il sert ?
 
 		this.frameMere = frameMere;
 
@@ -68,10 +65,18 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		this.panelGrille = new JPanel(new GridLayout(ligne, colonne));
 		this.tabBtn      = new JButton[ligne][colonne];
-
-
-	
-
+		
+		this.cptVirus = 1;
+		
+		for (int ligVirus = 0; ligVirus < this.ctrl.getLig(); ligVirus++)
+			for (int colVirus = 0; colVirus < this.ctrl.getCol(); colVirus++)
+				if (this.frameMere != null && this.ctrl.getCase(ligVirus, colVirus).getSommet() != null && 
+					this.ctrl.getCase(ligVirus, colVirus).getSommet().getEstBase() != 0)
+						this.cptVirus++;
+		
+		if (this.frameMere != null)
+			this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - (this.cptVirus - 1));
+		
 		for (int lig = 0; lig < this.tabBtn.length; lig++)
 		{
 			for (int col = 0; col < this.tabBtn[lig].length; col++)
@@ -143,8 +148,16 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		this.tabBtn[lig][col].setIcon(null);
 
 		int zone = this.ctrl.getCase(lig, col).getZone();
-		this.tabBtn[lig][col].setBackground(getCouleurZone(zone));
-
+		
+		if (this.ctrl.getCase(lig, col).getSommet() == null || this.ctrl.getCase(lig, col).getSommet().getEstBase() == 0) 
+		{
+			this.tabBtn[lig][col].setBackground(getCouleurZone(zone));
+		} 
+		else 
+		{
+			this.tabBtn[lig][col].setBackground(Color.WHITE);
+		}
+		
 		if (this.ctrl.getCase(lig, col).getSommet() != null)
 		{
 			String symbole = this.ctrl.getCase(lig, col).getSommet().getSymbole();
@@ -161,7 +174,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		{
 			this.tabBtn[lig][col].setIcon(null);
 		}
-
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -195,7 +207,10 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				for (int col = 0; col < this.tabBtn[0].length; col++)
 				{
 					if (this.ctrl.getCase(lig, col).getZone() == 0)
+					{
+						JOptionPane.showMessageDialog(this, "Il reste des cases sans zone !", "Attention", JOptionPane.WARNING_MESSAGE);
 						return;
+					}
 				}
 			}
 
@@ -227,9 +242,9 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 						{
 							Sommet s = ctrl.getCase(lig, col).getSommet();
 
-							if (s != null && this.cptVirus < this.ctrl.getNbVirus() && s.getEstBase() == false)
+							if (s != null && this.cptVirus <= this.ctrl.getNbVirus() && s.getEstBase() == 0)
 							{
-								s.setBase(true);
+								s.setBase(this.cptVirus);
 								ctrl.getButton(lig, col).setBackground(Color.WHITE);
 								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.cptVirus);
 								this.cptVirus++;
@@ -244,6 +259,8 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		{
 			if ( top instanceof FrameCreer )
 			{
+				((FrameCreer) top).retirerPanel();
+				
 				if ( this.estNouveau )
 				{
 					((FrameCreer)(top)).changerPanel(new PanelParametre((FrameCreer)(top)));
@@ -274,6 +291,12 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 					{
 						if (e.getSource() == this.tabBtn[lig][col])
 						{
+							if (this.ctrl.getCase(lig, col).getSommet() != null && this.ctrl.getCase(lig, col).getSommet().getEstBase() != 0)
+							{
+								this.cptVirus--;
+								if (this.frameMere != null)
+										this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - (this.cptVirus - 1));
+							}
 							this.ctrl.supprimerSommet(lig, col);
 						}
 					}

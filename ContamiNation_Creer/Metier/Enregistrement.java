@@ -39,10 +39,12 @@ public class Enregistrement
 	
 	public void enregistrer()
 	{
-		try
+		File dossier = new File("../niveaux/");
+		if (!dossier.exists()) 
+			dossier.mkdirs(); // Crée le dossier et ses parents si besoin
+		
+		try(PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("../niveaux/carte_num_" + this.plateau.getNumero() + ".data"), "UTF8")))
 		{
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("../niveaux/carte_num_" + this.plateau.getNumero() + ".data"), "UTF8"));
-			
 			pw.println(this.plateau.getLig      ());
 			pw.println(this.plateau.getCol      ());
 			pw.println(this.plateau.getNbVirus  ());
@@ -56,7 +58,6 @@ public class Enregistrement
 				}
 				pw.println();
 			}
-			pw.close();
 		}
 		catch (Exception e) { e.printStackTrace(); }
 	}
@@ -86,7 +87,12 @@ public class Enregistrement
 				
 				String sommetCase = sc.next();
 				if (!sommetCase.equals("null"))
+				{
 					plateau.ajouterSommet(ligCase, colCase, sommetCase);
+					int estBase = sc.nextInt();
+					if (estBase != 0)
+						plateau.getCase(ligCase, colCase).getSommet().setBase(estBase);
+				}
 			}
 			sc.close();
 
