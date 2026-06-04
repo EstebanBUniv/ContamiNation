@@ -25,6 +25,7 @@ public class PanelParametre extends JPanel implements ActionListener
 
 	private JButton btnValider;
 	private JButton btnAnnuler;
+	private JButton btnRetour;
 
 	private JTextField txtLigne;
 	private JTextField txtColonne;
@@ -46,6 +47,7 @@ public class PanelParametre extends JPanel implements ActionListener
 
 		this.btnAnnuler = new JButton("Annuler");
 		this.btnValider = new JButton("Valider");
+		this.btnRetour  = new JButton("Retour" );
 
 		this.txtColonne    = new JTextField(30);
 		this.txtLigne      = new JTextField(30);
@@ -63,6 +65,7 @@ public class PanelParametre extends JPanel implements ActionListener
 
 		this.panelBouton.add(this.btnValider);
 		this.panelBouton.add(this.btnAnnuler);
+		this.panelBouton.add(this.btnRetour );
 
 		this.panelTxt.add( new JLabel("Nombre de lignes :"  ));
 		this.panelTxt.add( this.txtLigne      );
@@ -82,6 +85,7 @@ public class PanelParametre extends JPanel implements ActionListener
 		
 		this.btnAnnuler.addActionListener(this);
 		this.btnValider.addActionListener(this);
+		this.btnRetour .addActionListener(this);
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -111,6 +115,11 @@ public class PanelParametre extends JPanel implements ActionListener
 				
 				this.frameMere.valider( lig, col, nbCouleur, nomPlateau);
 			}
+		}
+
+		if ( e.getSource() == this.btnRetour )
+		{
+			this.frameMere.changerPanel(new PanelSauvegarde(this.frameMere));
 		}
 	}
 }

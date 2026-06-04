@@ -107,6 +107,12 @@ public class Controleur
 	public void enregistrer()
 	{
 		this.plateau.enregistrer();
+		this.OuvrirCreer();
+	}
+
+	public void OuvrirCreer()
+	{
+		this.frame = new FrameCreer(this);
 	}
 	
 	public void charger(File fichier)
