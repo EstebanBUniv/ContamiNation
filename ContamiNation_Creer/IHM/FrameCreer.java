@@ -1,0 +1,87 @@
+package ContamiNation_Creer.IHM;
+
+import ContamiNation_Creer.Controleur;
+import java.awt.BorderLayout;
+import javax.swing.*;
+import java.io.File;
+
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
+public class FrameCreer extends JFrame
+{
+	private JPanel       panel;
+
+	private JTextField  txtNumZone;
+
+	private Controleur   ctrl;
+
+	public FrameCreer(Controleur ctrl)
+	{
+		this.setTitle   ("ContamiNation");
+		this.setSize    (800,600);
+		this.setLocationRelativeTo(null);
+		
+		this.ctrl       = ctrl;
+		this.panel      = new PanelSauvegarde(this);
+		this.txtNumZone = new JTextField(10);
+		
+		this.add(this.txtNumZone                       , BorderLayout.WEST  );
+		this.add(panel);
+
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setVisible(true);
+	}
+
+	public JPanel getPanel()
+	{
+		return this.panel;
+	}
+	
+	public void charger(File fichier)
+	{
+		this.ctrl.charger(fichier);
+		this.changerPanel(panel);
+	}
+
+	public void creerPlateau()
+	{
+		this.changerPanel(new PanelParametre(this));
+	}
+
+	public void valider (int lig, int col, int nbVirus, String nomPlateau)
+	{
+		this.ctrl.creerPlateau(lig, col, nbVirus, nomPlateau);
+		//this.dispose();
+	}
+
+	public void ajouterZone (int lig, int col)
+	{
+		if ( this.txtNumZone.getText().matches( "[0-9]+" ))
+			this.ctrl.ajouterZone(lig, col, Integer.parseInt(this.txtNumZone.getText()));
+	}
+
+	public void initBtn (String valeur, int lig, int col)
+	{
+		if (this.panel instanceof PanelGrille)	
+			((PanelGrille)(this.panel)).initBtn(valeur, lig, col);
+	}
+
+	public void fermer()
+	{
+		this.ctrl.ouvrirSommet();
+	}
+
+	public void changerPanel(JPanel panel)
+	{
+		this.remove(this.panel);
+		
+		this.panel = panel;
+		this.add(this.panel);
+		this.revalidate();
+		this.repaint();
+	}
+}

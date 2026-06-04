@@ -1,14 +1,10 @@
-./IHM/FramePlateau.java
-./IHM/PanelPlateau.java
-./IHM/FrameGrille.java
-./IHM/PanelGrille.java
+./IHM/FrameCreer.java
 ./IHM/FrameSommet.java
-./IHM/PanelSommet.java
 
+./IHM/PanelSauvegarde.java
+./IHM/PanelGrille.java
+./IHM/PanelSommet.java
 ./IHM/PanelArrete.java
-./IHM/PanelMenu.java
-./IHM/FrameMenu.java
-./IHM/FrameParametre.java
 ./IHM/PanelParametre.java
 
 

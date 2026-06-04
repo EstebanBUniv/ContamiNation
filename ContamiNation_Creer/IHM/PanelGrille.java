@@ -38,20 +38,21 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private JButton     valider;
 	private JButton     annuler;
 
-	private Map<Integer, Color> couleursZones;
+	private Map<Integer, Color> couleursZones = new HashMap<>();
 
 	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone)
 	{
 		
 		this.setLayout(new BorderLayout());
 
-		this.ctrl     = ctrl;
-		this.modeZone = modeZone;
+		this.ctrl      = ctrl;
+		this.modeZone  = modeZone;
 
 		this.panelGrille = new JPanel(new GridLayout(ligne, colonne));
 		this.tabBtn      = new JButton[ligne][colonne];
-		
-		this.couleursZones = this.ctrl.getCouleurZone();
+
+
+	
 
 		for (int lig = 0; lig < this.tabBtn.length; lig++)
 		{
@@ -120,7 +121,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		if (this.ctrl.getCase(lig, col).getSommet() != null)
 		{
 			String symbole = this.ctrl.getCase(lig, col).getSommet().getSymbole();
-			String chemin  = "../images/symboles/symbole_" + symbole + ".png";
+			String chemin  = "./images/symboles/symbole_" + symbole + ".png";
 			ImageIcon iconOriginal = new ImageIcon(chemin);
 
 			if (iconOriginal.getIconWidth() > 0)
@@ -147,9 +148,9 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 					if (e.getSource() == this.tabBtn[lig][col])
 					{
 						JFrame top = (JFrame)SwingUtilities.getWindowAncestor(this);
-						if (top instanceof FrameGrille)
+						if (top instanceof FrameCreer)
 						{
-							((FrameGrille)top).ajouterZone(lig, col);
+							((FrameCreer)top).ajouterZone(lig, col);
 
 							int indCouleur = this.ctrl.getCase(lig, col).getZone();
 							this.tabBtn[lig][col].setBackground(getCouleurZone(indCouleur));
@@ -171,8 +172,8 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 			}
 
 			JFrame top = (JFrame)SwingUtilities.getWindowAncestor(this);
-			if (top instanceof FrameGrille)
-				((FrameGrille)top).fermer();
+			if (top instanceof FrameCreer)
+				((FrameCreer)top).fermer();
 		}
 
 		if (this.modeZone && e.getSource() == this.annuler)
@@ -230,11 +231,11 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	private Color nextColor()
 	{
+		Color c = new Color(r, g, b);
+
 		r = (r + 67) % 256;
 		g = (g + 113) % 256;
 		b = (b + 193) % 256;
-		
-		Color c = new Color(r, g, b);
 
 		return c;
 	}

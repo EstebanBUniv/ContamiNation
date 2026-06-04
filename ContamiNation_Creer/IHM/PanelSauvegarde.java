@@ -21,7 +21,7 @@ SAE 2.01 | Développement d'une application
 * Groupe   : 3
 */
 
-public class PanelPlateau extends JPanel implements ActionListener
+public class PanelSauvegarde extends JPanel implements ActionListener
 {
 	private JTable      tabSauvegarde;
 	private JScrollPane scroll;
@@ -31,9 +31,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 	private JButton btnSupprimer;
 	private JButton btnRetour;
 	private JButton btnRenommer;
-	private JButton btnJouer;
-
-	private FramePlateau    frameMere;
+	private JButton btnConfirmer;	
 
 	private JPanel panelTitre;
 	private JPanel panelSauvegarde;
@@ -43,7 +41,9 @@ public class PanelPlateau extends JPanel implements ActionListener
 
 	private ArrayList<File> fichiersDossier;
 
-	public PanelPlateau(FramePlateau frameMere)
+	private FrameCreer frameMere;
+
+	public PanelSauvegarde(FrameCreer frameMere)
 	{
 		this.frameMere = frameMere;
 
@@ -59,20 +59,20 @@ public class PanelPlateau extends JPanel implements ActionListener
 		this.panelBtnHaut    = new JPanel(new FlowLayout  ()    );
 		this.panelBtnBas     = new JPanel(new FlowLayout  ()    );
 
-		this.tabSauvegarde = new JTable(this.getFichier("../niveaux/"), new String[]{"nom"});
+		this.tabSauvegarde = new JTable(this.getFichier("./niveaux/"), new String[]{"nom"});
 		this.tabSauvegarde.setRowHeight(50);
 		this.tabSauvegarde.setTableHeader(null);
-		this.scroll = new JScrollPane(this.tabSauvegarde);
+		this.scroll        = new JScrollPane(this.tabSauvegarde);
 
-		this.btnNouveau   = new JButton("Nouveau plateau");
-		this.btnModifier  = new JButton("Modifier"       );
-		this.btnSupprimer = new JButton("Supprimer"      );
-		this.btnRenommer  = new JButton("Renommer"       );
-		this.btnRetour    = new JButton("Retour"         );
-		this.btnJouer     = new JButton("Jouer"          );
+		this.btnNouveau    = new JButton("Nouveau plateau");
+		this.btnModifier   = new JButton("Modifier"       );
+		this.btnSupprimer  = new JButton("Supprimer"      );
+		this.btnRenommer   = new JButton("Renommer"       );
+		this.btnRetour     = new JButton("Retour"         );
+		this.btnConfirmer  = new JButton("Confirmer"      );
 
 		this.btnNouveau  .setPreferredSize(new Dimension(205, 30));
-		this.btnJouer    .setPreferredSize(new Dimension(205, 30));
+		this.btnConfirmer.setPreferredSize(new Dimension(205, 30));
 		this.btnRenommer .setPreferredSize(new Dimension(100, 30));
 		this.btnSupprimer.setPreferredSize(new Dimension(100, 30));
 		this.btnModifier .setPreferredSize(new Dimension(100, 30));
@@ -88,13 +88,13 @@ public class PanelPlateau extends JPanel implements ActionListener
 		this.panelSauvegarde.add(this.scroll,                    BorderLayout.CENTER);
 		this.panelSauvegarde.add(Box.createHorizontalStrut(100), BorderLayout.EAST  );
 
-		this.panelBtnHaut.add(this.btnJouer   );
-		this.panelBtnHaut.add(this.btnNouveau );
+		this.panelBtnHaut.add(this.btnConfirmer);
+		this.panelBtnHaut.add(this.btnNouveau  );
 
-		this.panelBtnBas.add(this.btnRenommer );
-		this.panelBtnBas.add(this.btnSupprimer);
-		this.panelBtnBas.add(this.btnModifier );
-		this.panelBtnBas.add(this.btnRetour   );
+		this.panelBtnBas.add(this.btnRenommer  );
+		this.panelBtnBas.add(this.btnSupprimer );
+		this.panelBtnBas.add(this.btnModifier  );
+		this.panelBtnBas.add(this.btnRetour    );
 
 		this.panelBoutons.add(this.panelBtnHaut);
 		this.panelBoutons.add(this.panelBtnBas );
@@ -107,7 +107,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 		// Activation des composants     //
 		//-------------------------------//
 		this.btnNouveau  .addActionListener(this);
-		this.btnJouer    .addActionListener(this);
+		this.btnConfirmer.addActionListener(this);
 		this.btnRenommer .addActionListener(this);
 		this.btnSupprimer.addActionListener(this);
 		this.btnModifier .addActionListener(this);
@@ -118,10 +118,9 @@ public class PanelPlateau extends JPanel implements ActionListener
 	{
 		int ligne = this.tabSauvegarde.getSelectedRow();
 
-		if (e.getSource() == this.btnJouer)
+		if (e.getSource() == this.btnConfirmer)
 		{
-			if (ligne != -1)
-				this.frameMere.charger(this.fichiersDossier.get(ligne));
+			this.frameMere.dispose();
 		}
 
 		if (e.getSource() == this.btnSupprimer)
@@ -140,7 +139,7 @@ public class PanelPlateau extends JPanel implements ActionListener
 	public void rafraichir()
 	{
 		this.tabSauvegarde.setModel(
-			new DefaultTableModel(this.getFichier("../niveaux/"), new String[]{"nom"})
+			new DefaultTableModel(this.getFichier("./niveaux/"), new String[]{"nom"})
 		);
 	}
 
