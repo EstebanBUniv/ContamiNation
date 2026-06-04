@@ -4,6 +4,9 @@ import ContamiNation_Creer.Metier.*;
 import ContamiNation_Creer.IHM.*;
 import javax.swing.*;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.awt.Color;
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -17,9 +20,10 @@ public class Controleur
 	/*  Attributs de la classe    */
 	/*----------------------------*/
 	
-	private FrameCreer  frame;
-	private FrameSommet frameSommet;
-	private Plateau     plateau;
+	private FrameCreer          frame;
+	private FrameSommet         frameSommet;
+	private Plateau             plateau;
+	private Map<Integer, Color> couleursZones = new HashMap<>();
 	
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -48,6 +52,8 @@ public class Controleur
 	{
 		return this.plateau.getCase(lig, col);
 	}
+
+	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
 	
 	/*----------------------------*/
 	/*  Méthodes                  */
@@ -106,8 +112,7 @@ public class Controleur
 	public void charger(File fichier)
 	{
 		this.plateau = Enregistrement.Recuperer(fichier, this);
-		
-		//this.grille = new FrameGrille(this, this.plateau.getLig(), this.plateau.getCol());
+		this.frame.changerPanel(new PanelGrille(this.plateau.getLig(), this.plateau.getCol(), this, true));
 		this.plateau.initBtn();
 	}
 	
@@ -119,8 +124,14 @@ public class Controleur
 	public int nbPlateau()
 	{
 		int num = 0;
-		while (new File("./niveaux/carte_num_" + num + ".data").exists())
+		while (new File("../niveaux/carte_num_" + num + ".data").exists())
 			num++;
 		return num;
+	}
+
+	public void supprimerZone(int lig, int col)
+	{
+		this.plateau.supprimerZone(lig, col);
+		this.plateau.initBtn();
 	}
 }

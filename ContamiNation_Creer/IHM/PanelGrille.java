@@ -38,7 +38,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private JButton     valider;
 	private JButton     annuler;
 
-	private Map<Integer, Color> couleursZones = new HashMap<>();
+	private Map<Integer, Color> couleursZones;
 
 	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone)
 	{
@@ -47,6 +47,8 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		this.ctrl      = ctrl;
 		this.modeZone  = modeZone;
+
+		this.couleursZones = this.ctrl.getCouleurZone();
 
 		this.panelGrille = new JPanel(new GridLayout(ligne, colonne));
 		this.tabBtn      = new JButton[ligne][colonne];
@@ -219,7 +221,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 					{
 						if (e.getSource() == this.tabBtn[lig][col])
 						{
-							this.ctrl.getCase(lig, col).supprimerZone();
+							this.ctrl.supprimerZone(lig, col);
 							this.tabBtn[lig][col].setBackground(Color.WHITE);
 							this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
 						}
@@ -231,12 +233,13 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	private Color nextColor()
 	{
-		Color c = new Color(r, g, b);
-
+		
 		r = (r + 67) % 256;
 		g = (g + 113) % 256;
 		b = (b + 193) % 256;
-
+		
+		Color c = new Color(r, g, b);
+		
 		return c;
 	}
 

@@ -55,7 +55,6 @@ public class FrameCreer extends JFrame
 	public void valider (int lig, int col, int nbVirus, String nomPlateau)
 	{
 		this.ctrl.creerPlateau(lig, col, nbVirus, nomPlateau);
-		//this.dispose();
 	}
 
 	public void ajouterZone (int lig, int col)
