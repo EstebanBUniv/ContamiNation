@@ -1,7 +1,7 @@
 package ContamiNation_Creer.IHM;
 
 import ContamiNation_Creer.Controleur;
-import ContamiNation_Creer.IHM.FrameParametre;
+import ContamiNation_Creer.IHM.FrameCreer;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -21,7 +21,7 @@ SAE 2.01 | Développement d'une application
 
 public class PanelParametre extends JPanel implements ActionListener
 {
-	private FrameParametre frameMere;
+	private FrameCreer frameMere;
 
 	private JButton btnValider;
 	private JButton btnAnnuler;
@@ -34,7 +34,7 @@ public class PanelParametre extends JPanel implements ActionListener
 	private JPanel panelBouton;
 	private JPanel panelTxt;
 
-	public PanelParametre(FrameParametre frameMere)
+	public PanelParametre(FrameCreer frameMere)
 	{
 		this.frameMere = frameMere;
 

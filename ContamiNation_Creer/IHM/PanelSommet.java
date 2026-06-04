@@ -12,7 +12,7 @@ SAE 2.01 | Développement d'une application
 
 public class PanelSommet extends JPanel implements MouseListener, MouseMotionListener
 {
-	private FrameSommet frameMere;
+	private FrameSommet  frameMere;
 	private JLabel[]    tabSymboles;
 	private String[]    nomSymboles = {"Aeroport", "Entrepot", "Hopital", "Laboratoire", "Ville"};
 
@@ -32,7 +32,7 @@ public class PanelSommet extends JPanel implements MouseListener, MouseMotionLis
 		for (int i = 0; i < this.nomSymboles.length; i++)
 		{
 			String nomFoyer  = this.nomSymboles[i];
-			String cheminImg = "../images/symboles/symbole_" + nomFoyer + ".png";
+			String cheminImg = "./images/symboles/symbole_" + nomFoyer + ".png";
 
 			ImageIcon iconOriginal = new ImageIcon(cheminImg);
 			Image img50 = iconOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
