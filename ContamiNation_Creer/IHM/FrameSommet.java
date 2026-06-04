@@ -6,6 +6,7 @@ import ContamiNation_Creer.Controleur;
 import javax.swing.*;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.*;
 
 /* 
@@ -20,22 +21,34 @@ public class FrameSommet extends JFrame implements ActionListener
 	private PanelSommet panelOutils;
 	private Controleur  ctrl;
 	private PanelArrete panelArrete;
+
 	private JButton     btnSave;
+	private JButton     btnRetour;
+	private JPanel      panelBouton;
 
 	public FrameSommet(Controleur ctrl, int lig, int col)
 	{
+		this.setTitle("ContamiNation - Sommets");
+		this.setSize(800, 600);
+		this.setLocationRelativeTo(null);
+		this.setLayout(new BorderLayout());
+
 		this.ctrl = ctrl;
+
+		//-------------------------//
+		// Création des composants //
+		//-------------------------//
 
 		this.panelGrille = new PanelGrille(lig, col, ctrl, false);
 		this.panelOutils = new PanelSommet(this);
 		this.panelArrete = new PanelArrete(this.ctrl);
 		this.btnSave     = new JButton("Enregistrer");
+		this.btnRetour   = new JButton("Retour");
+		this.panelBouton = new JPanel (new GridLayout());
 
 		this.panelArrete.setOpaque(false);
 
 		JPanel centerPanel = new JPanel(null) { public boolean isOptimizedDrawingEnabled() { return false; } }; // Surcharge d'une méthode
-		centerPanel.add(this.panelArrete); 
-		centerPanel.add(this.panelGrille);
 
 		centerPanel.addComponentListener(new ComponentAdapter()
 		{
@@ -50,15 +63,22 @@ public class FrameSommet extends JFrame implements ActionListener
 			}
 		});
 
-		this.setTitle("ContamiNation - Sommets");
-		this.setSize(800, 600);
-		this.setLocationRelativeTo(null);
-		this.setLayout(new BorderLayout());
-		this.add(centerPanel,       BorderLayout.CENTER);
-		this.add(this.panelOutils,  BorderLayout.EAST);
-		this.add(this.btnSave,      BorderLayout.SOUTH);
+		//-------------------------------//
+		// Positionnement des composants //
+		//-------------------------------//
 
-		this.btnSave.addActionListener(this);
+		centerPanel.add(this.panelArrete); 
+		centerPanel.add(this.panelGrille);
+
+		this.panelBouton.add(this.btnSave  , BorderLayout.EAST);
+		this.panelBouton.add(this.btnRetour, BorderLayout.WEST);
+
+		this.add(centerPanel,      BorderLayout.CENTER);
+		this.add(this.panelOutils, BorderLayout.EAST  );
+		this.add(this.panelBouton, BorderLayout.SOUTH);
+
+		this.btnSave  .addActionListener(this);
+		this.btnRetour.addActionListener(this);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
@@ -72,6 +92,12 @@ public class FrameSommet extends JFrame implements ActionListener
 		{
 			this.ctrl.enregistrer();
 			FrameBase frameBase = new FrameBase(this.ctrl);
+		}
+
+		if ( e.getSource() == this.btnRetour )
+		{
+			this.ctrl.OuvrirCreer();
+			this.dispose();
 		}
 	}
 
