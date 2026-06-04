@@ -29,7 +29,7 @@ public class FrameCreer extends JFrame
 		this.panel      = new PanelSauvegarde(this);
 		this.txtNumZone = new JTextField(10);
 		
-		this.add(this.txtNumZone                       , BorderLayout.WEST  );
+		this.add(this.txtNumZone, BorderLayout.WEST  );
 		this.add(panel);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -91,5 +91,14 @@ public class FrameCreer extends JFrame
 		this.add(this.panel);
 		this.revalidate();
 		this.repaint();
+	}
+
+	public void setEstNouveau(boolean val)
+	{
+		if ( this.panel instanceof PanelGrille )
+		{
+			((PanelGrille)(this.panel)).setEstNouveau(val);
+		}
+			
 	}
 }

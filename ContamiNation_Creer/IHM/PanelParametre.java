@@ -114,6 +114,7 @@ public class PanelParametre extends JPanel implements ActionListener
 				nomPlateau = this.txtNomPlateau.getText();
 				
 				this.frameMere.valider( lig, col, nbCouleur, nomPlateau);
+				this.frameMere.setEstNouveau(true);
 			}
 		}
 

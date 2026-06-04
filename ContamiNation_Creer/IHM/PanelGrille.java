@@ -35,8 +35,11 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private JPanel      panelGrille;
 	private JPanel      panelBoutton;
 
-	private JButton     valider;
-	private JButton     annuler;
+	private JButton     btnValider;
+	private JButton     btnAnnuler;
+	private JButton     btnRetour;
+
+	private boolean     estNouveau = false;
 
 	private Map<Integer, Color> couleursZones;
 
@@ -76,17 +79,20 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		if (this.modeZone)
 		{
-			this.annuler = new JButton("Annuler");
-			this.valider = new JButton("Valider");
+			this.btnAnnuler = new JButton("Annuler");
+			this.btnValider = new JButton("Valider");
+			this.btnRetour  = new JButton("Retour" );
 
 			this.panelBoutton = new JPanel();
-			this.panelBoutton.add(this.valider);
-			this.panelBoutton.add(this.annuler);
+			this.panelBoutton.add(this.btnValider);
+			this.panelBoutton.add(this.btnAnnuler);
+			this.panelBoutton.add(this.btnRetour );
 
 			this.add(this.panelBoutton, BorderLayout.SOUTH);
 
-			this.valider.addActionListener(this);
-			this.annuler.addActionListener(this);
+			this.btnValider.addActionListener(this);
+			this.btnAnnuler.addActionListener(this);
+			this.btnRetour .addActionListener(this);
 		}
 	}
 
@@ -111,6 +117,11 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		if (c instanceof JButton)
 			return (JButton)c;
 		return null;
+	}
+
+	public void setEstNouveau(boolean val)
+	{
+		this.estNouveau = val;
 	}
 
 	public void initBtn(String valeur, int lig, int col)
@@ -141,6 +152,8 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	public void actionPerformed(ActionEvent e)
 	{
+		JFrame top = (JFrame)SwingUtilities.getWindowAncestor(this);
+
 		if (this.modeZone)
 		{
 			for (int lig = 0; lig < this.tabBtn.length; lig++)
@@ -149,7 +162,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				{
 					if (e.getSource() == this.tabBtn[lig][col])
 					{
-						JFrame top = (JFrame)SwingUtilities.getWindowAncestor(this);
 						if (top instanceof FrameCreer)
 						{
 							((FrameCreer)top).ajouterZone(lig, col);
@@ -162,7 +174,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 			}
 		}
 
-		if (this.modeZone && e.getSource() == this.valider)
+		if (this.modeZone && e.getSource() == this.btnValider)
 		{
 			for (int lig = 0; lig < this.tabBtn.length; lig++)
 			{
@@ -173,12 +185,11 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				}
 			}
 
-			JFrame top = (JFrame)SwingUtilities.getWindowAncestor(this);
 			if (top instanceof FrameCreer)
 				((FrameCreer)top).fermer();
 		}
 
-		if (this.modeZone && e.getSource() == this.annuler)
+		if (this.modeZone && e.getSource() == this.btnAnnuler)
 		{
 			for (int lig = 0; lig < this.tabBtn.length; lig++)
 			{
@@ -189,6 +200,27 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 					this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
 				}
 			}
+		}
+
+		if ( e.getSource() == this.btnRetour )
+		{
+			if ( top instanceof FrameCreer )
+			{
+				if ( this.estNouveau )
+				{
+					((FrameCreer)(top)).changerPanel(new PanelParametre((FrameCreer)(top)));
+				}
+				else
+				{
+					((FrameCreer)(top)).changerPanel(new PanelSauvegarde((FrameCreer)(top)));
+				}
+			}
+					
+			if ( top instanceof FrameSommet )
+			{
+				System.out.println("retour");
+			}
+
 		}
 	}
 
