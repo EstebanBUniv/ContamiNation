@@ -45,7 +45,7 @@ public class PanelMenu extends JPanel implements ActionListener, AdjustmentListe
 	public PanelMenu(Controleur ctrl, FrameMenu frame)
 	{
 		this.setLayout(new BorderLayout());
-		this.imgFond = getToolkit().getImage("./images/BackGround/fond.png");
+		this.imgFond = getToolkit().getImage("../images/BackGround/fond.png");
 		
 		this.frame = frame;
 		this.ctrl  = ctrl;

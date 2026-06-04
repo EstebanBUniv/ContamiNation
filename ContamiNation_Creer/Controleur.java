@@ -4,6 +4,9 @@ import ContamiNation_Creer.Metier.*;
 import ContamiNation_Creer.IHM.*;
 import javax.swing.*;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.awt.Color;
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -17,10 +20,11 @@ public class Controleur
 	/*  Attributs de la classe    */
 	/*----------------------------*/
 	
-	private FrameMenu    frame;
-	private FrameGrille  grille;
-	private FrameSommet  frameSommet;
-	private Plateau      plateau;
+	private FrameMenu           frame;
+	private FrameGrille         grille;
+	private FrameSommet         frameSommet;
+	private Plateau             plateau;
+	private Map<Integer, Color> couleursZones = new HashMap<>();
 	
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -51,6 +55,8 @@ public class Controleur
 		return this.plateau.getCase(lig, col);
 	}
 	
+	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
+	
 	/*----------------------------*/
 	/*  Méthodes                  */
 	/*----------------------------*/
@@ -73,8 +79,8 @@ public class Controleur
 	
 	public void ajouterZone (int lig, int col, int numZone)
 	{
-		this.plateau.ajouterZone(lig, col, numZone);
-		this.plateau.initBtn();
+			this.plateau.ajouterZone(lig, col, numZone);
+			this.plateau.initBtn();
 	}
 
 	
@@ -87,9 +93,9 @@ public class Controleur
 	
 	public void supprimerSommet(int lig, int col)
 	{
-		this.plateau.supprimerSommet(lig, col);
-		this.plateau.relierTousLesSommets();
-		this.plateau.initBtn();
+			this.plateau.supprimerSommet(lig, col);
+			this.plateau.relierTousLesSommets();
+			this.plateau.initBtn();
 	}
 
 	public void ajouterSommet(int lig, int col, String symbole)
@@ -121,7 +127,7 @@ public class Controleur
 	public int nbPlateau()
 	{
 		int num = 0;
-		while (new File("./niveaux/carte_num_" + num + ".data").exists())
+		while (new File("../niveaux/carte_num_" + num + ".data").exists())
 			num++;
 		return num;
 	}
