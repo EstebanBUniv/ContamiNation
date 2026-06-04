@@ -75,10 +75,7 @@ public class FrameSommet extends JFrame implements ActionListener
 		if (e.getSource() == this.btnSave && this.cptVirus >= this.ctrl.getNbVirus())
 		{
 			this.ctrl.enregistrer();
-			FrameBase frameBase = new FrameBase(this.ctrl);
 		}
-
-		
 	}
 
 	public void initBtn(String valeur, int lig, int col)

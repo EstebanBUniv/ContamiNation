@@ -19,8 +19,7 @@ import java.util.Map;
 
 import javax.swing.*;
 
-/* 
-SAE 2.01 | Développement d'une application 
+/* SAE 2.01 | Développement d'une application 
 * @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
 * Groupe   : 3
 */
@@ -31,7 +30,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private int g = 0;
 	private int b = 0;
 
-	private int cptVirus = 0;
+	private int cptVirus = 1;
  
 	private JButton[][]  tabBtn;
 	private Controleur   ctrl;
@@ -54,12 +53,11 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone, FrameSommet frameMere)
 	{
-		
 		this.setLayout(new BorderLayout());
 
 		this.ctrl      = ctrl;
 		this.modeZone  = modeZone;
-		this.modeBase = false;
+		this.modeBase  = false;
 
 		this.frameMere = frameMere;
 
@@ -68,9 +66,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		this.panelGrille = new JPanel(new GridLayout(ligne, colonne));
 		this.tabBtn      = new JButton[ligne][colonne];
-
-
-	
 
 		for (int lig = 0; lig < this.tabBtn.length; lig++)
 		{
@@ -143,7 +138,15 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		this.tabBtn[lig][col].setIcon(null);
 
 		int zone = this.ctrl.getCase(lig, col).getZone();
-		this.tabBtn[lig][col].setBackground(getCouleurZone(zone));
+		
+		if (this.ctrl.getCase(lig, col).getSommet() == null || this.ctrl.getCase(lig, col).getSommet().getEstBase() == 0) 
+		{
+			this.tabBtn[lig][col].setBackground(getCouleurZone(zone));
+		} 
+		else 
+		{
+			this.tabBtn[lig][col].setBackground(Color.WHITE);
+		}
 
 		if (this.ctrl.getCase(lig, col).getSommet() != null)
 		{
@@ -161,7 +164,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		{
 			this.tabBtn[lig][col].setIcon(null);
 		}
-
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -215,6 +217,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				}
 			}
 		}
+		
 		if (this.frameMere != null)
 		{
 			if (this.frameMere.getmodeBase())
@@ -227,9 +230,9 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 						{
 							Sommet s = ctrl.getCase(lig, col).getSommet();
 
-							if (s != null && this.cptVirus < this.ctrl.getNbVirus() && s.getEstBase() == false)
+							if (s != null && this.cptVirus <= this.ctrl.getNbVirus() && s.getEstBase() == 0)
 							{
-								s.setBase(true);
+								s.setBase(this.cptVirus);
 								ctrl.getButton(lig, col).setBackground(Color.WHITE);
 								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.cptVirus);
 								this.cptVirus++;
@@ -258,7 +261,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 			{
 				System.out.println("retour");
 			}
-
 		}
 	}
 
@@ -274,11 +276,13 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 					{
 						if (e.getSource() == this.tabBtn[lig][col])
 						{
+							if (this.ctrl.getCase(lig, col).getSommet() != null && this.ctrl.getCase(lig, col).getSommet().getEstBase() != 0)
+								this.cptVirus--;
+								
 							this.ctrl.supprimerSommet(lig, col);
 						}
 					}
 				}
-			
 			}	
 		}
 		else
@@ -303,7 +307,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	private Color nextColor()
 	{
-		
 		r = (r + 67) % 256;
 		g = (g + 113) % 256;
 		b = (b + 193) % 256;
