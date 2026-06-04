@@ -4,16 +4,18 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+
 /* 
 SAE 2.01 | Développement d'une application 
 * @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
 * Groupe   : 3
 */
 
-public class PanelSommet extends JPanel implements MouseListener, MouseMotionListener
+public class PanelSommet extends JPanel implements MouseListener, MouseMotionListener, ActionListener
 {
 	private FrameSommet  frameMere;
 	private JLabel[]    tabSymboles;
+	private JButton     btnBase;
 	private String[]    nomSymboles = {"Aeroport", "Entrepot", "Hopital", "Laboratoire", "Ville"};
 
 	private JLabel      labelVolant;
@@ -21,30 +23,38 @@ public class PanelSommet extends JPanel implements MouseListener, MouseMotionLis
 	private ImageIcon   iconChoisie;
 	private int         clicX;
 	private int         clicY;
-
+	
 	public PanelSommet(FrameSommet frameMere)
 	{
 		this.frameMere = frameMere;
-		this.setLayout(new GridLayout(this.nomSymboles.length, 1, 10, 10));
-
+		this.setLayout(new GridLayout(this.nomSymboles.length + 1, 1, 10, 10));
+		
 		this.tabSymboles = new JLabel[this.nomSymboles.length];
-
+		this.btnBase     = new JButton("Placer les bases " + this.frameMere.getNbVirus());
+		this.btnBase.setBackground(Color.RED);
+		
 		for (int i = 0; i < this.nomSymboles.length; i++)
-		{
-			String nomFoyer  = this.nomSymboles[i];
-			String cheminImg = "../images/symboles/symbole_" + nomFoyer + ".png";
+			{
+				String nomFoyer  = this.nomSymboles[i];
+				String cheminImg = "../images/symboles/symbole_" + nomFoyer + ".png";
+				
+				ImageIcon iconOriginal = new ImageIcon(cheminImg);
+				Image img50 = iconOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+				ImageIcon icon50 = new ImageIcon(img50);
+				
+				this.tabSymboles[i] = new JLabel(nomFoyer, icon50, SwingConstants.CENTER);
+				
+				this.tabSymboles[i].addMouseListener(this);
+				this.tabSymboles[i].addMouseMotionListener(this);
+				
+				this.add(this.tabSymboles[i]);
+			}
 
-			ImageIcon iconOriginal = new ImageIcon(cheminImg);
-			Image img50 = iconOriginal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-			ImageIcon icon50 = new ImageIcon(img50);
+	
+		this.btnBase.addActionListener(this);
 
-			this.tabSymboles[i] = new JLabel(nomFoyer, icon50, SwingConstants.CENTER);
+		this.add(this.btnBase);
 
-			this.tabSymboles[i].addMouseListener(this);
-			this.tabSymboles[i].addMouseMotionListener(this);
-
-			this.add(this.tabSymboles[i]);
-		}
 	}
 
 	public void mousePressed(MouseEvent e)
@@ -124,6 +134,20 @@ public class PanelSommet extends JPanel implements MouseListener, MouseMotionLis
 			this.iconChoisie   = null;
 			this.symboleChoisi = null;
 			this.frameMere.repaint();
+		}
+	}
+
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == this.btnBase && this.frameMere != null)
+		{
+			this.frameMere.modeBase(! (this.frameMere.getmodeBase()));
+			this.btnBase.setText("Placer les bases " + this.frameMere.getNbVirus());
+			if (this.frameMere.getmodeBase())
+				this.btnBase.setBackground(Color.GREEN);
+			else
+				this.btnBase.setBackground(Color.RED);
 		}
 	}
 
