@@ -39,6 +39,7 @@ public class Sommet
 	public Sommet[] getLstVoisin() { return this.lstVoisins         ; }
 	public int      getLigSommet() { return this.caseSommet.getLig(); }
 	public int      getColSommet() { return this.caseSommet.getCol(); }
+	public boolean  getEstBase()   { return this.estBase            ; }
 	
 	/*----------------------------*/
 	/*  Méthodes                  */

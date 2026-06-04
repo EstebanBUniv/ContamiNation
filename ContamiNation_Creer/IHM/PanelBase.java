@@ -46,7 +46,7 @@ public class PanelBase extends JPanel implements ActionListener
 					{
 						Sommet s = ctrl.getCase(lig, col).getSommet();
 
-						if (s != null )
+						if (s != null && this.cptVirus < this.ctrl.getNbVirus())
 						{
 							s.setBase(true);
 							ctrl.getButton(lig, col).setBackground(Color.WHITE);

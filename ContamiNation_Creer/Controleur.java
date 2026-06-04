@@ -64,7 +64,7 @@ public class Controleur
 	public void creerPlateau(int lig, int col, int nbCouleur, String nomPlateau)
 	{
 		this.plateau = Plateau.creerPlateau( lig, col, nbCouleur, nomPlateau, this);
-		this.frame.changerPanel(new PanelGrille(lig, col, this, true));
+		this.frame.changerPanel(new PanelGrille(lig, col, this, true, this.frameSommet));
 		this.plateau.initBtn();
 	}
 	
@@ -120,7 +120,7 @@ public class Controleur
 	public void charger(File fichier)
 	{
 		this.plateau = Enregistrement.Recuperer(fichier, this);
-		this.frame.changerPanel(new PanelGrille(this.plateau.getLig(), this.plateau.getCol(), this, true));
+		this.frame.changerPanel(new PanelGrille(this.plateau.getLig(), this.plateau.getCol(), this, true, this.frameSommet));
 		this.plateau.initBtn();
 	}
 	
