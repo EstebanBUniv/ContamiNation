@@ -45,7 +45,7 @@ public class Enregistrement
 			
 			pw.println(this.plateau.getLig      ());
 			pw.println(this.plateau.getCol      ());
-			pw.println(this.plateau.getNbCouleur());
+			pw.println(this.plateau.getNbVirus  ());
 			pw.println(this.plateau.getNom      ());
 			
 			for (int lig = 0; lig < this.plateau.getLig(); lig++)

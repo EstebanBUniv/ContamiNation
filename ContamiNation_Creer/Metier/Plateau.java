@@ -21,7 +21,7 @@ public class Plateau
 	private Controleur ctrl;
 	private int        col;
 	private int        lig;
-	private int        nbCouleur;
+	private int        nbVirus;
 	private int        tailleCases;
 	private String     nom;
 	private String[]   couleurs;
@@ -31,14 +31,14 @@ public class Plateau
 	/*  Constructeur de la classe */
 	/*----------------------------*/
 	
-	public static Plateau creerPlateau(int lig, int col, int nbCouleur, String nom, Controleur ctrl)
+	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
 	{
-		if ( col <= 0 || lig <= 0 || nbCouleur <=0)
+		if ( col <= 0 || lig <= 0 || nbVirus <=0)
 				return null;
-		return new Plateau(lig, col, nbCouleur, nom, ctrl);
+		return new Plateau(lig, col, nbVirus, nom, ctrl);
 	}
 
-	private Plateau(int lig, int col, int nbCouleur, String nom, Controleur ctrl)
+	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
 	{
 		this.ctrl        = ctrl;
 		
@@ -47,8 +47,8 @@ public class Plateau
 		
 		this.nom = nom;
 		
-		this.nbCouleur   = nbCouleur;
-		this.couleurs    = new String[this.nbCouleur];
+		this.nbVirus   = nbVirus;
+		this.couleurs    = new String[this.nbVirus];
 		
 		this.tailleCases = 50;
 		this.tabCases    = new Case[this.lig][this.col];
@@ -72,7 +72,7 @@ public class Plateau
 	
 	public int    getLig      () { return this.lig              ; }
 	public int    getCol      () { return this.col              ; }
-	public int    getNbCouleur() { return this.nbCouleur        ; }
+	public int    getNbVirus  () { return this.nbVirus          ; }
 	public int    getNumero   () { return this.ctrl.nbPlateau() ; }
 	public String getNom      () { return this.nom              ; }
 	
