@@ -51,7 +51,8 @@ public class FrameSommet extends JFrame implements ActionListener
 		});
 
 		this.setTitle("ContamiNation - Sommets");
-		this.setSize(900, 700);
+		this.setSize(800, 600);
+		this.setLocationRelativeTo(null);
 		this.setLayout(new BorderLayout());
 		this.add(centerPanel,       BorderLayout.CENTER);
 		this.add(this.panelOutils,  BorderLayout.EAST);

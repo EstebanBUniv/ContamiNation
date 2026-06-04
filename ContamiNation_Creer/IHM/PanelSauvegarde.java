@@ -29,9 +29,8 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 	private JButton btnNouveau;
 	private JButton btnModifier;
 	private JButton btnSupprimer;
-	private JButton btnRetour;
 	private JButton btnRenommer;
-	private JButton btnConfirmer;	
+	private JButton btnQuitter;	
 
 	private JPanel panelTitre;
 	private JPanel panelSauvegarde;
@@ -68,15 +67,13 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.btnModifier   = new JButton("Modifier"       );
 		this.btnSupprimer  = new JButton("Supprimer"      );
 		this.btnRenommer   = new JButton("Renommer"       );
-		this.btnRetour     = new JButton("Retour"         );
-		this.btnConfirmer  = new JButton("Confirmer"      );
+		this.btnQuitter    = new JButton("Quitter"        );
 
 		this.btnNouveau  .setPreferredSize(new Dimension(205, 30));
-		this.btnConfirmer.setPreferredSize(new Dimension(205, 30));
-		this.btnRenommer .setPreferredSize(new Dimension(100, 30));
-		this.btnSupprimer.setPreferredSize(new Dimension(100, 30));
-		this.btnModifier .setPreferredSize(new Dimension(100, 30));
-		this.btnRetour   .setPreferredSize(new Dimension(100, 30));
+		this.btnModifier .setPreferredSize(new Dimension(205, 30));
+		this.btnQuitter  .setPreferredSize(new Dimension(135, 30));
+		this.btnRenommer .setPreferredSize(new Dimension(135, 30));
+		this.btnSupprimer.setPreferredSize(new Dimension(135, 30));
 
 		//-------------------------------//
 		// Positionnement des composants //
@@ -88,13 +85,12 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.panelSauvegarde.add(this.scroll,                    BorderLayout.CENTER);
 		this.panelSauvegarde.add(Box.createHorizontalStrut(100), BorderLayout.EAST  );
 
-		this.panelBtnHaut.add(this.btnConfirmer);
+		this.panelBtnHaut.add(this.btnModifier );
 		this.panelBtnHaut.add(this.btnNouveau  );
 
-		this.panelBtnBas.add(this.btnRenommer  );
 		this.panelBtnBas.add(this.btnSupprimer );
-		this.panelBtnBas.add(this.btnModifier  );
-		this.panelBtnBas.add(this.btnRetour    );
+		this.panelBtnBas.add(this.btnRenommer  );
+		this.panelBtnBas.add(this.btnQuitter   );
 
 		this.panelBoutons.add(this.panelBtnHaut);
 		this.panelBoutons.add(this.panelBtnBas );
@@ -107,18 +103,17 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		// Activation des composants     //
 		//-------------------------------//
 		this.btnNouveau  .addActionListener(this);
-		this.btnConfirmer.addActionListener(this);
+		this.btnQuitter  .addActionListener(this);
 		this.btnRenommer .addActionListener(this);
 		this.btnSupprimer.addActionListener(this);
 		this.btnModifier .addActionListener(this);
-		this.btnRetour   .addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
 		int ligne = this.tabSauvegarde.getSelectedRow();
 
-		if (e.getSource() == this.btnConfirmer)
+		if (e.getSource() == this.btnQuitter)
 		{
 			this.frameMere.dispose();
 		}
