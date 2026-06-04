@@ -52,8 +52,15 @@ public class FrameGrille extends JFrame
 	
 	public void ajouterZone (int lig, int col)
 	{
-		if ( this.txtNumZone.getText().matches( "[0-9]+" ))
-			this.ctrl.ajouterZone(lig, col, Integer.parseInt(this.txtNumZone.getText()));
+		try
+		{
+			if ( this.txtNumZone.getText().matches( "[0-9]+" ) && Integer.parseInt(this.txtNumZone.getText()) >= 1)
+				this.ctrl.ajouterZone(lig, col, Integer.parseInt(this.txtNumZone.getText()));
+		}
+		catch (NumberFormatException e)
+		{
+			System.out.println("Rentrez une valeur valide");
+		}
 	}
 
 	public Case getCase(int lig, int col)
