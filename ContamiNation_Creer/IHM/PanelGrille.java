@@ -150,7 +150,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		{
 			this.tabBtn[lig][col].setIcon(null);
 		}
-		this.tabBtn[lig][col].repaint();
 
 	}
 
@@ -172,7 +171,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 							int indCouleur = this.ctrl.getCase(lig, col).getZone();
 							this.tabBtn[lig][col].setBackground(getCouleurZone(indCouleur));
-							this.repaint();
 						}
 					}
 				}
@@ -260,7 +258,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 						{
 							this.ctrl.supprimerZone(lig, col);
 							this.tabBtn[lig][col].setBackground(Color.WHITE);
-							this.repaint();
 							this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
 						}
 					}
@@ -296,11 +293,4 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	public void mouseEntered (MouseEvent e) {}
 	public void mouseReleased(MouseEvent e) {}
 	public void mouseClicked (MouseEvent e) {}
-	
-	 protected void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-		ImageIcon bg = new ImageIcon("../images/BackGround/fond.png");
-		g.drawImage(bg.getImage(), 0, 0, getWidth(), getHeight(), this);
-	}
 }
