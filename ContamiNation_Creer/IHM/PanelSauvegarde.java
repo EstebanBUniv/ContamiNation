@@ -129,7 +129,6 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		
 		if (e.getSource() == this.btnModifier)
 		{
-			System.out.println("modif 1");
 			this.frameMere.charger(this.fichiersDossier.get(ligne));
 		}
 			
