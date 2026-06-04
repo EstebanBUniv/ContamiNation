@@ -125,13 +125,14 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 				this.fichiersDossier.get(ligne).delete();
 				this.rafraichir();
 			}
-		}
-
-		if (e.getSource() == this.btnRenommer)
-			
+		}			
 		
 		if (e.getSource() == this.btnModifier)
+		{
+			System.out.println("modif 1");
 			this.frameMere.charger(this.fichiersDossier.get(ligne));
+		}
+			
 			
 
 		if (e.getSource() == this.btnNouveau)
