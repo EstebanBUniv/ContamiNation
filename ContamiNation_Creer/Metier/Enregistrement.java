@@ -41,7 +41,7 @@ public class Enregistrement
 	{
 		try
 		{
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("./niveaux/carte_num_" + (this.plateau.getNumero() + 1) + ".data"), "UTF8"));
+			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("../niveaux/carte_num_" + this.plateau.getNumero() + ".data"), "UTF8"));
 			
 			pw.println(this.plateau.getLig      ());
 			pw.println(this.plateau.getCol      ());
@@ -89,6 +89,8 @@ public class Enregistrement
 					plateau.ajouterSommet(ligCase, colCase, sommetCase);
 			}
 			sc.close();
+
+			plateau.relierTousLesSommets();
 		}
 		catch (Exception e) { e.printStackTrace(); }
 		return plateau;

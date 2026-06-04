@@ -40,7 +40,7 @@ public class FrameSommet extends JFrame implements ActionListener
 		centerPanel.addComponentListener(new ComponentAdapter()
 		{
 			public void componentResized(ComponentEvent e)
-			{
+			{ 
 				int w = centerPanel.getWidth();
 				int h = centerPanel.getHeight();
 				panelGrille.setBounds(0, 0, w, h);

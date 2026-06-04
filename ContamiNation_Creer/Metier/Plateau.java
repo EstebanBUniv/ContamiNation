@@ -216,6 +216,17 @@ public class Plateau
 		
 		return res;
 	}
+
+
+	public void supprimerZone(int lig, int col)
+	{
+		int zoneSupp = this.tabCases[lig][col].getZone();
+
+		for (int i = 0 ; i < this.lig ; i ++)
+			for (int j = 0 ; j < this.col ; j++)
+				if (this.tabCases[i][j].getZone() == zoneSupp)
+					this.tabCases[i][j].supprimerZone();
+	}
 	
 
 }

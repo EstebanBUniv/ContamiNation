@@ -59,7 +59,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.panelBtnHaut    = new JPanel(new FlowLayout  ()    );
 		this.panelBtnBas     = new JPanel(new FlowLayout  ()    );
 
-		this.tabSauvegarde = new JTable(this.getFichier("./niveaux/"), new String[]{"nom"});
+		this.tabSauvegarde = new JTable(this.getFichier("../niveaux/"), new String[]{"nom"});
 		this.tabSauvegarde.setRowHeight(50);
 		this.tabSauvegarde.setTableHeader(null);
 		this.scroll        = new JScrollPane(this.tabSauvegarde);
@@ -131,6 +131,9 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 				this.rafraichir();
 			}
 		}
+		
+		if (e.getSource() == this.btnModifier)
+			this.frameMere.charger(this.fichiersDossier.get(ligne));
 
 		if (e.getSource() == this.btnNouveau)
 			this.frameMere.creerPlateau();
@@ -139,7 +142,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 	public void rafraichir()
 	{
 		this.tabSauvegarde.setModel(
-			new DefaultTableModel(this.getFichier("./niveaux/"), new String[]{"nom"})
+			new DefaultTableModel(this.getFichier("../niveaux/"), new String[]{"nom"})
 		);
 	}
 
