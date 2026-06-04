@@ -238,6 +238,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 					}
 				}
 			}
+		}
 
 		if ( e.getSource() == this.btnRetour )
 		{
