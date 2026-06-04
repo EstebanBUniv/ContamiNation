@@ -13,9 +13,8 @@ public class Sommet
 	/*----------------------------*/
 	
 	private String   symbole;
-	private String   couleur;
 	private Sommet[] lstVoisins;
-	private boolean  estBase;
+	private int      estBase;
 	private Case     caseSommet;
 	
 	/*----------------------------*/
@@ -25,10 +24,9 @@ public class Sommet
 	public Sommet (String symbole, Case caseSommet)
 	{
 		this.symbole    = symbole;
-		this.couleur    = null;
 		this.lstVoisins = new Sommet[8];
-		this.estBase    = false;
-		this.caseSommet      = caseSommet;
+		this.estBase    = 0;
+		this.caseSommet = caseSommet;
 	}
 	
 	/*----------------------------*/
@@ -39,7 +37,7 @@ public class Sommet
 	public Sommet[] getLstVoisin() { return this.lstVoisins         ; }
 	public int      getLigSommet() { return this.caseSommet.getLig(); }
 	public int      getColSommet() { return this.caseSommet.getCol(); }
-	public boolean  getEstBase()   { return this.estBase            ; }
+	public int      getEstBase()   { return this.estBase            ; }
 	
 	/*----------------------------*/
 	/*  Méthodes                  */
@@ -64,18 +62,16 @@ public class Sommet
 		this.lstVoisins = new Sommet[8];
 	}
 
-	public boolean setBase(boolean estBase)
+	public void setBase(int estBase)
 	{
-		if (!this.estBase)
+		if (this.estBase == 0)
 		{
 			this.estBase = estBase;
-			return true;
 		}
-		return false;
 	}
 	
 	public String toString ()
 	{
-		return this.symbole;
+		return this.symbole + "\t" + this.estBase;
 	}
 }

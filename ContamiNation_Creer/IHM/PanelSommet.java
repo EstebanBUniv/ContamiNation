@@ -150,6 +150,11 @@ public class PanelSommet extends JPanel implements MouseListener, MouseMotionLis
 				this.btnBase.setBackground(Color.RED);
 		}
 	}
+	
+	public void updateTexteBouton(int nbRestant) 
+	{
+		this.btnBase.setText("Placer les bases " + nbRestant);
+	}
 
 	public void mouseMoved  (MouseEvent e) {}
 	public void mouseClicked(MouseEvent e) {}

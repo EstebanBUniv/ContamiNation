@@ -1,15 +1,10 @@
 package ContamiNation_Creer.IHM;
 
-import ContamiNation_Creer.Controleur;
-import ContamiNation_Creer.IHM.FrameCreer;
-
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.concurrent.Flow;
 
 import javax.swing.*;
 
@@ -106,15 +101,21 @@ public class PanelParametre extends JPanel implements ActionListener
 
 		if (e.getSource() == this.btnValider)
 		{
-			if ( this.txtColonne.getText().matches ( "[0-9]+" ) && this.txtLigne.getText().matches ( "[0-9]+" ) && this.txtNbVirus.getText().matches ( "[0-9]+" ) && !this.txtNomPlateau.getText().isEmpty())
+			if ( this.txtColonne.getText().matches ( "[0-9]+" ) && 
+			     this.txtLigne  .getText().matches ( "[0-9]+" ) && 
+				 this.txtNbVirus.getText().matches ( "[0-9]+" ) && 
+				 !this.txtNomPlateau.getText().isEmpty())
 			{	
 				col        = Integer.parseInt(this.txtColonne.getText());
 				lig        = Integer.parseInt(this.txtLigne.getText());
 				nbCouleur  = Integer.parseInt(this.txtNbVirus.getText());
 				nomPlateau = this.txtNomPlateau.getText();
 				
-				this.frameMere.valider( lig, col, nbCouleur, nomPlateau);
-				this.frameMere.setEstNouveau(true);
+				if (col > 0 && lig > 0 && nbCouleur > 0) 
+				{
+					this.frameMere.valider( lig, col, nbCouleur, nomPlateau);
+					this.frameMere.setEstNouveau(true);
+				}
 			}
 		}
 
