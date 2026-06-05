@@ -50,6 +50,9 @@ public class Enregistrement
 			pw.println(this.plateau.getNbVirus  ());
 			pw.println(this.plateau.getNom      ());
 			
+			for (int cptVirus = 0; cptVirus < this.plateau.getNbVirus(); cptVirus++)
+				pw.println(this.plateau.getNomVirus(cptVirus));
+			
 			for (int lig = 0; lig < this.plateau.getLig(); lig++)
 			{
 				for (int col = 0; col < this.plateau.getCol(); col++)
@@ -72,10 +75,16 @@ public class Enregistrement
 			
 			int    lig       = sc.nextInt();
 			int    col       = sc.nextInt();
-			int    nbCouleur = sc.nextInt();
+			int    nbVirus = sc.nextInt();
 			String nom       = sc.next   ();
 			
-			plateau = Plateau.creerPlateau(lig, col, nbCouleur, nom, ctrl);
+			plateau = Plateau.creerPlateau(lig, col, nbVirus, nom, ctrl);
+			
+			for (int i = 0; i < nbVirus; i++)
+			{
+				String nomVirus = sc.next();
+				plateau.creerVirus(nomVirus);
+			}
 			
 			while (sc.hasNextInt())
 			{
