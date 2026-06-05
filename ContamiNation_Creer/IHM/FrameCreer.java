@@ -26,7 +26,7 @@ public class FrameCreer extends JFrame
 		this.setLocationRelativeTo(null);
 		
 		this.ctrl       = ctrl;
-		this.panel      = new PanelSauvegarde(this);
+		this.panel      = new PanelSauvegarde(this, this.ctrl);
 		this.txtNumZone = new JTextField(10);
 		
 		this.add(panel);
@@ -38,6 +38,11 @@ public class FrameCreer extends JFrame
 	public JPanel getPanel()
 	{
 		return this.panel;
+	}
+
+	public Controleur getCtrl()
+	{
+		return this.ctrl;
 	}
 	
 	public void charger(File fichier)

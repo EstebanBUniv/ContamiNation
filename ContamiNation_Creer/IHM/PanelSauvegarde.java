@@ -1,5 +1,8 @@
 package ContamiNation_Creer.IHM;
 
+import ContamiNation_Creer.Controleur;
+import ContamiNation_Creer.IHM.FrameRenommer;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -41,10 +44,12 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 	private ArrayList<File> fichiersDossier;
 
 	private FrameCreer frameMere;
+	private Controleur ctrl;
 
-	public PanelSauvegarde(FrameCreer frameMere)
+	public PanelSauvegarde(FrameCreer frameMere, Controleur ctrl)
 	{
 		this.frameMere = frameMere;
+		this.ctrl      = ctrl;
 
 		this.setLayout(new BorderLayout());
 
@@ -116,6 +121,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		if (e.getSource() == this.btnQuitter)
 		{
 			this.frameMere.dispose();
+
 		}
 
 		if (e.getSource() == this.btnSupprimer)
@@ -128,15 +134,18 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		}			
 		
 		if (e.getSource() == this.btnModifier)
-		{
 			if (ligne != -1)
-				this.frameMere.charger(this.fichiersDossier.get(ligne));
-		}
-			
-			
+				this.frameMere.charger(this.fichiersDossier.get(ligne));		
 
 		if (e.getSource() == this.btnNouveau)
 			this.frameMere.creerPlateau();
+
+		if ( e.getSource() == this.btnRenommer )
+			if ( ligne != -1 )
+			{
+				new FrameRenommer(this.fichiersDossier.get(ligne), this.ctrl, ligne);
+			}
+				
 				
 	}
 
@@ -145,6 +154,12 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.tabSauvegarde.setModel(
 			new DefaultTableModel(this.getFichier("../niveaux/"), new String[]{"nom"})
 		);
+	}
+
+	public void supprimerFichier(int ligne)
+	{
+		this.fichiersDossier.get(ligne).delete();
+		this.rafraichir();
 	}
 
 	public String[][] getFichier(String chemin)

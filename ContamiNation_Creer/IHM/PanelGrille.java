@@ -41,7 +41,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private JButton      valider; // A quoi il sert ?
 	private JButton      annuler; // A quoi il sert ?
 
-	private FrameSommet  frameMere;
+	private FrameSommet frameMere;
 	private JButton     btnValider;
 	private JButton     btnAnnuler;
 	private JButton     btnRetour;
@@ -267,7 +267,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				}
 				else
 				{
-					((FrameCreer)(top)).changerPanel(new PanelSauvegarde((FrameCreer)(top)));
+					((FrameCreer)(top)).changerPanel(new PanelSauvegarde((FrameCreer)(top), this.ctrl));
 				}
 			}
 					
