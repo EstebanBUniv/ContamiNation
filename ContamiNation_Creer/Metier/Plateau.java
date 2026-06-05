@@ -88,6 +88,11 @@ public class Plateau
 		return this.lstVirus.get(index);
 	}
 
+	public String getNomVirus(int numVirus)
+	{
+		return this.lstVirus.get(numVirus).getNom();
+	}
+
 	/*----------------------------*/
 	/*  Setters                   */
 	/*----------------------------*/

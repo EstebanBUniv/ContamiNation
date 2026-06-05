@@ -43,7 +43,7 @@ public class PanelRenommer extends JPanel implements ActionListener
 
 		this.panelBouton = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
-		this.txtNom      = new JTextField(15);
+		this.txtNom      = new JTextField(this.ctrl.getNom(fichier), 15);
 		this.btnValider  = new JButton("Valider");
 		this.btnAnnuler  = new JButton("Annuler");
 
@@ -64,24 +64,25 @@ public class PanelRenommer extends JPanel implements ActionListener
 		// Activation des composants     //
 		//-------------------------------//
 
-		this.btnValider.addActionListener(this);
+		this.txtNom    .addActionListener(e -> this.valider());
+		this.btnValider.addActionListener(e -> this.valider());
 		this.btnAnnuler.addActionListener(this);
+
+		
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if ( e.getSource() == this.btnValider )
-		{
-			if ( !this.txtNom.getText().isBlank() )
-			{
-				this.ctrl.Renommer(this.txtNom.getText(), this.fichier);
-				this.ctrl.supprimerFichier(this.ligne);
-				this.frameMere.dispose();
-			}
-		}
-
 		if ( e.getSource() == this.btnAnnuler )
+			this.frameMere.dispose();
+	}
+
+	private void valider()
+	{
+		if ( !this.txtNom.getText().isBlank() )
 		{
+			this.ctrl.Renommer(this.txtNom.getText(), this.fichier);
+			this.ctrl.supprimerFichier(this.ligne);
 			this.frameMere.dispose();
 		}
 	}

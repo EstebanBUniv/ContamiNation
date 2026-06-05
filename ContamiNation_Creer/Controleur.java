@@ -146,6 +146,11 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 
+	public String getNom(File fichier)
+	{
+		return Enregistrement.Recuperer(fichier, this).getNom();
+	}
+
 	public void supprimerFichier(int ligne)
 	{
 		((PanelSauvegarde)(this.frame.getPanel())).supprimerFichier(ligne);
