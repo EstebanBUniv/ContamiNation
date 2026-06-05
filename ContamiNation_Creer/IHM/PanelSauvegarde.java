@@ -68,8 +68,6 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.panelBtnHaut    = new JPanel(new GridLayout(1, 2, 5, 5));
 		this.panelBtnBas     = new JPanel(new GridLayout(1, 4, 5, 5));
 
-		panelBoutons.setBorder(BorderFactory.createEmptyBorder(5, this.MARGE, 5, this.MARGE));
-
 		this.tabSauvegarde = new JTable(this.getFichier("../niveaux/"), new String[]{"nom"});
 		this.tabSauvegarde.setRowHeight(50);
 		this.tabSauvegarde.setTableHeader(null);
@@ -101,8 +99,10 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.panelBoutons.add(this.panelBtnHaut);
 		this.panelBoutons.add(this.panelBtnBas );
 
+		this.setBorder(BorderFactory.createEmptyBorder(5, this.MARGE, 5, this.MARGE));
+
 		this.add(this.panelTitre     , BorderLayout.NORTH );
-		this.add(this.panelSauvegarde, BorderLayout.CENTER);
+		this.add(this.scroll         , BorderLayout.CENTER);
 		this.add(this.panelBoutons   , BorderLayout.SOUTH );
 
 		//-------------------------------//
