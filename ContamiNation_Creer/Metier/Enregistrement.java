@@ -73,10 +73,12 @@ public class Enregistrement
 		{
 			 Scanner sc = new Scanner(new FileInputStream(fichier));
 			
-			int    lig       = sc.nextInt();
-			int    col       = sc.nextInt();
-			int    nbVirus = sc.nextInt();
-			String nom       = sc.next   ();
+
+			int    lig       = sc.nextInt ();
+			int    col       = sc.nextInt ();
+			int    nbVirus   = sc.nextInt ();
+			                   sc.nextLine();
+			String nom       = sc.nextLine();
 			
 			plateau = Plateau.creerPlateau(lig, col, nbVirus, nom, ctrl);
 			

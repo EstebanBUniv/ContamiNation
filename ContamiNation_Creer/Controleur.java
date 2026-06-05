@@ -138,6 +138,14 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 
+	public void copier(File fichier)
+	{
+		this.plateau = Enregistrement.Recuperer(fichier, this);
+		this.plateau.setNom(this.plateau.getNom() + " - Copie");
+		this.plateau.enregistrer();
+		this.plateau.initBtn();
+	}
+
 	public void supprimerFichier(int ligne)
 	{
 		((PanelSauvegarde)(this.frame.getPanel())).supprimerFichier(ligne);
