@@ -4,6 +4,7 @@ import ContamiNation_Creer.Controleur;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.io.File;
 
 
 /* 
@@ -26,6 +27,7 @@ public class Plateau
 	private String     nom;
 	private String[]   couleurs;
 	private Case[][]   tabCases;
+	private File fichierSource = null;
 
 	private List<Virus> lstVirus = new ArrayList<Virus>();
 	
@@ -73,11 +75,12 @@ public class Plateau
 	/*  Getters                   */
 	/*----------------------------*/
 	
-	public int    getLig      () { return this.lig              ; }
-	public int    getCol      () { return this.col              ; }
-	public int    getNbVirus  () { return this.nbVirus          ; }
-	public int    getNumero   () { return this.ctrl.nbPlateau() ; }
-	public String getNom      () { return this.nom              ; }
+	public int    getLig         () { return this.lig              ; }
+	public int    getCol         () { return this.col              ; }
+	public int    getNbVirus     () { return this.nbVirus          ; }
+	public int    getNumero      () { return this.ctrl.nbPlateau() ; }
+	public String getNom         () { return this.nom              ; }
+	public File getFichierSource () { return this.fichierSource    ; }
 	
 	public Case getCase(int lig, int col)
 	{
@@ -103,10 +106,8 @@ public class Plateau
 	/*  Setters                   */
 	/*----------------------------*/
 
-	public void setNom(String nom)
-	{
-		this.nom = nom;
-	}
+	public void setNom           (String nom)  { this.nom           = nom ; }
+	public void setFichierSource (File   file) { this.fichierSource = file; }
 
 	
 	/*----------------------------*/
