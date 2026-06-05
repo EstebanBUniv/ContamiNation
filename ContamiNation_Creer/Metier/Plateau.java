@@ -83,6 +83,11 @@ public class Plateau
 		return this.tabCases[lig][col];
 	}
 
+	public Virus getVirus (int index)
+	{
+		return this.lstVirus.get(index);
+	}
+
 	/*----------------------------*/
 	/*  Setters                   */
 	/*----------------------------*/
