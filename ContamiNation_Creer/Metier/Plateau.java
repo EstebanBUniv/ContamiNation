@@ -42,6 +42,7 @@ public class Plateau
 
 	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
 	{
+		Virus.resetData();
 		this.ctrl        = ctrl;
 		
 		this.col         = col;
@@ -86,6 +87,11 @@ public class Plateau
 	public Virus getVirus (int index)
 	{
 		return this.lstVirus.get(index);
+	}
+	
+	public String getNomVirus(int nomVirus)
+	{
+		return this.lstVirus.get(nomVirus).getNom();
 	}
 
 	/*----------------------------*/

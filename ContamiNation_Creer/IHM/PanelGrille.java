@@ -2,6 +2,7 @@ package ContamiNation_Creer.IHM;
 
 import ContamiNation_Creer.Controleur;
 import ContamiNation_Creer.Metier.Sommet;
+import ContamiNation_Creer.Metier.Virus;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -236,11 +237,14 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 						{
 							Sommet s = ctrl.getCase(lig, col).getSommet();
 
-							if (s != null && this.cptVirus <= this.ctrl.getNbVirus() && s.getEstBase() == 0)
+							int idLibre = this.trouverIdLibre();
+						
+							if (s != null && idLibre != -1 && s.getEstBase() == 0)
 							{
-								s.setBase(this.cptVirus);
-								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.cptVirus);
-								this.cptVirus++;
+								s.setBase(idLibre); 
+								
+								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.compterBasesPlacees());
+								this.frameMere.repaint();
 							}
 						}
 					}
@@ -284,13 +288,12 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 					{
 						if (e.getSource() == this.tabBtn[lig][col])
 						{
-							if (this.ctrl.getCase(lig, col).getSommet() != null && this.ctrl.getCase(lig, col).getSommet().getEstBase() != 0)
-							{
-								this.cptVirus--;
-								if (this.frameMere != null)
-										this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - (this.cptVirus - 1));
-							}
 							this.ctrl.supprimerSommet(lig, col);
+							
+							if (this.frameMere != null)
+								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.compterBasesPlacees());
+							
+							this.frameMere.repaint();
 						}
 					}
 				}
@@ -338,6 +341,38 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 			couleursZones.put(numZone, nextColor());
 
 		return couleursZones.get(numZone);
+	}
+	
+	private int trouverIdLibre()
+	{
+		for (int id = 1; id <= this.ctrl.getNbVirus(); id++)
+		{
+			boolean estUtilise = false;
+			for (int lig = 0; lig < this.getNbLig(); lig++)
+			{
+				for (int col = 0; col < this.getNbCol(); col++)
+				{
+					Sommet s = this.ctrl.getCase(lig, col).getSommet();
+					if (s != null && s.getEstBase() == id)
+						estUtilise = true;
+				}
+			}
+			if (!estUtilise) return id;
+		}
+		return -1;
+	}
+
+	private int compterBasesPlacees()
+	{
+		int nb = 0;
+		for (int lig = 0; lig < this.getNbLig(); lig++)
+			for (int col = 0; col < this.getNbCol(); col++)
+			{
+				Sommet s = this.ctrl.getCase(lig, col).getSommet();
+				if (s != null && s.getEstBase() != 0)
+					nb++;
+			}
+		return nb;
 	}
 
 	public void mouseExited  (MouseEvent e) {}
