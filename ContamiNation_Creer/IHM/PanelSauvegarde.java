@@ -121,7 +121,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		int ligne = this.tabSauvegarde.getSelectedRow();
+		 int[] lignes = this.tabSauvegarde.getSelectedRows();
 
 		if (e.getSource() == this.btnQuitter)
 		{
@@ -131,28 +131,35 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		if (e.getSource() == this.btnSupprimer)
 		{
-			if (ligne != -1)
+			if (lignes.length > 0)
 			{
-				this.fichiersDossier.get(ligne).delete();
+				for (int i = lignes.length - 1; i >= 0; i--)
+				{
+					this.fichiersDossier.get(lignes[i]).delete();
+				}
+
 				this.rafraichir();
 			}
 		}			
 		
 		if (e.getSource() == this.btnModifier)
-			if (ligne != -1)
-				this.frameMere.charger(this.fichiersDossier.get(ligne));		
+			 if (lignes.length == 1)
+                this.frameMere.charger(this.fichiersDossier.get(lignes[0]));
 
 		if (e.getSource() == this.btnNouveau)
 			this.frameMere.creerPlateau();
 
 		if ( e.getSource() == this.btnRenommer )
-			if ( ligne != -1 )
-				new FrameRenommer(this.fichiersDossier.get(ligne), this.ctrl, ligne);
+			 if (lignes.length == 1)
+				new FrameRenommer(this.fichiersDossier.get(lignes[0]), this.ctrl, lignes[0] );
 		
 		if ( e.getSource() == this.btnCopier )
 		{
-			this.ctrl.copier(this.fichiersDossier.get(ligne));
-			this.rafraichir();
+			 if (lignes.length == 1)
+			{
+				this.ctrl.copier(this.fichiersDossier.get(lignes[0]));
+				this.rafraichir();
+			}
 		}		
 	}
 
