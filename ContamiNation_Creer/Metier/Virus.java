@@ -11,56 +11,56 @@ Groupe   : 3
 
 public class Virus
 {
-    private static int compteurId = 0; 
+	private static int compteurId = 1; 
 
-    private static Map<Integer, Color> couleursVirus = new HashMap<>();
+	private static Map<Integer, Color> couleursVirus = new HashMap<>();
 
-    private static int r = 0;
-    private static int g = 0;
-    private static int b = 0;
+	private static int r = 0;
+	private static int g = 0;
+	private static int b = 0;
 
-    private int    idVirus;
-    private String nom;
+	private int    idVirus;
+	private String nom;
 
-    public Virus(String nom)
-    {
-        this.nom     = nom;
-        this.idVirus = Virus.compteurId++;
+	public Virus(String nom)
+	{
+		this.nom     = nom;
+		this.idVirus = Virus.compteurId++;
 
-        if (!couleursVirus.containsKey(this.idVirus)) 
-        {
-            couleursVirus.put(this.idVirus, nextColor());
-        }
-    }
+		if (!couleursVirus.containsKey(this.idVirus)) 
+		{
+			couleursVirus.put(this.idVirus, nextColor());
+		}
+	}
 
-    /*----------------------------*/
-    /*  Getters                   */
-    /*----------------------------*/
+	/*----------------------------*/
+	/*  Getters                   */
+	/*----------------------------*/
 
-    public int    getId()      { return this.idVirus; }
-    public String getNom()     { return this.nom;     }
+	public int    getId()      { return this.idVirus; }
+	public String getNom()     { return this.nom;     }
 
-    public Color  getCouleur() { return couleursVirus.get(this.idVirus); }
+	public Color  getCouleur() { return couleursVirus.get(this.idVirus); }
 
 
-    /*----------------------------*/
-    /* Méthodes Utilitaires       */
-    /*----------------------------*/
+	/*----------------------------*/
+	/* Méthodes Utilitaires       */
+	/*----------------------------*/
 
-    private static Color nextColor()
-    {
-        r = (r + 67) % 256;
-        g = (g + 113) % 256;
-        b = (b + 193) % 256;
+	private static Color nextColor()
+	{
+		r = (r + 89) % 256;
+		g = (g + 149) % 256;
+		b = (b + 211) % 256;
 
-        return new Color(r, g, b);
-    }
+		return new Color(r, g, b);
+	}
 
-    public static void resetData()
-    {
-        compteurId = 0;
-        couleursVirus.clear();
-    }
+	public static void resetData()
+	{
+		compteurId = 1;
+		couleursVirus.clear();
+	}
 
 	public static Color getCouleur(int id)
 	{
@@ -69,8 +69,8 @@ public class Virus
 		return Color.BLACK;
 	}
 
-    public String toString()
-    {
-        return this.nom;
-    }
+	public String toString()
+	{
+		return this.nom;
+	}
 }

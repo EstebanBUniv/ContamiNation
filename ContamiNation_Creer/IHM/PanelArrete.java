@@ -58,7 +58,7 @@ public class PanelArrete extends JPanel
 
 					g2d.setColor(Color.BLACK);
 
-					// Dessin des arêtes (inchangé)
+					// Dessin des arêtes
 					Sommet[] lstVoisins = s.getLstVoisin();
 					for (int i = 0; i < lstVoisins.length; i++)
 					{
