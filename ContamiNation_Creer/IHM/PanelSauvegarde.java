@@ -26,8 +26,6 @@ SAE 2.01 | Développement d'une application
 
 public class PanelSauvegarde extends JPanel implements ActionListener
 {
-	//private final int MARGE;
-
 	private JTable      tabSauvegarde;
 	private JScrollPane scroll;
 
@@ -53,8 +51,6 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 	{
 		this.frameMere = frameMere;
 		this.ctrl      = ctrl;
-
-		//this.MARGE = (int)(this.frameMere.getWidth()*0.25);
 
 		this.setLayout(new BorderLayout());
 
