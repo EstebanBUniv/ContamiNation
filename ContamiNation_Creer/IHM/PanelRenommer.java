@@ -23,14 +23,16 @@ public class PanelRenommer extends JPanel implements ActionListener
 	private int           ligne;
 
 	private JPanel        panelBouton;
+	private PanelSauvegarde    panelSauvegarde;
 
 	private JTextField    txtNom;
 	private JButton       btnValider;
 	private JButton       btnAnnuler;      
 
-	public PanelRenommer(FrameRenommer frame, Controleur ctrl, File fichier, int ligne)
+	public PanelRenommer(FrameRenommer frame, Controleur ctrl, File fichier, int ligne, PanelSauvegarde panelSauvegarde)
 	{
 		this.frameMere = frame;
+		this.panelSauvegarde = panelSauvegarde;
 		this.ctrl      = ctrl;
 		this.fichier   = fichier;
 		this.ligne     = ligne;
@@ -75,7 +77,7 @@ public class PanelRenommer extends JPanel implements ActionListener
 			if ( !this.txtNom.getText().isBlank() )
 			{
 				this.ctrl.Renommer(this.txtNom.getText(), this.fichier);
-				this.ctrl.supprimerFichier(this.ligne);
+				this.panelSauvegarde.rafraichir();
 				this.frameMere.dispose();
 			}
 		}
