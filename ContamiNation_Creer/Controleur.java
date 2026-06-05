@@ -149,6 +149,7 @@ public class Controleur
 		this.resetCouleurs();
 		this.plateau = Enregistrement.Recuperer(fichier, this);
 		this.plateau.setNom(this.plateau.getNom() + " - Copie");
+		this.plateau.setFichierSource(null);
 		this.plateau.enregistrer();
 		this.plateau.initBtn();
 	}

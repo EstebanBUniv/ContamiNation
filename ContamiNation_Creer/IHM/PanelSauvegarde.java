@@ -151,11 +151,11 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		if ( e.getSource() == this.btnRenommer )
 			 if (lignes.length == 1)
-				new FrameRenommer(this.fichiersDossier.get(lignes[0]), this.ctrl, lignes[0] );
+				new FrameRenommer(this.fichiersDossier.get(lignes[0]), this.ctrl, lignes[0], this );
 		
 		if ( e.getSource() == this.btnCopier )
 		{
-			 if (lignes.length == 1)
+			if (lignes.length == 1)
 			{
 				this.ctrl.copier(this.fichiersDossier.get(lignes[0]));
 				this.rafraichir();
