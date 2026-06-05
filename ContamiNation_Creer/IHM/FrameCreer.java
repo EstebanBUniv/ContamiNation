@@ -14,6 +14,8 @@ SAE 2.01 | Développement d'une application
 
 public class FrameCreer extends JFrame implements ActionListener
 {
+	public final int MARGE;
+
 	private JPanel       panel;
 	private JPanel       panelZone;
 
@@ -31,6 +33,8 @@ public class FrameCreer extends JFrame implements ActionListener
 		this.setTitle   ("ContamiNation");
 		this.setSize    (900,600);
 		this.setLocationRelativeTo(null);
+
+		this.MARGE = (int)(this.getWidth()*0.25);
 		
 		this.ctrl            = ctrl;
 		this.panel           = new PanelSauvegarde(this, this.ctrl);

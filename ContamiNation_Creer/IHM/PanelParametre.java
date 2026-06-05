@@ -28,21 +28,17 @@ public class PanelParametre extends JPanel implements ActionListener
 	private JTextField txtColonne;
 	private JTextField txtNbVirus;
 	private JTextField txtNomPlateau;
-	//private JTextField txtNomVirus;
 
 	private JPanel panelBouton;
 	private JPanel panelTxt;
-
-	//private int     cptVirus = 0;
-	
-	
-
 
 	public PanelParametre(FrameCreer frameMere)
 	{
 		this.frameMere = frameMere;
 
 		this.setLayout(new BorderLayout());
+
+		this.setBorder(BorderFactory.createEmptyBorder(0, this.frameMere.MARGE, 0, this.frameMere.MARGE));
 
 		//-------------------------------//
 		// Création des composants       //
@@ -56,7 +52,6 @@ public class PanelParametre extends JPanel implements ActionListener
 		this.txtLigne      = new JTextField(30);
 		this.txtNbVirus    = new JTextField(30);
 		this.txtNomPlateau = new JTextField(30);
-		//this.txtNomVirus   = new JTextField(30);
 
 		this.panelBouton = new JPanel();
 		this.panelBouton.setLayout(new FlowLayout());
@@ -90,15 +85,7 @@ public class PanelParametre extends JPanel implements ActionListener
 		this.btnAnnuler.addActionListener(this);
 		this.btnValider.addActionListener(this);
 		this.btnRetour .addActionListener(this);
-		//this.txtNomVirus.addActionListener(this);
 	}
-	
-	/*public void creerVirus()
-	{
-		this.txtNomVirus.setText("");
-		this.revalidate();
-		this.repaint();
-	}*/
 
 	public void actionPerformed(ActionEvent e)
 	{
@@ -133,13 +120,6 @@ public class PanelParametre extends JPanel implements ActionListener
 					this.frameMere.valider( lig, col, nbCouleur, nomPlateau);
 
 					this.frameMere.changerPanel(new PanelVirus(this.frameMere, nbCouleur, lig, col));
-
-					/*this.removeAll();
-					this.setLayout(new GridLayout(2,1));
-					this.add(new JLabel("Quel est le nom de votre virus numéro " + (this.cptVirus+1) ));
-					this.add(this.txtNomVirus);
-
-					this.creerVirus();*/
 				}
 			}
 		}
