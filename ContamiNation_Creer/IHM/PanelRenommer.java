@@ -1,19 +1,15 @@
 package ContamiNation_Creer.IHM;
 
+import ContamiNation_Creer.Controleur;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.*;
-
 import java.io.File;
-
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
-import ContamiNation_Creer.Controleur;
-import ContamiNation_Creer.IHM.FrameRenommer;
 
 public class PanelRenommer extends JPanel implements ActionListener
 {
@@ -85,7 +81,6 @@ public class PanelRenommer extends JPanel implements ActionListener
 		if ( !this.txtNom.getText().isBlank() )
 		{
 			this.ctrl.Renommer(this.txtNom.getText(), this.fichier);
-			this.ctrl.supprimerFichier(this.ligne);
 			this.panelSauvegarde.rafraichir();
 			this.frameMere.dispose();
 		}
