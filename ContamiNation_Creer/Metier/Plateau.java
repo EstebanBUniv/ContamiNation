@@ -3,6 +3,8 @@ package ContamiNation_Creer.Metier;
 import ContamiNation_Creer.Controleur;
 
 import java.util.ArrayList;
+import java.util.List;
+
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -16,8 +18,6 @@ public class Plateau
 	/*  Attributs de la classe    */
 	/*----------------------------*/
 	
-	private final ArrayList<Sommet> SOMMETS = new ArrayList<Sommet>(); // A quoi il sert ?
-	
 	private Controleur ctrl;
 	private int        col;
 	private int        lig;
@@ -26,6 +26,8 @@ public class Plateau
 	private String     nom;
 	private String[]   couleurs;
 	private Case[][]   tabCases;
+
+	private List<Virus> lstVirus = new ArrayList<Virus>();
 	
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -225,6 +227,11 @@ public class Plateau
 		}
 		
 		return res;
+	}
+
+	public void creerVirus(String nom)
+	{
+		this.lstVirus.add(new Virus(nom));
 	}
 
 
