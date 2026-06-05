@@ -92,10 +92,16 @@ public class FrameSommet extends JFrame implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == this.btnSave && this.cptVirus <= 0)
+		if (e.getSource() == this.btnSave)
 		{
-			this.ctrl.enregistrer();
-			this.dispose();
+			if (this.cptVirus <= 0)
+			{
+				this.ctrl.enregistrer();
+				this.dispose();
+			}
+			else
+				JOptionPane.showMessageDialog(this, "Vous devez placer toutes les bases de virus avant de sauvegarder !", "Attention", JOptionPane.WARNING_MESSAGE);
+			
 		}
 
 		if ( e.getSource() == this.btnRetour )
