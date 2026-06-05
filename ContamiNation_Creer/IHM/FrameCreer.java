@@ -68,6 +68,7 @@ public class FrameCreer extends JFrame implements ActionListener
 	{
 		this.ctrl.changerPanel(lig, col);
 		this.setSize(800,600);
+		this.setLocationRelativeTo(null);
 	}
 	
 	public void charger(File fichier)
@@ -84,7 +85,8 @@ public class FrameCreer extends JFrame implements ActionListener
 	public void valider (int lig, int col, int nbVirus, String nomPlateau)
 	{
 		this.ctrl.creerPlateau(lig, col, nbVirus, nomPlateau);
-		this.setSize    (300,300);
+		this.setSize    (300,120);
+		this.setLocationRelativeTo(null);
 	}
 
 

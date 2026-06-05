@@ -1,5 +1,7 @@
 package ContamiNation_Creer.IHM;
 
+import ContamiNation_Creer.IHM.PanelVirus;
+
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
@@ -26,12 +28,12 @@ public class PanelParametre extends JPanel implements ActionListener
 	private JTextField txtColonne;
 	private JTextField txtNbVirus;
 	private JTextField txtNomPlateau;
-	private JTextField txtNomVirus;
+	//private JTextField txtNomVirus;
 
 	private JPanel panelBouton;
 	private JPanel panelTxt;
 
-	private int     cptVirus = 0;
+	//private int     cptVirus = 0;
 	
 	
 
@@ -54,7 +56,7 @@ public class PanelParametre extends JPanel implements ActionListener
 		this.txtLigne      = new JTextField(30);
 		this.txtNbVirus    = new JTextField(30);
 		this.txtNomPlateau = new JTextField(30);
-		this.txtNomVirus   = new JTextField(30);
+		//this.txtNomVirus   = new JTextField(30);
 
 		this.panelBouton = new JPanel();
 		this.panelBouton.setLayout(new FlowLayout());
@@ -88,20 +90,15 @@ public class PanelParametre extends JPanel implements ActionListener
 		this.btnAnnuler.addActionListener(this);
 		this.btnValider.addActionListener(this);
 		this.btnRetour .addActionListener(this);
-		this.txtNomVirus.addActionListener(this);
+		//this.txtNomVirus.addActionListener(this);
 	}
 	
-	public void creerVirus()
+	/*public void creerVirus()
 	{
-		this.removeAll();
-		this.setLayout(new GridLayout(2,1));
-		this.add(new JLabel("Quel est le nom de votre virus numéro " + this.cptVirus));
-		this.add(this.txtNomVirus);
 		this.txtNomVirus.setText("");
 		this.revalidate();
 		this.repaint();
-
-	}
+	}*/
 
 	public void actionPerformed(ActionEvent e)
 	{
@@ -134,7 +131,15 @@ public class PanelParametre extends JPanel implements ActionListener
 				if (col > 0 && lig > 0 && nbCouleur > 0) 
 				{
 					this.frameMere.valider( lig, col, nbCouleur, nomPlateau);
-					this.creerVirus();
+
+					this.frameMere.changerPanel(new PanelVirus(this.frameMere, nbCouleur, lig, col));
+
+					/*this.removeAll();
+					this.setLayout(new GridLayout(2,1));
+					this.add(new JLabel("Quel est le nom de votre virus numéro " + (this.cptVirus+1) ));
+					this.add(this.txtNomVirus);
+
+					this.creerVirus();*/
 				}
 			}
 		}
@@ -142,21 +147,6 @@ public class PanelParametre extends JPanel implements ActionListener
 		if ( e.getSource() == this.btnRetour )
 		{
 			this.frameMere.changerPanel(new PanelSauvegarde(this.frameMere, this.frameMere.getCtrl()));
-		}
-
-		if (e.getSource() == this.txtNomVirus)
-		{
-			this.frameMere.creerVirus(this.txtNomVirus.getText());
-			this.cptVirus++;
-			if (this.cptVirus < Integer.parseInt(this.txtNbVirus.getText()))
-				this.creerVirus();
-			else
-			{
-				this.frameMere.setEstNouveau(true);
-				this.frameMere.changerGrille(Integer.parseInt(this.txtLigne.getText()), Integer.parseInt(this.txtColonne.getText()));
-			}
-
-			
 		}
 	}
 }
