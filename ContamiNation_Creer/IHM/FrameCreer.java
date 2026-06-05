@@ -4,6 +4,7 @@ import ContamiNation_Creer.Controleur;
 import java.awt.BorderLayout;
 import javax.swing.*;
 import java.io.File;
+import java.awt.event.*;
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -11,25 +12,44 @@ SAE 2.01 | Développement d'une application
 * Groupe   : 3
 */
 
-public class FrameCreer extends JFrame
+public class FrameCreer extends JFrame implements ActionListener
 {
 	private JPanel       panel;
+	private JPanel       panelZone;
 
-	private JTextField  txtNumZone;
+
+	private JButton     btnplusZone;
+	private JLabel      numZoneActuelle;
+	private JButton     btnmoinsZone;
+
+	private int         cptZone;
 
 	private Controleur   ctrl;
 
-	public FrameCreer(Controleur ctrl)
+	public FrameCreer(Controleur ctrl) 
 	{
 		this.setTitle   ("ContamiNation");
 		this.setSize    (900,600);
 		this.setLocationRelativeTo(null);
 		
-		this.ctrl       = ctrl;
-		this.panel      = new PanelSauvegarde(this, this.ctrl);
-		this.txtNumZone = new JTextField(10);
+		this.ctrl            = ctrl;
+		this.panel           = new PanelSauvegarde(this, this.ctrl);
+		this.panelZone       = new JPanel(new BorderLayout());
+		this.btnplusZone        = new JButton("+");
+		this.numZoneActuelle = new JLabel("1");
+		this.btnmoinsZone       = new JButton("-");
+		this.cptZone = 1;
 		
-		this.add(panel);
+		this.btnplusZone .addActionListener(this);
+		this.btnmoinsZone.addActionListener(this);
+
+		this.panelZone.add( this.btnplusZone, BorderLayout.NORTH    );
+		this.panelZone.add(this.numZoneActuelle, BorderLayout.CENTER);
+		this.panelZone.add(this.btnmoinsZone   , BorderLayout.SOUTH );
+
+		this.setLayout(new BorderLayout());
+
+		this.add(this.panel, BorderLayout.CENTER);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
@@ -71,16 +91,7 @@ public class FrameCreer extends JFrame
 
 	public void ajouterZone (int lig, int col)
 	{
-		try
-		{
-			if ( this.txtNumZone.getText().matches( "[0-9]+" ))
-				if (Integer.parseInt(this.txtNumZone.getText()) > 0)
-					this.ctrl.ajouterZone(lig, col, Integer.parseInt(this.txtNumZone.getText()));
-		}
-		catch (NumberFormatException e)
-		{
-			System.out.println("Erreur nombre trop grand");
-		}
+		this.ctrl.ajouterZone(lig, col, this.cptZone);
 	}
 
 	public void initBtn (String valeur, int lig, int col)
@@ -120,13 +131,31 @@ public class FrameCreer extends JFrame
 	
 	public void ajouterPanel()
 	{
-		this.add(this.txtNumZone, BorderLayout.WEST  );
+		this.add(this.panelZone, BorderLayout.WEST  );
 		this.revalidate();
 	}
 	
 	public void retirerPanel()
 	{
-		this.remove(this.txtNumZone);
+		this.remove(this.panelZone);
 		this.revalidate();
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == this.btnplusZone && this.cptZone < Integer.MAX_VALUE)
+		{
+			this.cptZone++;
+			this.numZoneActuelle.setText(this.cptZone + "");
+			this.panelZone.repaint();
+		}
+
+		if (e.getSource() == this.btnmoinsZone && this.cptZone > 1)
+		{
+			this.cptZone--;
+			this.numZoneActuelle.setText(this.cptZone + "");
+			this.panelZone.repaint();
+		}		
+
 	}
 }
