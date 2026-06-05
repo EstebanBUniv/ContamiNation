@@ -29,11 +29,12 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 	private JTable      tabSauvegarde;
 	private JScrollPane scroll;
 
-	private JButton btnNouveau;
 	private JButton btnModifier;
+	private JButton btnNouveau;
 	private JButton btnSupprimer;
 	private JButton btnRenommer;
 	private JButton btnQuitter;
+	private JButton btnCopier;
 
 	private JPanel panelTitre;
 	private JPanel panelSauvegarde;
@@ -72,13 +73,16 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.btnModifier   = new JButton("Modifier"       );
 		this.btnSupprimer  = new JButton("Supprimer"      );
 		this.btnRenommer   = new JButton("Renommer"       );
+		this.btnCopier     = new JButton("Copier"         );
 		this.btnQuitter    = new JButton("Quitter"        );
 
-		this.btnNouveau  .setPreferredSize(new Dimension(205, 30));
-		this.btnModifier .setPreferredSize(new Dimension(205, 30));
-		this.btnQuitter  .setPreferredSize(new Dimension(135, 30));
-		this.btnRenommer .setPreferredSize(new Dimension(135, 30));
-		this.btnSupprimer.setPreferredSize(new Dimension(135, 30));
+		this.btnNouveau  .setPreferredSize(new Dimension((int)(this.frameMere.getWidth()*0.29), 30));
+		this.btnModifier .setPreferredSize(new Dimension((int)(this.frameMere.getWidth()*0.29), 30));
+		this.btnQuitter  .setPreferredSize(new Dimension((int)(this.frameMere.getWidth()*0.14), 30));
+		this.btnRenommer .setPreferredSize(new Dimension((int)(this.frameMere.getWidth()*0.14), 30));
+		this.btnCopier   .setPreferredSize(new Dimension((int)(this.frameMere.getWidth()*0.14), 30));
+		this.btnSupprimer.setPreferredSize(new Dimension((int)(this.frameMere.getWidth()*0.14), 30));
+
 
 		//-------------------------------//
 		// Positionnement des composants //
@@ -95,6 +99,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		this.panelBtnBas.add(this.btnSupprimer );
 		this.panelBtnBas.add(this.btnRenommer  );
+		this.panelBtnBas.add(this.btnCopier    );
 		this.panelBtnBas.add(this.btnQuitter   );
 
 		this.panelBoutons.add(this.panelBtnHaut);
@@ -111,7 +116,23 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.btnQuitter  .addActionListener(this);
 		this.btnRenommer .addActionListener(this);
 		this.btnSupprimer.addActionListener(this);
+		this.btnCopier   .addActionListener(this);
 		this.btnModifier .addActionListener(this);
+
+		this.frameMere.addComponentListener(new ComponentAdapter() {
+   		public void componentResized(ComponentEvent e) {
+			int w = frameMere.getWidth();
+
+			btnNouveau.setPreferredSize(new Dimension((int)(w * 0.29), 30));
+			btnModifier.setPreferredSize(new Dimension((int)(w * 0.29), 30));
+			btnQuitter.setPreferredSize(new Dimension((int)(w * 0.14), 30));
+			btnRenommer.setPreferredSize(new Dimension((int)(w * 0.14), 30));
+			btnCopier.setPreferredSize(new Dimension((int)(w * 0.14), 30));
+			btnSupprimer.setPreferredSize(new Dimension((int)(w * 0.14), 30));
+
+			revalidate();
+   			}
+		});
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -142,9 +163,14 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		if ( e.getSource() == this.btnRenommer )
 			if ( ligne != -1 )
-			{
 				new FrameRenommer(this.fichiersDossier.get(ligne), this.ctrl, ligne);
-			}
+		
+		if ( e.getSource() == this.btnCopier )
+		{
+			this.ctrl.copier(this.fichiersDossier.get(ligne));
+			this.rafraichir();
+		}
+		
 				
 				
 	}
