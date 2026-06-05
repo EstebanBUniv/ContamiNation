@@ -5,6 +5,8 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.*;
 import java.io.File;
+
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -36,6 +38,9 @@ public class PanelRenommer extends JPanel implements ActionListener
 
 		this.setLayout(new BorderLayout());
 
+		System.out.println(this.frameMere.MARGE);
+		this.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
+
 		//-------------------------------//
 		// Création des composants       //
 		//-------------------------------//
@@ -53,10 +58,8 @@ public class PanelRenommer extends JPanel implements ActionListener
 		this.panelBouton.add(this.btnValider);
 		this.panelBouton.add(this.btnAnnuler);
 
-		this.add(new JLabel("    Nouveau nom : "), BorderLayout.NORTH );
-		this.add(Box.createHorizontalStrut(10), BorderLayout.WEST);
+		this.add(new JLabel("Nouveau nom : "), BorderLayout.NORTH );
 		this.add(this.txtNom,      BorderLayout.CENTER);
-		this.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
 		this.add(this.panelBouton, BorderLayout.SOUTH );
 
 		//-------------------------------//

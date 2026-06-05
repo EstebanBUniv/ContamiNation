@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 import java.io.File;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -42,6 +43,8 @@ public class PanelVirus extends JPanel implements ActionListener
 
 		this.setLayout(new BorderLayout());
 
+		this.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
+
 		//-------------------------------//
 		// Création des composants       //
 		//-------------------------------//
@@ -53,7 +56,7 @@ public class PanelVirus extends JPanel implements ActionListener
 
 		this.txtNomVirus = new JTextField(15);
 
-		this.lbNumVirus  = new JLabel("    Nom du Virus n°" + (this.cptVirus+1));
+		this.lbNumVirus  = new JLabel("Nom du Virus n°" + (this.cptVirus+1));
 
 		//-------------------------------//
 		// Positionnement des composants //
@@ -63,9 +66,7 @@ public class PanelVirus extends JPanel implements ActionListener
 		this.panelBouton.add(this.btnAnnuler);
 
 		this.add(this.lbNumVirus, BorderLayout.NORTH  );
-		this.add(Box.createHorizontalStrut(10), BorderLayout.WEST);
 		this.add(this.txtNomVirus, BorderLayout.CENTER);
-		this.add(Box.createHorizontalStrut(10), BorderLayout.EAST);
 		this.add(this.panelBouton, BorderLayout.SOUTH );
 
 		//-------------------------------//
