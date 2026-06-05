@@ -82,6 +82,16 @@ public class Plateau
 	{
 		return this.tabCases[lig][col];
 	}
+
+	/*----------------------------*/
+	/*  Setters                   */
+	/*----------------------------*/
+
+	public void setNom(String nom)
+	{
+		this.nom = nom;
+	}
+
 	
 	/*----------------------------*/
 	/*  Méthodes                  */

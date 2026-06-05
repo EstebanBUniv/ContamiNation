@@ -141,7 +141,7 @@ public class PanelParametre extends JPanel implements ActionListener
 
 		if ( e.getSource() == this.btnRetour )
 		{
-			this.frameMere.changerPanel(new PanelSauvegarde(this.frameMere));
+			this.frameMere.changerPanel(new PanelSauvegarde(this.frameMere, this.frameMere.getCtrl()));
 		}
 
 		if (e.getSource() == this.txtNomVirus)

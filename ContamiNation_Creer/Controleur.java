@@ -129,6 +129,19 @@ public class Controleur
 		this.frame.ajouterPanel();
 		this.plateau.initBtn();
 	}
+
+	public void Renommer(String nom, File fichier)
+	{
+		this.plateau = Enregistrement.Recuperer(fichier, this);
+		this.plateau.setNom(nom);
+		this.plateau.enregistrer();
+		this.plateau.initBtn();
+	}
+
+	public void supprimerFichier(int ligne)
+	{
+		((PanelSauvegarde)(this.frame.getPanel())).supprimerFichier(ligne);
+	}
 	
 	public static void main (String[] args)
 	{
