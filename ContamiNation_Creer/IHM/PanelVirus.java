@@ -1,6 +1,7 @@
 package ContamiNation_Creer.IHM;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.*;
 
@@ -106,6 +107,7 @@ public class PanelVirus extends JPanel implements ActionListener
 			{
 				this.frameMere.setEstNouveau(true);
 				this.frameMere.changerGrille(this.lig, this.col);
+				this.frameMere.setEstNouveau(true);
 			}
 		}
 		this.frameMere.setResizable(true);
