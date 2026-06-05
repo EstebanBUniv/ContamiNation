@@ -24,6 +24,9 @@ public class Controleur
 	private FrameSommet         frameSommet;
 	private Plateau             plateau;
 	private Map<Integer, Color> couleursZones = new HashMap<>();
+	private int r;
+	private int g;
+	private int b;
 	
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -63,6 +66,7 @@ public class Controleur
 	
 	public void creerPlateau(int lig, int col, int nbCouleur, String nomPlateau)
 	{
+		this.resetCouleurs();
 		this.plateau = Plateau.creerPlateau( lig, col, nbCouleur, nomPlateau, this);
 	}
 
@@ -124,6 +128,7 @@ public class Controleur
 	
 	public void charger(File fichier)
 	{
+		this.resetCouleurs();
 		this.plateau = Enregistrement.Recuperer(fichier, this);
 		this.frame.changerPanel(new PanelGrille(this.plateau.getLig(), this.plateau.getCol(), this, true, this.frameSommet));
 		this.frame.ajouterPanel();
@@ -132,6 +137,7 @@ public class Controleur
 
 	public void Renommer(String nom, File fichier)
 	{
+		this.resetCouleurs();
 		this.plateau = Enregistrement.Recuperer(fichier, this);
 		this.plateau.setNom(nom);
 		this.plateau.enregistrer();
@@ -140,6 +146,7 @@ public class Controleur
 
 	public void copier(File fichier)
 	{
+		this.resetCouleurs();
 		this.plateau = Enregistrement.Recuperer(fichier, this);
 		this.plateau.setNom(this.plateau.getNom() + " - Copie");
 		this.plateau.enregistrer();
@@ -173,5 +180,27 @@ public class Controleur
 	public void creerVirus(String nom)
 	{
 		this.plateau.creerVirus(nom);
+	}
+	
+	public Color getCouleurZone(int numZone)
+	{
+		if (numZone == 0) return Color.WHITE;
+
+		if (!this.couleursZones.containsKey(numZone))
+		{
+			this.r = (this.r + 67) % 256;
+			this.g = (this.g + 113) % 256;
+			this.b = (this.b + 193) % 256;
+			this.couleursZones.put(numZone, new Color(this.r, this.g, this.b));
+		}
+		return this.couleursZones.get(numZone);
+	}
+
+	public void resetCouleurs()
+	{
+		this.couleursZones.clear();
+		this.r = 0;
+		this.g = 0;
+		this.b = 0;
 	}
 }

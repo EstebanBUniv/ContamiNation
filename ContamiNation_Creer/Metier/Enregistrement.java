@@ -43,7 +43,13 @@ public class Enregistrement
 		if (!dossier.exists()) 
 			dossier.mkdirs(); // Crée le dossier et ses parents si besoin
 		
-		try(PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream("../niveaux/carte_num_" + this.plateau.getNumero() + ".data"), "UTF8")))
+		File fichierCible;
+		if (this.plateau.getFichierSource() != null) 
+			fichierCible = this.plateau.getFichierSource();
+		else
+			fichierCible = new File("../niveaux/carte_num_" + this.plateau.getNumero() + ".data");
+		
+		try(PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(fichierCible), "UTF8")))
 		{
 			pw.println(this.plateau.getLig      ());
 			pw.println(this.plateau.getCol      ());
@@ -84,7 +90,7 @@ public class Enregistrement
 			
 			for (int i = 0; i < nbVirus; i++)
 			{
-				String nomVirus = sc.next();
+				String nomVirus = sc.nextLine();
 				plateau.creerVirus(nomVirus);
 			}
 			
@@ -106,7 +112,8 @@ public class Enregistrement
 				}
 			}
 			sc.close();
-
+			
+			plateau.setFichierSource(fichier);
 			plateau.relierTousLesSommets();
 		}
 		catch (Exception e) { e.printStackTrace(); }

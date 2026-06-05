@@ -14,8 +14,6 @@ import java.awt.Point;
 
 import java.awt.event.*;
 
-import java.util.Map;
-
 import javax.swing.*;
 
 /* 
@@ -26,10 +24,6 @@ SAE 2.01 | Développement d'une application
 
 public class PanelGrille extends JPanel implements ActionListener, MouseListener
 {
-	private int r = 0;
-	private int g = 0;
-	private int b = 0;
-
 	private int cptVirus;
  
 	private JButton[][]  tabBtn;
@@ -49,8 +43,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 	private boolean     estNouveau = false;
 
-	private Map<Integer, Color> couleursZones;
-
 	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone, FrameSommet frameMere)
 	{
 		this.setLayout(new BorderLayout());
@@ -61,7 +53,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		this.frameMere = frameMere;
 
-		this.couleursZones = this.ctrl.getCouleurZone();
 		this.setOpaque(false);
 
 		this.panelGrille = new JPanel(new GridLayout(ligne, colonne));
@@ -150,7 +141,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		int zone = this.ctrl.getCase(lig, col).getZone();
 		
-		this.tabBtn[lig][col].setBackground(getCouleurZone(zone));
+		this.tabBtn[lig][col].setBackground(this.ctrl.getCouleurZone(zone));
 
 		
 		if (this.ctrl.getCase(lig, col).getSommet() != null)
@@ -188,7 +179,7 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 							((FrameCreer)top).ajouterZone(lig, col);
 
 							int indCouleur = this.ctrl.getCase(lig, col).getZone();
-							this.tabBtn[lig][col].setBackground(getCouleurZone(indCouleur));
+							this.tabBtn[lig][col].setBackground(this.ctrl.getCouleurZone(indCouleur));
 						}
 					}
 				}
@@ -318,29 +309,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 				}
 			}
 		}
-	}
-
-	private Color nextColor()
-	{
-		
-		r = (r + 67) % 256;
-		g = (g + 113) % 256;
-		b = (b + 193) % 256;
-		
-		Color c = new Color(r, g, b);
-		
-		return c;
-	}
-
-	private Color getCouleurZone(int numZone)
-	{
-		if (numZone == 0)
-			return Color.WHITE;
-
-		if (!couleursZones.containsKey(numZone))
-			couleursZones.put(numZone, nextColor());
-
-		return couleursZones.get(numZone);
 	}
 	
 	private int trouverIdLibre()
