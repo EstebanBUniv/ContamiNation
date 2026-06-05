@@ -39,6 +39,12 @@ public class FrameCreer extends JFrame
 	{
 		return this.panel;
 	}
+
+	public void changerGrille(int lig, int col)
+	{
+		this.ctrl.changerPanel(lig, col);
+		this.setSize(800,600);
+	}
 	
 	public void charger(File fichier)
 	{
@@ -54,7 +60,10 @@ public class FrameCreer extends JFrame
 	public void valider (int lig, int col, int nbVirus, String nomPlateau)
 	{
 		this.ctrl.creerPlateau(lig, col, nbVirus, nomPlateau);
+		this.setSize    (300,300);
 	}
+
+
 
 	public void ajouterZone (int lig, int col)
 	{
@@ -98,6 +107,11 @@ public class FrameCreer extends JFrame
 			((PanelGrille)(this.panel)).setEstNouveau(val);
 		}
 			
+	}
+
+	public void creerVirus(String nom)
+	{
+		this.ctrl.creerVirus(nom);
 	}
 	
 	public void ajouterPanel()
