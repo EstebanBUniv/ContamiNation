@@ -29,7 +29,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private JButton[][]  tabBtn;
 	private Controleur   ctrl;
 	private boolean      modeZone;
-	private boolean      modeBase; // A quoi il sert ?
 	private JPanel       panelGrille;
 	private JPanel       panelBoutton;
 
@@ -49,7 +48,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		this.ctrl      = ctrl;
 		this.modeZone  = modeZone;
-		this.modeBase  = false; // A quoi il sert ?
 
 		this.frameMere = frameMere;
 

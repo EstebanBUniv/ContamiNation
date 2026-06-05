@@ -85,7 +85,6 @@ public class PanelRenommer extends JPanel implements ActionListener
 		if ( !this.txtNom.getText().isBlank() )
 		{
 			this.ctrl.Renommer(this.txtNom.getText(), this.fichier);
-			this.ctrl.supprimerFichier(this.ligne);
 			this.panelSauvegarde.rafraichir();
 			this.frameMere.dispose();
 		}
