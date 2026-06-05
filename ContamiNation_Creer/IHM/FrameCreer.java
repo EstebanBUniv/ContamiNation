@@ -22,7 +22,7 @@ public class FrameCreer extends JFrame
 	public FrameCreer(Controleur ctrl)
 	{
 		this.setTitle   ("ContamiNation");
-		this.setSize    (800,600);
+		this.setSize    (900,600);
 		this.setLocationRelativeTo(null);
 		
 		this.ctrl       = ctrl;
