@@ -19,7 +19,7 @@ public class FrameRenommer extends JFrame
 	private Controleur ctrl;
 	private int        ligne;
 	
-	public FrameRenommer(File fichier, Controleur ctrl, int ligne)
+	public FrameRenommer(File fichier, Controleur ctrl, int ligne, PanelSauvegarde panelSauvegarde)
 	{
 		this.fichier    = fichier;
 		this.ctrl       = ctrl;
@@ -27,7 +27,7 @@ public class FrameRenommer extends JFrame
 
 		this.setSize(300, 120);
 		this.setLocationRelativeTo(null);
-		this.add(new PanelRenommer(this, this.ctrl, this.fichier, this.ligne ));
+		this.add(new PanelRenommer(this, this.ctrl, this.fichier, this.ligne, panelSauvegarde ));
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
