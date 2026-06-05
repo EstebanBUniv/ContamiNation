@@ -3,6 +3,8 @@ package ContamiNation_Creer.Metier;
 import ContamiNation_Creer.Controleur;
 
 import java.util.ArrayList;
+import java.util.List;
+
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -16,8 +18,6 @@ public class Plateau
 	/*  Attributs de la classe    */
 	/*----------------------------*/
 	
-	private final ArrayList<Sommet> SOMMETS = new ArrayList<Sommet>(); // A quoi il sert ?
-	
 	private Controleur ctrl;
 	private int        col;
 	private int        lig;
@@ -26,6 +26,8 @@ public class Plateau
 	private String     nom;
 	private String[]   couleurs;
 	private Case[][]   tabCases;
+
+	private List<Virus> lstVirus = new ArrayList<Virus>();
 	
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -237,15 +239,67 @@ public class Plateau
 		return res;
 	}
 
+	public void creerVirus(String nom)
+	{
+		this.lstVirus.add(new Virus(nom));
+	}
+
 
 	public void supprimerZone(int lig, int col)
 	{
-		int zoneSupp = this.tabCases[lig][col].getZone();
+		int zoneCible = this.tabCases[lig][col].getZone();
+		
+		if (zoneCible == 0)
+			return;
+			
+		int totalCasesZone = 0;
+		int ligDepart      = -1;
+		int colDepart      = -1;
+		
+		for (int i = 0; i < this.lig; i++)
+			for (int j = 0; j < this.col; j++)
+				if (this.tabCases[i][j].getZone() == zoneCible)
+				{
+					totalCasesZone++;
+					if (i != lig || j != col)
+					{
+						ligDepart = i;
+						colDepart = j;
+					}
+				}
+				
+		if (totalCasesZone <= 1)
+		{
+			this.tabCases[lig][col].supprimerZone();
+			return;
+		}
+		
+		this.tabCases[lig][col].supprimerZone();
+		
+		boolean[][] visite          = new boolean[this.lig][this.col];
+		int         casesConnectees = this.compterCasesConnectees(ligDepart, colDepart, zoneCible, visite);
+		
+		if (casesConnectees < totalCasesZone - 1)
+			this.tabCases[lig][col].ajouterZone(zoneCible);
+	}
 
-		for (int i = 0 ; i < this.lig ; i ++)
-			for (int j = 0 ; j < this.col ; j++)
-				if (this.tabCases[i][j].getZone() == zoneSupp)
-					this.tabCases[i][j].supprimerZone();
+	private int compterCasesConnectees(int l, int c, int zoneCible, boolean[][] visite)
+	{
+		if (l < 0 || l >= this.lig || c < 0 || c >= this.col)
+			return 0;
+			
+		if (visite[l][c] || this.tabCases[l][c].getZone() != zoneCible)
+			return 0;
+			
+		visite[l][c] = true;
+		int nb = 1;
+		
+		nb += this.compterCasesConnectees(l - 1, c, zoneCible, visite);
+		nb += this.compterCasesConnectees(l + 1, c, zoneCible, visite);
+		nb += this.compterCasesConnectees(l, c - 1, zoneCible, visite);
+		nb += this.compterCasesConnectees(l, c + 1, zoneCible, visite);
+		
+		return nb;
 	}
 	
 

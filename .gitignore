@@ -1,5 +1,9 @@
 # Compiled class file
 *.class
+carte_num_1.data
+carte_num_2.data
+carte_num_3.data
+carte_num_4.data
 
 # Log file
 *.log

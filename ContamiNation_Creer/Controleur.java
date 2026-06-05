@@ -64,6 +64,10 @@ public class Controleur
 	public void creerPlateau(int lig, int col, int nbCouleur, String nomPlateau)
 	{
 		this.plateau = Plateau.creerPlateau( lig, col, nbCouleur, nomPlateau, this);
+	}
+
+	public void changerPanel(int lig, int col)
+	{
 		this.frame.changerPanel(new PanelGrille(lig, col, this, true, this.frameSommet));
 		this.frame.ajouterPanel();
 		this.plateau.initBtn();
@@ -156,5 +160,10 @@ public class Controleur
 	{
 		this.plateau.supprimerZone(lig, col);
 		this.plateau.initBtn();
+	}
+
+	public void creerVirus(String nom)
+	{
+		this.plateau.creerVirus(nom);
 	}
 }

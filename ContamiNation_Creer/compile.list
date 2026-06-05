@@ -14,5 +14,6 @@
 ./Metier/Case.java
 ./Metier/Sommet.java
 ./Metier/Enregistrement.java
+./Metier/Virus.java
 
 ./Controleur.java
