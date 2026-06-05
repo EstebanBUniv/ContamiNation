@@ -14,10 +14,14 @@ import java.io.File;
 
 import javax.swing.*;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class FrameRenommer extends JFrame
 {
-	public final int MARGE;
-
 	private File       fichier;
 	private Controleur ctrl;
 	private int        ligne;
@@ -31,6 +35,8 @@ public class FrameRenommer extends JFrame
 		this.setTitle("Renommer");
 		this.setSize(300, 120);
 		this.setLocationRelativeTo(null);
+		this.setResizable(false);
+
 		this.add(new PanelRenommer(this, this.ctrl, this.fichier, this.ligne, panelSauvegarde ));
 
 		
@@ -38,7 +44,5 @@ public class FrameRenommer extends JFrame
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		this.setVisible(true);
-
-		this.MARGE = (int)(this.getWidth()*0.25);
 	}
 }

@@ -16,8 +16,16 @@ import javax.swing.JTextField;
 import ContamiNation_Creer.IHM.FrameCreer;
 import ContamiNation_Creer.IHM.FrameRenommer;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class PanelVirus extends JPanel implements ActionListener
 {
+	private final int     MARGE = 20;
+
 	private FrameCreer    frameMere;
 
 	private JPanel        panelBouton;
@@ -43,7 +51,7 @@ public class PanelVirus extends JPanel implements ActionListener
 
 		this.setLayout(new BorderLayout());
 
-		this.setBorder(BorderFactory.createEmptyBorder(0, 30, 0, 30));
+		this.setBorder(BorderFactory.createEmptyBorder(0, this.MARGE, 0, this.MARGE));
 
 		//-------------------------------//
 		// Création des composants       //
@@ -100,12 +108,13 @@ public class PanelVirus extends JPanel implements ActionListener
 				this.frameMere.changerGrille(this.lig, this.col);
 			}
 		}
+		this.frameMere.setResizable(true);
 	}
 
 	public void creerVirus()
 	{
 		this.txtNomVirus.setText("");
-		this.lbNumVirus.setText("    Nom du Virus n°" + (this.cptVirus+1));
+		this.lbNumVirus.setText("Nom du Virus n°" + (this.cptVirus+1));
 		this.revalidate();
 		this.repaint();
 	}

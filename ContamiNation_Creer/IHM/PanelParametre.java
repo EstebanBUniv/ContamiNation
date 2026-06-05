@@ -120,6 +120,7 @@ public class PanelParametre extends JPanel implements ActionListener
 					this.frameMere.valider( lig, col, nbCouleur, nomPlateau);
 
 					this.frameMere.changerPanel(new PanelVirus(this.frameMere, nbCouleur, lig, col));
+					this.frameMere.setResizable(false);
 				}
 			}
 		}
