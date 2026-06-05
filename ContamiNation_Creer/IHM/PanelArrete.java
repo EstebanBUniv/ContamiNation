@@ -7,6 +7,7 @@ import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Color;
 
 import javax.swing.*;
 
@@ -32,9 +33,8 @@ public class PanelArrete extends JPanel
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setStroke(new BasicStroke(3.0f));
 
-		// Marge en pixels à laisser autour du centre du bouton
-		// (à ajuster selon la taille de tes icônes)
-		int marge = 25; 
+		int marge   = 30;
+		int rayon   = 30; 
 
 		for (int lig = 0; lig < ctrl.getLig(); lig++)
 		{
@@ -44,6 +44,21 @@ public class PanelArrete extends JPanel
 
 				if (s != null)
 				{
+					JButton btn = ctrl.getButton(lig, col);
+					Point centre = SwingUtilities.convertPoint(
+						btn.getParent(),
+						btn.getX() + btn.getWidth()  / 2,
+						btn.getY() + btn.getHeight() / 2,
+						this
+					);
+					if (s.getEstBase() != 0)
+						g2d.setColor(Virus.getCouleur(s.getEstBase()));
+
+					g2d.drawOval(centre.x - rayon, centre.y - rayon, rayon * 2, rayon * 2);
+
+					g2d.setColor(Color.BLACK);
+
+					// Dessin des arêtes (inchangé)
 					Sommet[] lstVoisins = s.getLstVoisin();
 					for (int i = 0; i < lstVoisins.length; i++)
 					{
@@ -55,29 +70,22 @@ public class PanelArrete extends JPanel
 							Point p1 = SwingUtilities.convertPoint(btn1.getParent(), btn1.getX() + btn1.getWidth() / 2, btn1.getY() + btn1.getHeight() / 2, this);
 							Point p2 = SwingUtilities.convertPoint(btn2.getParent(), btn2.getX() + btn2.getWidth() / 2, btn2.getY() + btn2.getHeight() / 2, this);
 
-							// Calcul de la différence de position
-							double dx = p2.x - p1.x;
-							double dy = p2.y - p1.y;
-							
-							// Calcul de la distance totale
+							double dx       = p2.x - p1.x;
+							double dy       = p2.y - p1.y;
 							double distance = Math.sqrt(dx * dx + dy * dy);
 
-							// Si les boutons ne sont pas superposés
-							if (distance > 0) {
-								// Vecteur de direction (normalisé)
+							if (distance > 0)
+							{
 								double dirX = dx / distance;
 								double dirY = dy / distance;
 
-								// Application de la marge sur le point de départ et d'arrivée
 								int debutX = (int) (p1.x + (dirX * marge));
 								int debutY = (int) (p1.y + (dirY * marge));
-								
-								int finX = (int) (p2.x - (dirX * marge));
-								int finY = (int) (p2.y - (dirY * marge));
+								int finX   = (int) (p2.x - (dirX * marge));
+								int finY   = (int) (p2.y - (dirY * marge));
 
-								// Dessin de l'arête raccourcie
-								// On vérifie que la distance est bien supérieure aux deux marges combinées
-								if (distance > marge * 2) { 
+								if (distance > marge * 2)
+								{
 									g2d.drawLine(debutX, debutY, finX, finY);
 								}
 							}
