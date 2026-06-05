@@ -149,14 +149,8 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		int zone = this.ctrl.getCase(lig, col).getZone();
 		
-		if (this.ctrl.getCase(lig, col).getSommet() == null || this.ctrl.getCase(lig, col).getSommet().getEstBase() == 0) 
-		{
-			this.tabBtn[lig][col].setBackground(getCouleurZone(zone));
-		} 
-		else 
-		{
-			this.tabBtn[lig][col].setBackground(Color.WHITE);
-		}
+		this.tabBtn[lig][col].setBackground(getCouleurZone(zone));
+
 		
 		if (this.ctrl.getCase(lig, col).getSommet() != null)
 		{
@@ -245,7 +239,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 							if (s != null && this.cptVirus <= this.ctrl.getNbVirus() && s.getEstBase() == 0)
 							{
 								s.setBase(this.cptVirus);
-								ctrl.getButton(lig, col).setBackground(Color.WHITE);
 								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.cptVirus);
 								this.cptVirus++;
 							}
