@@ -3,6 +3,7 @@ package ContamiNation_Creer.IHM;
 import ContamiNation_Creer.IHM.PanelVirus;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -108,7 +109,7 @@ public class PanelParametre extends JPanel implements ActionListener
 			if ( this.txtColonne.getText().matches ( "[0-9]+" ) && 
 			     this.txtLigne  .getText().matches ( "[0-9]+" ) && 
 				 this.txtNbVirus.getText().matches ( "[0-9]+" ) && 
-				 !this.txtNomPlateau.getText().isEmpty())
+				 !this.txtNomPlateau.getText().isBlank())
 			{	
 				col        = Integer.parseInt(this.txtColonne.getText());
 				lig        = Integer.parseInt(this.txtLigne.getText());
@@ -118,9 +119,7 @@ public class PanelParametre extends JPanel implements ActionListener
 				if (col > 0 && lig > 0 && nbCouleur > 0) 
 				{
 					this.frameMere.valider( lig, col, nbCouleur, nomPlateau);
-
 					this.frameMere.changerPanel(new PanelVirus(this.frameMere, nbCouleur, lig, col));
-					this.frameMere.setResizable(false);
 				}
 			}
 		}

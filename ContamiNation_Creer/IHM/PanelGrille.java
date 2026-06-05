@@ -8,7 +8,7 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Component;
-
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Point;
 
@@ -31,9 +31,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private boolean      modeZone;
 	private JPanel       panelGrille;
 	private JPanel       panelBoutton;
-
-	private JButton      valider; // A quoi il sert ?
-	private JButton      annuler; // A quoi il sert ?
 
 	private FrameSommet frameMere;
 	private JButton     btnValider;
@@ -246,6 +243,8 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 			if ( top instanceof FrameCreer )
 			{
 				((FrameCreer) top).retirerPanel();
+				((FrameCreer) top).setMinimumSize(new Dimension(900, 600));
+				((FrameCreer) top).setSize(900, 600);
 				
 				if ( this.estNouveau )
 				{

@@ -8,6 +8,12 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.BasicStroke;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,6 +22,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /* 
@@ -26,9 +34,22 @@ SAE 2.01 | Développement d'une application
 
 public class PanelSauvegarde extends JPanel implements ActionListener
 {
+	//--------------------------------//
+	// Constantes                     //
+	//--------------------------------//
+
+	private static final Color COLOR_BACKGROUND = new Color( 37,  37,  37);
+	private static final Color COLOR_FOREGROUND = new Color(210, 210, 210);
+
+	//--------------------------------//
+	// Variables                      //
+	//--------------------------------//
+
+	// Table et barre de défilement
 	private JTable      tabSauvegarde;
 	private JScrollPane scroll;
 
+	// Boutons
 	private JButton btnModifier;
 	private JButton btnNouveau;
 	private JButton btnSupprimer;
@@ -36,16 +57,19 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 	private JButton btnQuitter;
 	private JButton btnCopier;
 
-	private JPanel panelTitre;
+	// Panels
 	private JPanel panelSauvegarde;
 	private JPanel panelBoutons;
 	private JPanel panelBtnHaut;
 	private JPanel panelBtnBas;
+	private JPanel panelMain;
 
 	private ArrayList<File> fichiersDossier;
 
 	private FrameCreer frameMere;
 	private Controleur ctrl;
+	
+	private Image      imgFond;
 
 	public PanelSauvegarde(FrameCreer frameMere, Controleur ctrl)
 	{
@@ -54,36 +78,57 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		this.setLayout(new BorderLayout());
 
-		this.setBorder(BorderFactory.createEmptyBorder(5, this.frameMere.MARGE, 5, this.frameMere.MARGE));
+		this.imgFond = getToolkit().getImage("./images/fond/fond.png");
 
 		//-------------------------------//
 		// Création des composants       //
 		//-------------------------------//
 		
-		this.panelTitre      = new JPanel(new FlowLayout());
 		this.panelSauvegarde = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		this.panelBoutons    = new JPanel(new GridLayout(2, 1, 5, 5));
 		this.panelBtnHaut    = new JPanel(new GridLayout(1, 2, 5, 5));
 		this.panelBtnBas     = new JPanel(new GridLayout(1, 4, 5, 5));
 
+		this.panelMain       = new JPanel(new BorderLayout());
+		
+		// ajoute des marges a gauche et a droite de panelMain (table + boutons)
+		this.panelMain.setBorder(BorderFactory.createEmptyBorder(5, this.frameMere.MARGE, 5, this.frameMere.MARGE));
+
+		// tout les panel transparent pour voir l'image de fond
+		this.panelMain      .setOpaque(false);
+		this.panelBoutons   .setOpaque(false);
+		this.panelBtnHaut   .setOpaque(false);
+		this.panelBtnBas    .setOpaque(false);
+		this.panelSauvegarde.setOpaque(false);
+
 		this.tabSauvegarde = new JTable(this.getFichier("../niveaux/"), new String[]{"nom"});
 		this.tabSauvegarde.setRowHeight(50);
-		this.tabSauvegarde.setTableHeader(null);
-		this.scroll        = new JScrollPane(this.tabSauvegarde);
+		this.tabSauvegarde.setTableHeader(null);                                     // retire l'entête de la table
+		this.tabSauvegarde.setDefaultEditor(Object.class, null);                     // Empêche l'edition des cellules
+		this.tabSauvegarde.setDefaultRenderer(Object.class, new CellRenderer());     // modifie l'aspect des cellules
 
-		this.btnNouveau    = new JButton("Nouveau plateau");
-		this.btnModifier   = new JButton("Modifier"       );
-		this.btnSupprimer  = new JButton("Supprimer"      );
-		this.btnRenommer   = new JButton("Renommer"       );
-		this.btnCopier     = new JButton("Copier"         );
-		this.btnQuitter    = new JButton("Quitter"        );
+		// initialisation de la barre de défilement et ajout image de fond
+		this.scroll = this.creerScroll();
+
+		JButton[] tabBtn = new JButton[6];
+
+		tabBtn[0] = this.btnNouveau    = new JButton("Nouveau plateau");
+		tabBtn[1] = this.btnModifier   = new JButton("Modifier"       );
+		tabBtn[2] = this.btnSupprimer  = new JButton("Supprimer"      );
+		tabBtn[3] = this.btnRenommer   = new JButton("Renommer"       );
+		tabBtn[4] = this.btnCopier     = new JButton("Copier"         );
+		tabBtn[5] = this.btnQuitter    = new JButton("Quitter"        );
+
+		for ( JButton btn : tabBtn )
+		{
+			btn.setBackground(PanelSauvegarde.COLOR_BACKGROUND); // change la couleur des boutons en gris foncé
+			btn.setForeground(PanelSauvegarde.COLOR_FOREGROUND); // change la couleur du texte des boutons en gris clair
+		}
 
 		//-------------------------------//
 		// Positionnement des composants //
 		//-------------------------------//
 		
-		this.panelTitre.add(new JLabel("Selectionner un plateau"));
-
 		this.panelSauvegarde.add(this.scroll);
 
 		this.panelBtnHaut.add(this.btnModifier );
@@ -97,22 +142,20 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.panelBoutons.add(this.panelBtnHaut);
 		this.panelBoutons.add(this.panelBtnBas );
 
-		this.add(this.panelTitre     , BorderLayout.NORTH );
-		this.add(this.scroll         , BorderLayout.CENTER);
-		this.add(this.panelBoutons   , BorderLayout.SOUTH );
+		// ajoute une image en entête du Panel principal
+		this.add(this.creerTitre()             , BorderLayout.NORTH);
+
+		this.panelMain.add(this.scroll         , BorderLayout.CENTER);
+		this.panelMain.add(this.panelBoutons   , BorderLayout.SOUTH );
+
+		this.add(this.panelMain);
 
 		//-------------------------------//
 		// Activation des composants     //
 		//-------------------------------//
 
-		this.btnNouveau  .addActionListener(this);
-		this.btnQuitter  .addActionListener(this);
-		this.btnRenommer .addActionListener(this);
-		this.btnSupprimer.addActionListener(this);
-		this.btnCopier   .addActionListener(this);
-		this.btnModifier .addActionListener(this);
-
-		this.initResizeListener();
+		for ( JButton btn : tabBtn )
+			btn.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -159,26 +202,6 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		}		
 	}
 
-	private void initResizeListener()
-	{
-		this.frameMere.addComponentListener(new ComponentAdapter() {
-			public void componentResized(ComponentEvent e) {
-
-				int w = frameMere.getWidth();
-
-				btnNouveau.setPreferredSize(new Dimension((int)(w * 0.29), 30));
-				btnModifier.setPreferredSize(new Dimension((int)(w * 0.29), 30));
-				btnQuitter.setPreferredSize(new Dimension((int)(w * 0.14), 30));
-				btnRenommer.setPreferredSize(new Dimension((int)(w * 0.14), 30));
-				btnCopier.setPreferredSize(new Dimension((int)(w * 0.14), 30));
-				btnSupprimer.setPreferredSize(new Dimension((int)(w * 0.14), 30));
-
-				revalidate();
-				repaint();
-			}
-		});
-	}
-
 	public void rafraichir()
 	{
 		this.tabSauvegarde.setModel(
@@ -205,7 +228,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 			if (f.isFile() && f.getName().endsWith(".data"))
 				this.fichiersDossier.add(f);
 
-		String[][] tabPlateau = new String[this.fichiersDossier.size()][1];
+		String[][] tabPlateau = new String[this.fichiersDossier.size()][2];
 
 		for (int i = 0; i < this.fichiersDossier.size(); i++)
 		{
@@ -223,5 +246,83 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		return tabPlateau;
 	}
-	
+
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		
+		// Ajout de l'image du fond
+		if ( imgFond != null )
+		{
+			((Graphics2D) g).drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
+		}
+	}
+
+	private JLabel creerTitre()
+	{
+		ImageIcon icon    = new ImageIcon("./images/Titre.png");
+		int       largeur = (int)(this.frameMere.getWidth() * 0.60);
+		int       hauteur = icon.getIconHeight() * largeur / icon.getIconWidth();
+		Image     img     = icon.getImage().getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
+		return new JLabel(new ImageIcon(img));
+	}
+
+	private JScrollPane creerScroll()
+	{
+		JScrollPane scroll = new JScrollPane(this.tabSauvegarde)
+		{
+			private ImageIcon bgScroll = new ImageIcon("./images/fond/fond_table.png");
+			
+			protected void paintComponent(Graphics g)
+			{
+				super.paintComponent(g);
+				g.drawImage(bgScroll.getImage(), 0, 0, getWidth(), getHeight(), this);
+			}
+		};
+
+		scroll.getViewport().setOpaque(false);
+		this.tabSauvegarde  .setOpaque(false);
+
+		return scroll;
+	}
+
+	// class interne pour modifier l'aspect des cellules de tabSauvegarde
+	private class CellRenderer extends DefaultTableCellRenderer
+	{
+		private final ImageIcon bgImage = new ImageIcon("./images/fond/fond_cell2.png");
+
+		public Component getTableCellRendererComponent(JTable t, Object value,
+				boolean isSelected, boolean hasFocus, int row, int col)
+		{
+			final boolean selected = isSelected;
+
+			JPanel panel = new JPanel(new BorderLayout())
+			{
+				protected void paintComponent(Graphics g)
+				{
+					super.paintComponent(g);
+					g.drawImage(bgImage.getImage(), 0, 0, getWidth(), getHeight(), this);
+
+					if (selected)
+					{
+						Graphics2D g2d = (Graphics2D) g.create();
+						g2d.setColor(new Color(200, 200, 200, 50));
+						g2d.fillRect(0, 0, getWidth(), getHeight());
+						g2d.setColor(new Color(230, 230, 230, 60));
+						g2d.dispose();
+					}
+				}
+			};
+
+			panel.setOpaque(true);
+
+			JLabel label = new JLabel(value.toString());
+			label.setForeground(PanelSauvegarde.COLOR_FOREGROUND);
+			label.setOpaque(false);
+			label.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
+
+			panel.add(label, BorderLayout.CENTER);
+			return panel;
+		}
+	}	
 }

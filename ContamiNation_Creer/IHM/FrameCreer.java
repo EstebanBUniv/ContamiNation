@@ -2,6 +2,8 @@ package ContamiNation_Creer.IHM;
 
 import ContamiNation_Creer.Controleur;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.*;
 import java.io.File;
 import java.awt.event.*;
@@ -31,7 +33,7 @@ public class FrameCreer extends JFrame implements ActionListener
 	public FrameCreer(Controleur ctrl) 
 	{
 		this.setTitle   ("ContamiNation");
-		this.setSize    (900,600);
+		this.setMinimumSize(new Dimension(900, 600));
 		this.setLocationRelativeTo(null);
 
 		this.MARGE = (int)(this.getWidth()*0.25);
@@ -39,10 +41,10 @@ public class FrameCreer extends JFrame implements ActionListener
 		this.ctrl            = ctrl;
 		this.panel           = new PanelSauvegarde(this, this.ctrl);
 		this.panelZone       = new JPanel(new BorderLayout());
-		this.btnplusZone        = new JButton("+");
+		this.btnplusZone     = new JButton("+");
 		this.numZoneActuelle = new JLabel("1");
-		this.btnmoinsZone       = new JButton("-");
-		this.cptZone = 1;
+		this.btnmoinsZone    = new JButton("-");
+		this.cptZone         = 1;
 		
 		this.btnplusZone .addActionListener(this);
 		this.btnmoinsZone.addActionListener(this);
@@ -89,7 +91,8 @@ public class FrameCreer extends JFrame implements ActionListener
 	public void valider (int lig, int col, int nbVirus, String nomPlateau)
 	{
 		this.ctrl.creerPlateau(lig, col, nbVirus, nomPlateau);
-		this.setSize    (300,120);
+		this.setMinimumSize(new Dimension(300,120));
+		this.setSize(300, 120);
 		this.setLocationRelativeTo(null);
 	}
 
