@@ -1,5 +1,7 @@
 package ContamiNation_Creer.IHM;
 
+import ContamiNation_Creer.Metier.Sommet;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -123,7 +125,18 @@ public class PanelSommet extends JPanel implements MouseListener, MouseMotionLis
 					{
 						if (this.frameMere.getPanelGrille().getButton(lig, col) == cible && !trouve)
 						{
+							int baseExistante = 0;
+							Sommet ancienSommet = this.frameMere.getCtrl().getCase(lig,col).getSommet();
+							if (ancienSommet != null)
+								baseExistante = ancienSommet.getEstBase();
+
 							this.frameMere.getCtrl().ajouterSommet(lig, col, this.symboleChoisi);
+
+							if (baseExistante != 0)
+							{
+								this.frameMere.getCtrl().getCase(lig,col).getSommet().setBase(baseExistante);
+							}
+
 							trouve = true;
 						}
 					}
