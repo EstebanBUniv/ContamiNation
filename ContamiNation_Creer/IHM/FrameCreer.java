@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import javax.swing.*;
 import java.io.File;
 import java.awt.event.*;
+import java.awt.Color;
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -14,19 +15,13 @@ SAE 2.01 | Développement d'une application
 * Groupe   : 3
 */
 
-public class FrameCreer extends JFrame implements ActionListener
+public class FrameCreer extends JFrame
 {
+	public static final Color COLOR_SELECT     = new Color(70, 150, 160);
+
 	public final int MARGE;
 
 	private JPanel       panel;
-	private JPanel       panelZone;
-
-
-	private JButton     btnplusZone;
-	private JLabel      numZoneActuelle;
-	private JButton     btnmoinsZone;
-
-	private int         cptZone;
 
 	private Controleur   ctrl;
 
@@ -40,18 +35,6 @@ public class FrameCreer extends JFrame implements ActionListener
 		
 		this.ctrl            = ctrl;
 		this.panel           = new PanelSauvegarde(this, this.ctrl);
-		this.panelZone       = new JPanel(new BorderLayout());
-		this.btnplusZone     = new JButton("+");
-		this.numZoneActuelle = new JLabel("1");
-		this.btnmoinsZone    = new JButton("-");
-		this.cptZone         = 1;
-		
-		this.btnplusZone .addActionListener(this);
-		this.btnmoinsZone.addActionListener(this);
-
-		this.panelZone.add( this.btnplusZone, BorderLayout.NORTH    );
-		this.panelZone.add(this.numZoneActuelle, BorderLayout.CENTER);
-		this.panelZone.add(this.btnmoinsZone   , BorderLayout.SOUTH );
 
 		this.setLayout(new BorderLayout());
 
@@ -96,13 +79,6 @@ public class FrameCreer extends JFrame implements ActionListener
 		this.setLocationRelativeTo(null);
 	}
 
-
-
-	public void ajouterZone (int lig, int col)
-	{
-		this.ctrl.ajouterZone(lig, col, this.cptZone);
-	}
-
 	public void initBtn (String valeur, int lig, int col)
 	{
 		if (this.panel instanceof PanelGrille)	
@@ -136,35 +112,5 @@ public class FrameCreer extends JFrame implements ActionListener
 	public void creerVirus(String nom)
 	{
 		this.ctrl.creerVirus(nom);
-	}
-	
-	public void ajouterPanel()
-	{
-		this.add(this.panelZone, BorderLayout.WEST  );
-		this.revalidate();
-	}
-	
-	public void retirerPanel()
-	{
-		this.remove(this.panelZone);
-		this.revalidate();
-	}
-
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == this.btnplusZone && this.cptZone < Integer.MAX_VALUE)
-		{
-			this.cptZone++;
-			this.numZoneActuelle.setText(this.cptZone + "");
-			this.panelZone.repaint();
-		}
-
-		if (e.getSource() == this.btnmoinsZone && this.cptZone > 1)
-		{
-			this.cptZone--;
-			this.numZoneActuelle.setText(this.cptZone + "");
-			this.panelZone.repaint();
-		}		
-
 	}
 }

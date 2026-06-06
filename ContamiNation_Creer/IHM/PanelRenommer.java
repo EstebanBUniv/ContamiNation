@@ -26,7 +26,6 @@ public class PanelRenommer extends JPanel implements ActionListener
 	private FrameRenommer frameMere;
 	private Controleur    ctrl;
 	private File          fichier;
-	private int           ligne;
 
 	private JPanel        panelBouton;
 
@@ -36,13 +35,12 @@ public class PanelRenommer extends JPanel implements ActionListener
 
 	private PanelSauvegarde panelSauvegarde;
 
-	public PanelRenommer(FrameRenommer frame, Controleur ctrl, File fichier, int ligne, PanelSauvegarde panelSauvegarde)
+	public PanelRenommer(FrameRenommer frame, Controleur ctrl, File fichier, PanelSauvegarde panelSauvegarde)
 	{
 		this.frameMere = frame;
 		this.panelSauvegarde = panelSauvegarde;
 		this.ctrl      = ctrl;
 		this.fichier   = fichier;
-		this.ligne     = ligne;
 
 		this.setLayout(new BorderLayout());
 
@@ -55,8 +53,15 @@ public class PanelRenommer extends JPanel implements ActionListener
 		this.panelBouton = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
 		this.txtNom      = new JTextField(this.ctrl.getNom(fichier), 15);
+
 		this.btnValider  = new JButton("Valider");
 		this.btnAnnuler  = new JButton("Annuler");
+
+		this.btnValider.setBackground(Controleur.COLOR_BACKGROUND);
+		this.btnValider.setForeground(Controleur.COLOR_FOREGROUND);
+
+		this.btnAnnuler.setBackground(Controleur.COLOR_BACKGROUND);
+		this.btnAnnuler.setForeground(Controleur.COLOR_FOREGROUND);
 
 		//-------------------------------//
 		// Positionnement des composants //

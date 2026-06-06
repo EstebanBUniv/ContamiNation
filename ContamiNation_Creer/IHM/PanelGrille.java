@@ -37,6 +37,14 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 	private JButton     btnAnnuler;
 	private JButton     btnRetour;
 
+	private JButton     btnPlus;
+	private JButton     btnMoins;
+	private JLabel      numZoneActuelle;
+	private int         cptZone;
+
+	private JPanel      panelZone;
+	private JPanel      panelBas;
+
 	private boolean     estNouveau = false;
 
 	public PanelGrille(int ligne, int colonne, Controleur ctrl, boolean modeZone, FrameSommet frameMere)
@@ -45,7 +53,6 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		this.ctrl      = ctrl;
 		this.modeZone  = modeZone;
-
 		this.frameMere = frameMere;
 
 		this.setOpaque(false);
@@ -82,23 +89,259 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 
 		this.add(this.panelGrille, BorderLayout.CENTER);
 
+		// Boutons communs aux deux modes
+		this.btnRetour  = new JButton("Retour" );
+		this.btnAnnuler = new JButton("Annuler");
+
+		if (this.modeZone)
+			this.btnValider = new JButton("Valider"     );
+		else
+   			this.btnValider = new JButton("Enregistrer" );
+
+		this.panelBoutton = new JPanel();
+		this.panelBoutton.add(this.btnRetour );
+		this.panelBoutton.add(this.btnAnnuler);
+		this.panelBoutton.add(this.btnValider);
+
 		if (this.modeZone)
 		{
-			this.btnAnnuler = new JButton("Annuler");
-			this.btnValider = new JButton("Valider");
-			this.btnRetour  = new JButton("Retour" );
+			this.cptZone         = 1;
+			this.numZoneActuelle = new JLabel("1", SwingConstants.CENTER);
+			this.btnPlus         = new JButton("+");
+			this.btnMoins        = new JButton("-");
 
-			this.panelBoutton = new JPanel();
-			this.panelBoutton.add(this.btnValider);
-			this.panelBoutton.add(this.btnAnnuler);
-			this.panelBoutton.add(this.btnRetour );
+			this.btnPlus .setBackground(Controleur.COLOR_BACKGROUND);
+			this.btnPlus .setForeground(Controleur.COLOR_FOREGROUND);
+			this.btnMoins.setBackground(Controleur.COLOR_BACKGROUND);
+			this.btnMoins.setForeground(Controleur.COLOR_FOREGROUND);
 
-			this.add(this.panelBoutton, BorderLayout.SOUTH);
+			this.btnPlus.addActionListener(this);
+			this.btnMoins.addActionListener(this);
 
-			this.btnValider.addActionListener(this);
-			this.btnAnnuler.addActionListener(this);
-			this.btnRetour .addActionListener(this);
+			this.panelZone = new JPanel(new BorderLayout());
+			this.panelZone.add(this.btnMoins       , BorderLayout.WEST  );
+			this.panelZone.add(this.numZoneActuelle, BorderLayout.CENTER );
+			this.panelZone.add(this.btnPlus        , BorderLayout.EAST  );
+
+			this.panelBas = new JPanel(new GridLayout(2, 1));
+			this.panelBas.add(this.panelZone   );
+			this.panelBas.add(this.panelBoutton);
+
+			this.add(this.panelBas, BorderLayout.SOUTH);
 		}
+		else
+		{
+			this.add(this.panelBoutton, BorderLayout.SOUTH);
+		}
+
+		// Listeners et couleurs communs
+		JButton[] tabBtn = {this.btnRetour, this.btnAnnuler, this.btnValider};
+		for (JButton btn : tabBtn )
+		{
+			btn.addActionListener(this);
+			btn.setBackground(Controleur.COLOR_BACKGROUND);
+			btn.setForeground(Controleur.COLOR_FOREGROUND);
+		}
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		JFrame top = (JFrame)SwingUtilities.getWindowAncestor(this);
+
+		if (this.modeZone)
+		{
+			for (int lig = 0; lig < this.tabBtn.length; lig++)
+			{
+				for (int col = 0; col < this.tabBtn[0].length; col++)
+				{
+					if (e.getSource() == this.tabBtn[lig][col])
+					{
+						if (top instanceof FrameCreer)
+						{
+							this.ajouterZone(lig, col);
+
+							int indCouleur = this.ctrl.getCase(lig, col).getZone();
+							this.tabBtn[lig][col].setBackground(this.ctrl.getCouleurZone(indCouleur));
+						}
+					}
+				}
+			}
+		}
+
+		if ( this.modeZone )
+		{
+			if (e.getSource() == this.btnPlus && this.cptZone < Integer.MAX_VALUE)
+			{
+				this.cptZone++;
+				this.numZoneActuelle.setText(this.cptZone + "");
+				this.panelZone.repaint();
+			}
+
+			if (e.getSource() == this.btnMoins && this.cptZone > 1)
+			{
+				this.cptZone--;
+				this.numZoneActuelle.setText(this.cptZone + "");
+				this.panelZone.repaint();
+			}
+		}
+
+		if (e.getSource() == this.btnValider)
+		{
+			if (this.modeZone)
+			{
+				for (int lig = 0; lig < this.getNbLig(); lig++)
+					for (int col = 0; col < this.getNbCol(); col++)
+						if (this.ctrl.getCase(lig, col).getZone() == 0)
+						{
+							JOptionPane.showMessageDialog(this, "Il reste des cases sans zone !", "Attention", JOptionPane.WARNING_MESSAGE);
+							return;
+						}
+
+				if (top instanceof FrameCreer)
+					((FrameCreer) top).fermer();
+			}
+			 else
+			{
+				if (top instanceof FrameSommet)
+				{
+					FrameSommet fs = (FrameSommet) top;
+					if (fs.getNbVirus() <= 0)
+					{
+						fs.getCtrl().enregistrer();
+						fs.dispose();
+					}
+					else
+						JOptionPane.showMessageDialog(this,
+							"Vous devez placer toutes les bases de virus avant de sauvegarder !",
+							"Attention", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+		}
+
+		if (e.getSource() == this.btnAnnuler)
+		{
+			if (this.modeZone)
+				this.supprimerToutesZones();
+			else
+			{
+				this.supprimerTousSommets();
+				if (this.frameMere != null)
+					this.frameMere.updateCptVirus(this.ctrl.getNbVirus());
+				this.repaint();
+			}
+		}
+
+		if (this.frameMere != null)
+		{
+			if (this.frameMere.getmodeBase())
+			{
+				for (int lig = 0; lig < this.ctrl.getLig(); lig++)
+				{
+					for (int col = 0; col < this.ctrl.getCol(); col++)
+					{
+						if (e.getSource() == this.tabBtn[lig][col])
+						{
+							Sommet s = ctrl.getCase(lig, col).getSommet();
+
+							int idLibre = this.trouverIdLibre();
+						
+							if (s != null && idLibre != -1 && s.getEstBase() == 0)
+							{
+								s.setBase(idLibre); 
+								
+								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.compterBasesPlacees());
+								this.frameMere.repaint();
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if (e.getSource() == this.btnRetour)
+		{
+			if (top instanceof FrameCreer)
+			{
+				((FrameCreer) top).setMinimumSize(new Dimension(900, 600));
+				((FrameCreer) top).setSize(900, 600);
+				
+				if (this.estNouveau)
+					((FrameCreer) top).changerPanel(new PanelParametre((FrameCreer) top));
+				else
+					((FrameCreer) top).changerPanel(new PanelSauvegarde((FrameCreer) top, this.ctrl));
+			}
+
+			if (top instanceof FrameSommet)
+			{
+				if (!this.modeZone)
+					this.supprimerTousSommets();
+
+				((FrameSommet) top).getCtrl().OuvrirCreer();
+				((FrameSommet) top).dispose();
+			}
+		}
+	}
+
+	public void mousePressed(MouseEvent e)
+	{
+		if (!this.modeZone )
+		{
+			if (e.getButton() == MouseEvent.BUTTON3)
+			{
+				for (int lig = 0; lig < this.tabBtn.length; lig++)
+				{
+					for (int col = 0; col < this.tabBtn[0].length; col++)
+					{
+						if (e.getSource() == this.tabBtn[lig][col])
+						{
+							this.ctrl.supprimerSommet(lig, col);
+							
+							if (this.frameMere != null)
+								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.compterBasesPlacees());
+							
+							this.frameMere.repaint();
+						}
+					}
+				}
+			
+			}	
+		}
+		else
+		{
+			if (e.getButton() == MouseEvent.BUTTON3)
+			{
+				for (int lig = 0; lig < this.tabBtn.length; lig++)
+				{
+					for (int col = 0; col < this.tabBtn[0].length; col++)
+					{
+						if (e.getSource() == this.tabBtn[lig][col])
+						{
+							this.ctrl.supprimerZone(lig, col);
+							this.tabBtn[lig][col].setBackground(Color.WHITE);
+							this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void supprimerTousSommets()
+	{
+		for (int lig = 0; lig < this.getNbLig(); lig++)
+			for (int col = 0; col < this.getNbCol(); col++)
+				this.ctrl.supprimerSommet(lig, col);
+	}
+
+	private void supprimerToutesZones()
+	{
+		for (int lig = 0; lig < this.getNbLig(); lig++)
+			for (int col = 0; col < this.getNbCol(); col++)
+			{
+				this.ctrl.getCase(lig, col).supprimerZone();
+				this.tabBtn[lig][col].setBackground(Color.WHITE);
+				this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
+			}
 	}
 
 	public JButton getButton(int lig, int col)
@@ -157,155 +400,9 @@ public class PanelGrille extends JPanel implements ActionListener, MouseListener
 		}
 	}
 
-	public void actionPerformed(ActionEvent e)
+	public void ajouterZone (int lig, int col)
 	{
-		JFrame top = (JFrame)SwingUtilities.getWindowAncestor(this);
-
-		if (this.modeZone)
-		{
-			for (int lig = 0; lig < this.tabBtn.length; lig++)
-			{
-				for (int col = 0; col < this.tabBtn[0].length; col++)
-				{
-					if (e.getSource() == this.tabBtn[lig][col])
-					{
-						if (top instanceof FrameCreer)
-						{
-							((FrameCreer)top).ajouterZone(lig, col);
-
-							int indCouleur = this.ctrl.getCase(lig, col).getZone();
-							this.tabBtn[lig][col].setBackground(this.ctrl.getCouleurZone(indCouleur));
-						}
-					}
-				}
-			}
-		}
-
-		if (this.modeZone && e.getSource() == this.btnValider)
-		{
-			for (int lig = 0; lig < this.tabBtn.length; lig++)
-			{
-				for (int col = 0; col < this.tabBtn[0].length; col++)
-				{
-					if (this.ctrl.getCase(lig, col).getZone() == 0)
-					{
-						JOptionPane.showMessageDialog(this, "Il reste des cases sans zone !", "Attention", JOptionPane.WARNING_MESSAGE);
-						return;
-					}
-				}
-			}
-
-			if (top instanceof FrameCreer)
-				((FrameCreer)top).fermer();
-		}
-
-		if (this.modeZone && e.getSource() == this.btnAnnuler)
-		{
-			for (int lig = 0; lig < this.tabBtn.length; lig++)
-			{
-				for (int col = 0; col < this.tabBtn[0].length; col++)
-				{
-					this.ctrl.getCase(lig, col).supprimerZone();
-					this.tabBtn[lig][col].setBackground(Color.WHITE);
-					this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
-				}
-			}
-		}
-		if (this.frameMere != null)
-		{
-			if (this.frameMere.getmodeBase())
-			{
-				for (int lig = 0; lig < this.ctrl.getLig(); lig++)
-				{
-					for (int col = 0; col < this.ctrl.getCol(); col++)
-					{
-						if (e.getSource() == this.tabBtn[lig][col])
-						{
-							Sommet s = ctrl.getCase(lig, col).getSommet();
-
-							int idLibre = this.trouverIdLibre();
-						
-							if (s != null && idLibre != -1 && s.getEstBase() == 0)
-							{
-								s.setBase(idLibre); 
-								
-								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.compterBasesPlacees());
-								this.frameMere.repaint();
-							}
-						}
-					}
-				}
-			}
-		}
-
-		if ( e.getSource() == this.btnRetour )
-		{
-			if ( top instanceof FrameCreer )
-			{
-				((FrameCreer) top).retirerPanel();
-				((FrameCreer) top).setMinimumSize(new Dimension(900, 600));
-				((FrameCreer) top).setSize(900, 600);
-				
-				if ( this.estNouveau )
-				{
-					((FrameCreer)(top)).changerPanel(new PanelParametre((FrameCreer)(top)));
-				}
-				else
-				{
-					((FrameCreer)(top)).changerPanel(new PanelSauvegarde((FrameCreer)(top), this.ctrl));
-				}
-			}
-					
-			if ( top instanceof FrameSommet )
-			{
-				System.out.println("retour");
-			}
-
-		}
-	}
-
-	public void mousePressed(MouseEvent e)
-	{
-		if (!this.modeZone )
-		{
-			if (e.getButton() == MouseEvent.BUTTON3)
-			{
-				for (int lig = 0; lig < this.tabBtn.length; lig++)
-				{
-					for (int col = 0; col < this.tabBtn[0].length; col++)
-					{
-						if (e.getSource() == this.tabBtn[lig][col])
-						{
-							this.ctrl.supprimerSommet(lig, col);
-							
-							if (this.frameMere != null)
-								this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - this.compterBasesPlacees());
-							
-							this.frameMere.repaint();
-						}
-					}
-				}
-			
-			}	
-		}
-		else
-		{
-			if (e.getButton() == MouseEvent.BUTTON3)
-			{
-				for (int lig = 0; lig < this.tabBtn.length; lig++)
-				{
-					for (int col = 0; col < this.tabBtn[0].length; col++)
-					{
-						if (e.getSource() == this.tabBtn[lig][col])
-						{
-							this.ctrl.supprimerZone(lig, col);
-							this.tabBtn[lig][col].setBackground(Color.WHITE);
-							this.initBtn(this.ctrl.getCase(lig, col).toString(), lig, col);
-						}
-					}
-				}
-			}
-		}
+		this.ctrl.ajouterZone(lig, col, this.cptZone);
 	}
 	
 	private int trouverIdLibre()

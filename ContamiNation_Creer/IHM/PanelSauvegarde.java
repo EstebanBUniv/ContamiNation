@@ -14,6 +14,7 @@ import java.awt.Image;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.BasicStroke;
+import java.awt.Font;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +22,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.UIManager;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -34,14 +36,6 @@ SAE 2.01 | Développement d'une application
 
 public class PanelSauvegarde extends JPanel implements ActionListener
 {
-	//--------------------------------//
-	// Constantes                     //
-	//--------------------------------//
-
-	private static final Color COLOR_BACKGROUND = new Color( 37,  37,  37);
-	private static final Color COLOR_FOREGROUND = new Color(210, 210, 210);
-	private static final Color COLOR_SELECT     = new Color( 70,  70,  70);
-
 	//--------------------------------//
 	// Variables                      //
 	//--------------------------------//
@@ -79,7 +73,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		this.setLayout(new BorderLayout());
 
-		this.imgFond = getToolkit().getImage("./images/fond/fond.png");
+		this.imgFond = getToolkit().getImage("./images/fond/fond2.png");
 
 		//-------------------------------//
 		// Création des composants       //
@@ -104,25 +98,26 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		this.tabSauvegarde = new JTable(this.getFichier("../niveaux/"), new String[]{"nom"});
 		this.tabSauvegarde.setRowHeight      (50);
-		this.tabSauvegarde.setTableHeader    (null);                                     // retire l'entête de la table
-		this.tabSauvegarde.setDefaultEditor  (Object.class, null);                       // Empêche l'edition des cellules
-		this.tabSauvegarde.setDefaultRenderer(Object.class, this.creerRenderer());       // modifie l'aspect des cellules
+		this.tabSauvegarde.setTableHeader    (null);                               // retire l'entête de la table
+		this.tabSauvegarde.setDefaultEditor  (Object.class, null);                 // Empêche l'edition des cellules
+		this.tabSauvegarde.setDefaultRenderer(Object.class, this.creerRenderer()); // modifie l'aspect des cellules
 
 		this.scroll = new JScrollPane(this.tabSauvegarde);
 
-		JButton[] tabBtn = new JButton[6];
+		this.btnNouveau    = new JButton("Nouveau plateau");
+		this.btnModifier   = new JButton("Modifier"       );
+		this.btnSupprimer  = new JButton("Supprimer"      );
+		this.btnRenommer   = new JButton("Renommer"       );
+		this.btnCopier     = new JButton("Copier"         );
+		this.btnQuitter    = new JButton("Quitter"        );
 
-		tabBtn[0] = this.btnNouveau    = new JButton("Nouveau plateau");
-		tabBtn[1] = this.btnModifier   = new JButton("Modifier"       );
-		tabBtn[2] = this.btnSupprimer  = new JButton("Supprimer"      );
-		tabBtn[3] = this.btnRenommer   = new JButton("Renommer"       );
-		tabBtn[4] = this.btnCopier     = new JButton("Copier"         );
-		tabBtn[5] = this.btnQuitter    = new JButton("Quitter"        );
+		JButton[] tabBtn = {this.btnNouveau , this.btnModifier, this.btnSupprimer,
+			                this.btnRenommer, this.btnCopier  , this.btnQuitter    };
 
 		for ( JButton btn : tabBtn )
 		{
-			btn.setBackground(PanelSauvegarde.COLOR_BACKGROUND); // change la couleur des boutons en gris foncé
-			btn.setForeground(PanelSauvegarde.COLOR_FOREGROUND); // change la couleur du texte des boutons en gris clair
+			btn.setBackground(Controleur.COLOR_BACKGROUND); // change la couleur des boutons en gris foncé
+			btn.setForeground(Controleur.COLOR_FOREGROUND); // change la couleur du texte des boutons en gris clair
 		}
 
 		//-------------------------------//
@@ -190,7 +185,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		if ( e.getSource() == this.btnRenommer )
 			 if (lignes.length == 1)
-				new FrameRenommer(this.fichiersDossier.get(lignes[0]), this.ctrl, lignes[0], this );
+				new FrameRenommer(this.fichiersDossier.get(lignes[0]), this.ctrl, this );
 		
 		if ( e.getSource() == this.btnCopier )
 		{
@@ -280,11 +275,11 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 				super.getTableCellRendererComponent(t, value, isSelected, hasFocus, row, col);
 				
 				if (isSelected)
-					setBackground(PanelSauvegarde.COLOR_SELECT);
+					setBackground(FrameCreer.COLOR_SELECT);
 				else
-					setBackground(PanelSauvegarde.COLOR_BACKGROUND);
+					setBackground(Controleur.COLOR_BACKGROUND);
 				
-				setForeground(PanelSauvegarde.COLOR_FOREGROUND);
+				setForeground(Controleur.COLOR_FOREGROUND);
 				
 				
 				return this;

@@ -1,5 +1,6 @@
 package ContamiNation_Creer.IHM;
 
+import ContamiNation_Creer.Controleur;
 import ContamiNation_Creer.IHM.PanelVirus;
 
 import java.awt.BorderLayout;
@@ -8,6 +9,12 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 
 import javax.swing.*;
 
@@ -33,6 +40,8 @@ public class PanelParametre extends JPanel implements ActionListener
 	private JPanel panelBouton;
 	private JPanel panelTxt;
 
+	private Image  imgFond;
+
 	public PanelParametre(FrameCreer frameMere)
 	{
 		this.frameMere = frameMere;
@@ -41,13 +50,26 @@ public class PanelParametre extends JPanel implements ActionListener
 
 		this.setBorder(BorderFactory.createEmptyBorder(0, this.frameMere.MARGE, 0, this.frameMere.MARGE));
 
+		this.imgFond = getToolkit().getImage("./images/fond/fond2.png");
+
 		//-------------------------------//
 		// Création des composants       //
 		//-------------------------------//
 
-		this.btnAnnuler = new JButton("Annuler");
-		this.btnValider = new JButton("Valider");
-		this.btnRetour  = new JButton("Retour" );
+		UIManager.put("Label.foreground", Color.BLACK );
+		UIManager.put("Label.font", new Font("Arial", Font.BOLD, 14));
+
+		JButton[] tabBtn = new JButton[3];
+
+		tabBtn[0] = this.btnRetour  = new JButton("Retour" );
+		tabBtn[1] = this.btnAnnuler = new JButton("Annuler");
+		tabBtn[2] = this.btnValider = new JButton("Valider");
+
+		for ( JButton btn : tabBtn )
+		{
+			btn.setBackground(Controleur.COLOR_BACKGROUND);
+			btn.setForeground(Controleur.COLOR_FOREGROUND);
+		}
 
 		this.txtColonne    = new JTextField(30);
 		this.txtLigne      = new JTextField(30);
@@ -59,13 +81,15 @@ public class PanelParametre extends JPanel implements ActionListener
 		this.panelTxt    = new JPanel();
 		this.panelTxt.setLayout(new GridLayout(8, 1));
 
+		this.panelBouton.setOpaque(false);
+		this.panelTxt.setOpaque(false);
+
 		//-------------------------------//
 		// Positionnement des composants //
 		//-------------------------------//
 
-		this.panelBouton.add(this.btnValider);
-		this.panelBouton.add(this.btnAnnuler);
-		this.panelBouton.add(this.btnRetour );
+		for ( JButton btn : tabBtn )
+			this.panelBouton.add(btn);
 
 		this.panelTxt.add( new JLabel("Nombre de lignes :"  ));
 		this.panelTxt.add( this.txtLigne      );
@@ -83,9 +107,8 @@ public class PanelParametre extends JPanel implements ActionListener
 		// Activation des composants     //
 		//-------------------------------//
 		
-		this.btnAnnuler.addActionListener(this);
-		this.btnValider.addActionListener(this);
-		this.btnRetour .addActionListener(this);
+		for ( JButton btn : tabBtn )
+			btn.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -127,6 +150,17 @@ public class PanelParametre extends JPanel implements ActionListener
 		if ( e.getSource() == this.btnRetour )
 		{
 			this.frameMere.changerPanel(new PanelSauvegarde(this.frameMere, this.frameMere.getCtrl()));
+		}
+	}
+
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		
+		// Ajout de l'image du fond
+		if ( imgFond != null )
+		{
+			((Graphics2D) g).drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
 		}
 	}
 }

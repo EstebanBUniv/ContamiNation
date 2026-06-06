@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import ContamiNation_Creer.Controleur;
 import ContamiNation_Creer.IHM.FrameCreer;
 import ContamiNation_Creer.IHM.FrameRenommer;
 
@@ -62,6 +63,12 @@ public class PanelVirus extends JPanel implements ActionListener
 
 		this.btnValider  = new JButton("Valider");
 		this.btnAnnuler  = new JButton("Annuler");
+
+		this.btnValider.setBackground(Controleur.COLOR_BACKGROUND);
+		this.btnValider.setForeground(Controleur.COLOR_FOREGROUND);
+
+		this.btnAnnuler.setBackground(Controleur.COLOR_BACKGROUND);
+		this.btnAnnuler.setForeground(Controleur.COLOR_FOREGROUND);
 
 		this.txtNomVirus = new JTextField(15);
 
