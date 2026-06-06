@@ -40,6 +40,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 	private static final Color COLOR_BACKGROUND = new Color( 37,  37,  37);
 	private static final Color COLOR_FOREGROUND = new Color(210, 210, 210);
+	private static final Color COLOR_SELECT     = new Color( 70,  70,  70);
 
 	//--------------------------------//
 	// Variables                      //
@@ -102,13 +103,12 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		this.panelSauvegarde.setOpaque(false);
 
 		this.tabSauvegarde = new JTable(this.getFichier("../niveaux/"), new String[]{"nom"});
-		this.tabSauvegarde.setRowHeight(50);
-		this.tabSauvegarde.setTableHeader(null);                                     // retire l'entête de la table
-		this.tabSauvegarde.setDefaultEditor(Object.class, null);                     // Empêche l'edition des cellules
-		this.tabSauvegarde.setDefaultRenderer(Object.class, new CellRenderer());     // modifie l'aspect des cellules
+		this.tabSauvegarde.setRowHeight      (50);
+		this.tabSauvegarde.setTableHeader    (null);                                     // retire l'entête de la table
+		this.tabSauvegarde.setDefaultEditor  (Object.class, null);                       // Empêche l'edition des cellules
+		this.tabSauvegarde.setDefaultRenderer(Object.class, this.creerRenderer());       // modifie l'aspect des cellules
 
-		// initialisation de la barre de défilement et ajout image de fond
-		this.scroll = this.creerScroll();
+		this.scroll = new JScrollPane(this.tabSauvegarde);
 
 		JButton[] tabBtn = new JButton[6];
 
@@ -158,14 +158,14 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 			btn.addActionListener(this);
 	}
 
+
 	public void actionPerformed(ActionEvent e)
 	{
-		 int[] lignes = this.tabSauvegarde.getSelectedRows();
+		int[] lignes = this.tabSauvegarde.getSelectedRows(); // tab des cellules sélectionnées
 
 		if (e.getSource() == this.btnQuitter)
 		{
 			this.frameMere.dispose();
-
 		}
 
 		if (e.getSource() == this.btnSupprimer)
@@ -202,6 +202,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		}		
 	}
 
+	// actualise l'affichage des cellules de tabSauvegarde
 	public void rafraichir()
 	{
 		this.tabSauvegarde.setModel(
@@ -258,6 +259,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		}
 	}
 
+	// retourne un JLabel avec l'image Titre.png
 	private JLabel creerTitre()
 	{
 		ImageIcon icon    = new ImageIcon("./images/Titre.png");
@@ -267,62 +269,26 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 		return new JLabel(new ImageIcon(img));
 	}
 
-	private JScrollPane creerScroll()
+	// change l'aspect des cellules de tabSauvegarde
+	private DefaultTableCellRenderer creerRenderer()
 	{
-		JScrollPane scroll = new JScrollPane(this.tabSauvegarde)
+		return new DefaultTableCellRenderer()
 		{
-			private ImageIcon bgScroll = new ImageIcon("./images/fond/fond_table.png");
-			
-			protected void paintComponent(Graphics g)
+			public Component getTableCellRendererComponent(JTable t, Object value,
+					boolean isSelected, boolean hasFocus, int row, int col)
 			{
-				super.paintComponent(g);
-				g.drawImage(bgScroll.getImage(), 0, 0, getWidth(), getHeight(), this);
+				super.getTableCellRendererComponent(t, value, isSelected, hasFocus, row, col);
+				
+				if (isSelected)
+					setBackground(PanelSauvegarde.COLOR_SELECT);
+				else
+					setBackground(PanelSauvegarde.COLOR_BACKGROUND);
+				
+				setForeground(PanelSauvegarde.COLOR_FOREGROUND);
+				
+				
+				return this;
 			}
 		};
-
-		scroll.getViewport().setOpaque(false);
-		this.tabSauvegarde  .setOpaque(false);
-
-		return scroll;
 	}
-
-	// class interne pour modifier l'aspect des cellules de tabSauvegarde
-	private class CellRenderer extends DefaultTableCellRenderer
-	{
-		private final ImageIcon bgImage = new ImageIcon("./images/fond/fond_cell2.png");
-
-		public Component getTableCellRendererComponent(JTable t, Object value,
-				boolean isSelected, boolean hasFocus, int row, int col)
-		{
-			final boolean selected = isSelected;
-
-			JPanel panel = new JPanel(new BorderLayout())
-			{
-				protected void paintComponent(Graphics g)
-				{
-					super.paintComponent(g);
-					g.drawImage(bgImage.getImage(), 0, 0, getWidth(), getHeight(), this);
-
-					if (selected)
-					{
-						Graphics2D g2d = (Graphics2D) g.create();
-						g2d.setColor(new Color(200, 200, 200, 50));
-						g2d.fillRect(0, 0, getWidth(), getHeight());
-						g2d.setColor(new Color(230, 230, 230, 60));
-						g2d.dispose();
-					}
-				}
-			};
-
-			panel.setOpaque(true);
-
-			JLabel label = new JLabel(value.toString());
-			label.setForeground(PanelSauvegarde.COLOR_FOREGROUND);
-			label.setOpaque(false);
-			label.setBorder(BorderFactory.createEmptyBorder(0, 15, 0, 0));
-
-			panel.add(label, BorderLayout.CENTER);
-			return panel;
-		}
-	}	
 }
