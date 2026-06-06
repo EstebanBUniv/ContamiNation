@@ -24,20 +24,18 @@ public class FrameRenommer extends JFrame
 {
 	private File       fichier;
 	private Controleur ctrl;
-	private int        ligne;
 	
-	public FrameRenommer(File fichier, Controleur ctrl, int ligne, PanelSauvegarde panelSauvegarde)
+	public FrameRenommer(File fichier, Controleur ctrl, PanelSauvegarde panelSauvegarde)
 	{
 		this.fichier    = fichier;
 		this.ctrl       = ctrl;
-		this.ligne      = ligne;
 
 		this.setTitle("Renommer");
 		this.setSize(300, 120);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 
-		this.add(new PanelRenommer(this, this.ctrl, this.fichier, this.ligne, panelSauvegarde ));
+		this.add(new PanelRenommer(this, this.ctrl, this.fichier, panelSauvegarde ));
 
 		
 

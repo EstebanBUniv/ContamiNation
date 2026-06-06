@@ -15,16 +15,16 @@ SAE 2.01 | Développement d'une application
 * Groupe   : 3
 */
 
-public class FrameSommet extends JFrame implements ActionListener
+public class FrameSommet extends JFrame
 {
 	private PanelGrille panelGrille;
 	private PanelSommet panelOutils;
 	private Controleur  ctrl;
 	private PanelArrete panelArrete;
 
-	private JButton     btnSave;
-	private JButton     btnRetour;
-	private JPanel      panelBouton;
+	//private JButton     btnSave;
+	//private JButton     btnRetour;
+	//private JPanel      panelBouton;
 	private Boolean     modeBase;
 	private int         cptVirus;
 
@@ -45,9 +45,6 @@ public class FrameSommet extends JFrame implements ActionListener
 		this.panelOutils = new PanelSommet(this);
 		this.panelGrille = new PanelGrille(lig, col, ctrl, false, this);
 		this.panelArrete = new PanelArrete(this.ctrl);
-		this.btnSave     = new JButton("Enregistrer");
-		this.btnRetour   = new JButton("Retour");
-		this.panelBouton = new JPanel (new GridLayout());
 		this.modeBase    = false;
 
 		this.panelArrete.setOpaque(false);
@@ -74,41 +71,13 @@ public class FrameSommet extends JFrame implements ActionListener
 		centerPanel.add(this.panelArrete); 
 		centerPanel.add(this.panelGrille);
 
-		this.panelBouton.add(this.btnSave  , BorderLayout.EAST);
-		this.panelBouton.add(this.btnRetour, BorderLayout.WEST);
-
 		this.add(centerPanel,      BorderLayout.CENTER);
 		this.add(this.panelOutils, BorderLayout.EAST  );
-		this.add(this.panelBouton, BorderLayout.SOUTH);
-
-		this.btnSave  .addActionListener(this);
-		this.btnRetour.addActionListener(this);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 		this.revalidate();
 		this.repaint();
-	}
-
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == this.btnSave)
-		{
-			if (this.cptVirus <= 0)
-			{
-				this.ctrl.enregistrer();
-				this.dispose();
-			}
-			else
-				JOptionPane.showMessageDialog(this, "Vous devez placer toutes les bases de virus avant de sauvegarder !", "Attention", JOptionPane.WARNING_MESSAGE);
-			
-		}
-
-		if ( e.getSource() == this.btnRetour )
-		{
-			this.ctrl.OuvrirCreer();
-			this.dispose();
-		}
 	}
 
 	public void initBtn(String valeur, int lig, int col)

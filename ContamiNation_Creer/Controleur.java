@@ -20,6 +20,9 @@ public class Controleur
 	/*  Attributs de la classe    */
 	/*----------------------------*/
 	
+	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134); // couleur de fond
+	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230); // couleur de texte
+
 	private FrameCreer          frame;
 	private FrameSommet         frameSommet;
 	private Plateau             plateau;
@@ -59,6 +62,26 @@ public class Controleur
 	public int getNbVirus() { return this.plateau.getNbVirus(); }
 
 	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
+
+	public Color getCouleurZone(int numZone)
+	{
+		if (numZone == 0) return Color.WHITE;
+
+		if (!this.couleursZones.containsKey(numZone))
+		{
+			this.r = (this.r + 67) % 256;
+			this.g = (this.g + 113) % 256;
+			this.b = (this.b + 193) % 256;
+			this.couleursZones.put(numZone, new Color(this.r, this.g, this.b));
+		}
+		return this.couleursZones.get(numZone);
+	}
+
+	
+	public String getNom(File fichier)
+	{
+		return Enregistrement.Recuperer(fichier, this).getNom();
+	}
 	
 	/*----------------------------*/
 	/*  Méthodes                  */
@@ -73,7 +96,6 @@ public class Controleur
 	public void changerPanel(int lig, int col)
 	{
 		this.frame.changerPanel(new PanelGrille(lig, col, this, true, this.frameSommet));
-		this.frame.ajouterPanel();
 		this.plateau.initBtn();
 	}
 	
@@ -92,8 +114,6 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 
-	
-	
 	public void ouvrirSommet()
 	{
 		this.frameSommet = new FrameSommet(this, this.plateau.getLig(), this.plateau.getCol());
@@ -114,7 +134,6 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 	
-	
 	public void enregistrer()
 	{
 		this.plateau.enregistrer();
@@ -131,7 +150,7 @@ public class Controleur
 		this.resetCouleurs();
 		this.plateau = Enregistrement.Recuperer(fichier, this);
 		this.frame.changerPanel(new PanelGrille(this.plateau.getLig(), this.plateau.getCol(), this, true, this.frameSommet));
-		this.frame.ajouterPanel();
+		//this.frame.ajouterPanel();
 		this.plateau.initBtn();
 	}
 
@@ -154,19 +173,9 @@ public class Controleur
 		this.plateau.initBtn();
 	}
 
-	public String getNom(File fichier)
-	{
-		return Enregistrement.Recuperer(fichier, this).getNom();
-	}
-
 	public void supprimerFichier(int ligne)
 	{
 		((PanelSauvegarde)(this.frame.getPanel())).supprimerFichier(ligne);
-	}
-	
-	public static void main (String[] args)
-	{
-		new Controleur();
 	}
 	
 	public int nbPlateau()
@@ -187,20 +196,6 @@ public class Controleur
 	{
 		this.plateau.creerVirus(nom);
 	}
-	
-	public Color getCouleurZone(int numZone)
-	{
-		if (numZone == 0) return Color.WHITE;
-
-		if (!this.couleursZones.containsKey(numZone))
-		{
-			this.r = (this.r + 67) % 256;
-			this.g = (this.g + 113) % 256;
-			this.b = (this.b + 193) % 256;
-			this.couleursZones.put(numZone, new Color(this.r, this.g, this.b));
-		}
-		return this.couleursZones.get(numZone);
-	}
 
 	public void resetCouleurs()
 	{
@@ -208,5 +203,10 @@ public class Controleur
 		this.r = 0;
 		this.g = 0;
 		this.b = 0;
+	}
+
+	public static void main (String[] args)
+	{
+		new Controleur();
 	}
 }
