@@ -46,10 +46,7 @@ public class Virus
 	/*----------------------------*/
 	/* Méthodes Utilitaires       */
 	/*----------------------------*/
-	
-	// Génère une couleur via une progression arithmétique modulo 256.
-    // Les nombres 89, 149 et 211 sont des nombres premiers, 
-    // ce qui assure une bonne distribution des couleurs.
+
 	private static Color nextColor()
 	{
 		r = (r + 89) % 256;
@@ -59,15 +56,12 @@ public class Virus
 		return new Color(r, g, b);
 	}
 
-	// Réinitialise les compteurs lors de la création d'une nouvelle partie.
 	public static void resetData()
 	{
 		compteurId = 1;
 		couleursVirus.clear();
 	}
-	
-	// Récupère la couleur associée à un ID virus.
-    // Retourne noir par défaut si l'ID n'est pas trouvé.
+
 	public static Color getCouleur(int id)
 	{
 		if (couleursVirus.containsKey(id))

@@ -43,11 +43,13 @@ public class Sommet
 	/*  Méthodes                  */
 	/*----------------------------*/
 	
+	// Ajoute un voisin selon une direction spécifique (0-7)
 	public void ajouterVoisin(int direction, Sommet voisin)
 	{
 		this.lstVoisins[direction] = voisin;
 	}
-
+	
+	// Supprime un voisin spécifique de la liste
 	public void retirerVoisin(Sommet s)
 	{
 		for (int i = 0; i < this.lstVoisins.length; i++)
@@ -57,17 +59,25 @@ public class Sommet
     	}
 	}
 	
+	// Réinitialise toutes les connexions du sommet
 	public void resetVoisins()
 	{
 		this.lstVoisins = new Sommet[8];
 	}
-
+	
+	// Définit ce sommet comme base pour un virus donné
 	public void setBase(int estBase)
 	{
 		if (this.estBase == 0)
 		{
 			this.estBase = estBase;
 		}
+	}
+	
+	// Supprime le statut de base de ce sommet
+	public void retirerBase()
+	{
+		this.estBase = 0;
 	}
 	
 	public String toString ()

@@ -228,14 +228,12 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 
 		for (int i = 0; i < this.fichiersDossier.size(); i++)
 		{
-			try
+			try(Scanner sc = new Scanner(new FileInputStream(this.fichiersDossier.get(i)), "UTF-8"))
 			{
-				Scanner sc = new Scanner(new FileInputStream(this.fichiersDossier.get(i)));
 				sc.nextLine(); // lig
 				sc.nextLine(); // col
 				sc.nextLine(); // nbCouleur
 				tabPlateau[i][0] = sc.nextLine(); // nom
-				sc.close();
 			}
 			catch (Exception ex) { ex.printStackTrace(); }
 		}
