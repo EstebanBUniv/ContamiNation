@@ -150,7 +150,6 @@ public class Controleur
 		this.resetCouleurs();
 		this.plateau = Enregistrement.Recuperer(fichier, this);
 		this.frame.changerPanel(new PanelGrille(this.plateau.getLig(), this.plateau.getCol(), this, true, this.frameSommet));
-		//this.frame.ajouterPanel();
 		this.plateau.initBtn();
 	}
 

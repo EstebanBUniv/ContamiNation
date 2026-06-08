@@ -1,11 +1,17 @@
 package ContamiNation_Jouer;
 
 import ContamiNation_Jouer.IHM.*;
-import javax.swing.*;
+import javax.swing.JFrame;
 
-import ContamiNation_Jouer.IHM.FrameJeu;
+import ContamiNation_Jouer.Metier.Plateau;
+
+import java.awt.Color;
+
+import ContamiNation_Jouer.IHM.PanelPlateau;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.util.Scanner;
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -19,7 +25,11 @@ public class Controleur
 	/*  Attributs de la classe    */
 	/*----------------------------*/
 
+	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134); // couleur de fond
+	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230); // couleur de texte
+
 	private FrameJeu frame;
+	private Plateau  plateau;
 
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -30,9 +40,50 @@ public class Controleur
 		this.frame = new FrameJeu(this);
 	}
 
+	/*----------------------------*/
+	/*  Getters                   */
+	/*----------------------------*/
+
+	public Plateau getPlateau()
+	{
+		return this.plateau;
+	}
+
+	/*----------------------------*/
+	/*  Méthodes                  */
+	/*----------------------------*/
+
+	public void chargerNiveau(File fichier)
+	{
+		Plateau plateau = null;
+
+		try
+		{
+			Scanner sc = new Scanner(new FileInputStream(fichier));
+			
+
+			int    lig       = sc.nextInt ();
+			int    col       = sc.nextInt ();
+			int    nbVirus   = sc.nextInt ();
+			                   sc.nextLine();
+			String nom       = sc.nextLine();
+			
+			plateau = Plateau.creerPlateau(lig, col, nbVirus, nom, this);
+			
+			sc.close();
+			
+			plateau.setFichierSource(fichier);
+			//plateau.relierTousLesSommets();
+		}
+		catch (Exception e) { e.printStackTrace(); }
+
+		this.frame.changerPanel(new PanelPlateau(this.frame, this));
+
+		this.plateau = plateau;
+	}
+
 	public static void main (String[] args)
 	{
 		new Controleur();
 	}
-
 }
