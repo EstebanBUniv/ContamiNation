@@ -314,6 +314,16 @@ public class Plateau
 		
 		return nb;
 	}
+
+
+	public boolean VerifChemin( Case caseAVerif)
+	{
+		if (! case.getAUnSommet() && case.getEstTraverse())
+			return false;
+		if (case.getNbChemin() == 0)
+			return false;
+		return true;
+	}
 	
 
 }
