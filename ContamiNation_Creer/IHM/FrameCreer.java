@@ -29,6 +29,7 @@ public class FrameCreer extends JFrame
 	{
 		this.setTitle   ("ContamiNation");
 		this.setMinimumSize(new Dimension(900, 600));
+		this.setSize(900, 600);
 		this.setLocationRelativeTo(null);              //Pour faire appraitre la frame au millieu de l'écran.
 
 		this.MARGE           = (int)(this.getWidth()*0.25);

@@ -71,14 +71,20 @@ public class PanelGrille extends JPanel implements ActionListener
 		this.cptVirus = 1;
 		
 		// Initialisation du compteur de virus
-		for (int ligVirus = 0; ligVirus < this.ctrl.getLig(); ligVirus++)
-			for (int colVirus = 0; colVirus < this.ctrl.getCol(); colVirus++)
-				if (this.frameMere != null && this.ctrl.aSommet(ligVirus, colVirus) && 
-					this.ctrl.getEstBaseSommet(ligVirus, colVirus) != 0)
+		if (this.frameMere != null) 
+		{
+			for (int ligVirus = 0; ligVirus < ligne; ligVirus++)
+			{
+				for (int colVirus = 0; colVirus < colonne; colVirus++)
+				{
+					if (this.ctrl.aSommet(ligVirus, colVirus) && this.ctrl.getEstBaseSommet(ligVirus, colVirus) != 0)
+					{
 						this.cptVirus++;
-		
-		if (this.frameMere != null)
+					}
+				}
+			}
 			this.frameMere.updateCptVirus(this.ctrl.getNbVirus() - (this.cptVirus - 1));
+		}
 		
 		// Création de la grille de boutons
 		for (int lig = 0; lig < this.tabBtn.length; lig++)

@@ -6,7 +6,6 @@
 ./IHM/PanelGrille.java
 ./IHM/PanelSommet.java
 ./IHM/PanelArrete.java
-./IHM/PanelVirus.java
 ./IHM/PanelParametre.java
 ./IHM/PanelRenommer.java
 
