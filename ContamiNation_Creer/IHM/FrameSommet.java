@@ -1,13 +1,10 @@
 package ContamiNation_Creer.IHM;
 
-import ContamiNation_Creer.Metier.Case;
 import ContamiNation_Creer.Controleur;
-
-import javax.swing.*;
-
+import ContamiNation_Creer.Metier.Case;
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.*;
+import javax.swing.*;
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -17,6 +14,7 @@ SAE 2.01 | Développement d'une application
 
 public class FrameSommet extends JFrame
 {
+	// Attribut d'instance
 	private PanelGrille panelGrille;
 	private PanelSommet panelOutils;
 	private Controleur  ctrl;
@@ -47,13 +45,13 @@ public class FrameSommet extends JFrame
 		this.panelArrete = new PanelArrete(this.ctrl);
 		this.modeBase    = false;
 
-		this.panelArrete.setOpaque(false);
+		this.panelArrete.setOpaque(false);  // Pour que le panel arrete ne cache pas la grille
 
 		JPanel centerPanel = new JPanel(null) { public boolean isOptimizedDrawingEnabled() { return false; } }; // Surcharge d'une méthode
 
 		centerPanel.addComponentListener(new ComponentAdapter()
 		{
-			public void componentResized(ComponentEvent e)
+			public void componentResized(ComponentEvent e)	// Listener de changement de taille de la frame
 			{ 
 				int w = centerPanel.getWidth();
 				int h = centerPanel.getHeight();
@@ -80,12 +78,14 @@ public class FrameSommet extends JFrame
 		this.repaint();
 	}
 
+	// Méthode qui creer un bouton pour chaque case du plateau
 	public void initBtn(String valeur, int lig, int col)
 	{
 		this.panelGrille.initBtn(valeur, lig, col);
 		this.panelArrete.repaint();
 	}
 
+	// Création des getters
 	public Case getCase(int lig, int col)
 	{
 		return this.ctrl.getCase(lig, col);
@@ -111,16 +111,18 @@ public class FrameSommet extends JFrame
 		return (JPanel)this.getGlassPane();
 	}
 
-	public void modeBase(boolean valeur)
-	{
-		this.modeBase = valeur;
-	}
-
 	public int getNbVirus()
 	{
 		return this.cptVirus;
 	}
 
+	// Méthode qui défini si l'on peut poser les bases
+	public void modeBase(boolean valeur)
+	{
+		this.modeBase = valeur;
+	}
+
+	// Méthode qui met à jour les virus
 	public void updateCptVirus(int cptVirus)
 	{
 		this.cptVirus = cptVirus;

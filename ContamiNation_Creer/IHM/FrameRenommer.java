@@ -1,18 +1,8 @@
 package ContamiNation_Creer.IHM;
 
-import javax.swing.JFrame;
-
 import ContamiNation_Creer.Controleur;
-import ContamiNation_Creer.IHM.PanelRenommer;
-import ContamiNation_Creer.IHM.PanelSauvegarde;
-
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-
 import java.io.File;
-
-
-import javax.swing.*;
+import javax.swing.JFrame;
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -22,6 +12,7 @@ SAE 2.01 | Développement d'une application
 
 public class FrameRenommer extends JFrame
 {
+	// Attributs d'intance
 	private File       fichier;
 	private Controleur ctrl;
 	
