@@ -81,8 +81,8 @@ public class FrameCreer extends JFrame
 	public void valider (int lig, int col, int nbVirus, String nomPlateau)
 	{
 		this.ctrl.creerPlateau(lig, col, nbVirus, nomPlateau);
-		this.setMinimumSize(new Dimension(300,120));
-		this.setSize(300, 120);
+		this.setMinimumSize(new Dimension(1000,500));
+		this.setSize(1000, 500);
 		this.setLocationRelativeTo(null);
 	}
 

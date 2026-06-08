@@ -90,8 +90,6 @@ public class PanelParametre extends JPanel implements ActionListener
 		this.add(this.panelBouton, BorderLayout.SOUTH);
 	}
 
-	// Gestion dans les activations de bouton
-
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == this.btnAnnuler) 

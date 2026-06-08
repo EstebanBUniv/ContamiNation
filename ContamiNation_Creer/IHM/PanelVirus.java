@@ -1,18 +1,13 @@
 package ContamiNation_Creer.IHM;
 
-import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.*;
 
 import java.io.File;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import ContamiNation_Creer.Controleur;
 import ContamiNation_Creer.IHM.FrameCreer;
@@ -32,10 +27,10 @@ public class PanelVirus extends JPanel implements ActionListener
 
 	private JPanel        panelBouton;
 
-	private JTextField    txtNomVirus;
 	private JButton       btnValider;
 	private JButton       btnAnnuler;
-	private JLabel        lbNumVirus; 
+	private JTextField[]  txtNomVirus;
+	private JLabel[]      lbNumVirus; 
 	
 	private int           cptVirus = 0;
 	private int           nbVirus;
@@ -51,15 +46,13 @@ public class PanelVirus extends JPanel implements ActionListener
 		this.lig = lig;
 		this.col = col;
 
-		this.setLayout(new BorderLayout());
+		this.setLayout(new GridLayout((this.nbVirus+1),2));
 
 		this.setBorder(BorderFactory.createEmptyBorder(0, this.MARGE, 0, this.MARGE));
 
 		//-------------------------------//
 		// Création des composants       //
 		//-------------------------------//
-
-		this.panelBouton = new JPanel(new FlowLayout(FlowLayout.CENTER));
 
 		this.btnValider  = new JButton("Valider");
 		this.btnAnnuler  = new JButton("Annuler");
@@ -70,26 +63,39 @@ public class PanelVirus extends JPanel implements ActionListener
 		this.btnAnnuler.setBackground(Controleur.COLOR_BACKGROUND);
 		this.btnAnnuler.setForeground(Controleur.COLOR_FOREGROUND);
 
-		this.txtNomVirus = new JTextField(15);
 
-		this.lbNumVirus  = new JLabel("Nom du Virus n°" + (this.cptVirus+1));
+		
+		this.txtNomVirus = new JTextField[nbVirus];
+		this.lbNumVirus  = new JLabel    [nbVirus];
 
+		
+		
 		//-------------------------------//
 		// Positionnement des composants //
 		//-------------------------------//
+	
 
-		this.panelBouton.add(this.btnValider);
-		this.panelBouton.add(this.btnAnnuler);
+		
+		for (int cpt = 0 ; cpt < this.nbVirus ; cpt++)
+			{
+				this.lbNumVirus[cpt]  = new JLabel("Nom du Virus n°" + (cpt+1));
+				this.txtNomVirus[cpt] = new JTextField(15);
+				this.add(this.lbNumVirus[cpt]);
+				this.add(this.txtNomVirus[cpt]);
+				this.txtNomVirus[cpt].addActionListener( e -> this.valider());
+			}
 
-		this.add(this.lbNumVirus, BorderLayout.NORTH  );
-		this.add(this.txtNomVirus, BorderLayout.CENTER);
-		this.add(this.panelBouton, BorderLayout.SOUTH );
+		
+		this.add(this.btnValider);
+		this.add(this.btnAnnuler);
+
 
 		//-------------------------------//
 		// Activation des composants     //
 		//-------------------------------//
-
-		this.txtNomVirus.addActionListener(e -> this.valider());
+		
+				
+		
 		this.btnValider .addActionListener(e -> this.valider());
 		this.btnAnnuler .addActionListener(this);
 
@@ -99,11 +105,13 @@ public class PanelVirus extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if ( e.getSource() == this.btnAnnuler )
-			this.txtNomVirus.setText("");
+			for (int cpt = 0 ; cpt < this.txtNomVirus.length ; cpt++)
+				this.txtNomVirus[cpt].setText("");
 	}
 
 	private void valider()
 	{
+		/* 
 		if ( !this.txtNomVirus.getText().isBlank() )
 		{
 			this.frameMere.creerVirus(this.txtNomVirus.getText());
@@ -118,13 +126,28 @@ public class PanelVirus extends JPanel implements ActionListener
 			}
 		}
 		this.frameMere.setResizable(true);
-	}
+		*/
 
-	public void creerVirus()
-	{
-		this.txtNomVirus.setText("");
-		this.lbNumVirus.setText("Nom du Virus n°" + (this.cptVirus+1));
-		this.revalidate();
-		this.repaint();
+		for (int cpt = 0 ; cpt < this.txtNomVirus.length ; cpt++)
+		{
+			if (this.txtNomVirus[cpt].getText().isBlank())
+			{
+				JOptionPane.showMessageDialog(this, "Il reste des virus à nommer !", "Attention", JOptionPane.WARNING_MESSAGE);
+				return;	
+			}
+		}
+
+		for (int cpt = 0 ; cpt < this.txtNomVirus.length ; cpt++)
+		{
+			this.frameMere.creerVirus(this.txtNomVirus[cpt].getText());
+		}
+		
+		this.frameMere.setEstNouveau(true);
+		this.frameMere.changerGrille(this.lig, this.col);
+		this.frameMere.setEstNouveau(true);
+		
+		this.frameMere.setResizable(true);
+
+
 	}
 }
