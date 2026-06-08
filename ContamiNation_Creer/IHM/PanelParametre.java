@@ -110,7 +110,7 @@ public class PanelParametre extends JPanel implements ActionListener
 		for ( JButton btn : tabBtn )
 			btn.addActionListener(this);
 	}
-
+		// METHODE PERMETTANT DE METTRE LE PANELVIRUS
 	public void actionPerformed(ActionEvent e)
 	{
 		Integer col        = null;
