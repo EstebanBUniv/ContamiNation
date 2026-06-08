@@ -70,6 +70,11 @@ public class Sommet
 		}
 	}
 	
+	public void retirerBase()
+	{
+		this.estBase = 0;
+	}
+	
 	public String toString ()
 	{
 		return this.symbole + "\t" + this.estBase;

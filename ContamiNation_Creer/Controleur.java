@@ -83,9 +83,38 @@ public class Controleur
 		return Enregistrement.Recuperer(fichier, this).getNom();
 	}
 	
+	public boolean aSommet (int lig, int col)
+	{
+		return this.plateau.getCase(lig, col).getSommet() != null;
+	}
+	
+	public String getSymboleSommet(int lig, int col)
+	{
+		if (this.aSommet(lig, col))
+			return this.plateau.getCase(lig, col).getSommet().getSymbole();
+		return null;
+	}
+	
+	public int getEstBaseSommet(int lig, int col)
+	{
+		if (this.aSommet(lig, col))
+			return this.plateau.getCase(lig, col).getSommet().getEstBase();
+		return 0;
+	}
+	
+	public int getZone(int lig, int col)
+	{
+		return this.plateau.getCase(lig, col).getZone();
+	}
+	
 	/*----------------------------*/
 	/*  Méthodes                  */
 	/*----------------------------*/
+	
+	public void reinitialiserZone(int lig, int col)
+	{
+		this.plateau.getCase(lig, col).supprimerZone();
+	}
 	
 	public void creerPlateau(int lig, int col, int nbCouleur, String nomPlateau)
 	{
@@ -108,10 +137,11 @@ public class Controleur
 			this.frameSommet.initBtn(val, lig, col);
 	}
 	
-	public void ajouterZone (int lig, int col, int numZone)
+	public int ajouterZone (int lig, int col, int numZone)
 	{
-		this.plateau.ajouterZone(lig, col, numZone);
+		int zoneAppliquee = this.plateau.ajouterZone(lig, col, numZone);
 		this.plateau.initBtn();
+		return zoneAppliquee;
 	}
 
 	public void ouvrirSommet()
@@ -150,7 +180,6 @@ public class Controleur
 		this.resetCouleurs();
 		this.plateau = Enregistrement.Recuperer(fichier, this);
 		this.frame.changerPanel(new PanelGrille(this.plateau.getLig(), this.plateau.getCol(), this, true, this.frameSommet));
-		//this.frame.ajouterPanel();
 		this.plateau.initBtn();
 	}
 
@@ -203,6 +232,48 @@ public class Controleur
 		this.r = 0;
 		this.g = 0;
 		this.b = 0;
+	}
+	
+	public void setBaseSommet(int lig, int col, int idBase)
+	{
+		if (this.aSommet(lig, col))
+			this.plateau.getCase(lig, col).getSommet().setBase(idBase);
+	}
+
+	public void retirerBaseSommet(int lig, int col)
+	{
+		if (this.aSommet(lig, col))
+			this.plateau.getCase(lig, col).getSommet().retirerBase();
+	}
+	
+	public void setSommet(int lig, int col, int id)
+	{
+		if (this.plateau.getCase(lig, col).getSommet() != null) {
+			this.plateau.getCase(lig, col).getSommet().setBase(id);
+		}
+	}
+	
+	public void full(int lig, int col, int ancienneZone, int nouvelleZone, boolean[][] visite) 
+	{
+		this.plateau.full(lig, col, ancienneZone, nouvelleZone, visite);
+	}
+	
+	public boolean zoneExiste(int numZone)
+	{
+		for (int i = 0; i < this.getLig(); i++)
+			for (int j = 0; j < this.getCol(); j++)
+				if (this.plateau.getCase(i, j).getZone() == numZone) 
+					return true;
+		return false;
+	}
+
+	public boolean estAdjacentZone(int lig, int col, int numZone)
+	{
+		if (lig > 0 && this.plateau.getCase(lig - 1, col).getZone() == numZone) return true;
+		if (lig < this.getLig() - 1 && this.plateau.getCase(lig + 1, col).getZone() == numZone) return true;
+		if (col > 0 && this.plateau.getCase(lig, col - 1).getZone() == numZone) return true;
+		if (col < this.getCol() - 1 && this.plateau.getCase(lig, col + 1).getZone() == numZone) return true;
+		return false;
 	}
 
 	public static void main (String[] args)

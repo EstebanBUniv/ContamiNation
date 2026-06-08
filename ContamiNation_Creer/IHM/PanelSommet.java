@@ -125,16 +125,14 @@ public class PanelSommet extends JPanel implements MouseListener, MouseMotionLis
 					{
 						if (this.frameMere.getPanelGrille().getButton(lig, col) == cible && !trouve)
 						{
-							int baseExistante = 0;
-							Sommet ancienSommet = this.frameMere.getCtrl().getCase(lig,col).getSommet();
-							if (ancienSommet != null)
-								baseExistante = ancienSommet.getEstBase();
+							// Utilisation directe des méthodes relais du contrôleur
+							int baseExistante = this.frameMere.getCtrl().getEstBaseSommet(lig, col);
 
 							this.frameMere.getCtrl().ajouterSommet(lig, col, this.symboleChoisi);
 
 							if (baseExistante != 0)
 							{
-								this.frameMere.getCtrl().getCase(lig,col).getSommet().setBase(baseExistante);
+								this.frameMere.getCtrl().setBaseSommet(lig, col, baseExistante);
 							}
 
 							trouve = true;

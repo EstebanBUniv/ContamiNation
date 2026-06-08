@@ -75,11 +75,8 @@ public class Enregistrement
 	{
 		Plateau plateau = null;
 
-		try
+		try(Scanner sc = new Scanner(new FileInputStream(fichier), "UTF-8"))
 		{
-			 Scanner sc = new Scanner(new FileInputStream(fichier));
-			
-
 			int    lig       = sc.nextInt ();
 			int    col       = sc.nextInt ();
 			int    nbVirus   = sc.nextInt ();
@@ -111,7 +108,6 @@ public class Enregistrement
 						plateau.getCase(ligCase, colCase).getSommet().setBase(estBase);
 				}
 			}
-			sc.close();
 			
 			plateau.setFichierSource(fichier);
 			plateau.relierTousLesSommets();
