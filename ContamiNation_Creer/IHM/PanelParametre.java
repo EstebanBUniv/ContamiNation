@@ -62,29 +62,47 @@ public class PanelParametre extends JPanel implements ActionListener
 			btn.addActionListener(this);
 		}
 
-		// Champs de saisie
-		this.txtColonne = new JTextField(30);
-		this.txtLigne = new JTextField(30);
-		this.txtNbVirus = new JTextField(30);
-		this.txtNomPlateau = new JTextField(30);
+		this.txtColonne    = new JTextField(10);
+		this.txtLigne      = new JTextField(10);
+		this.txtNbVirus    = new JTextField(10);
+		this.txtNomPlateau = new JTextField(10);
 
-		// Panneaux conteneurs
-		this.panelBouton = new JPanel(new FlowLayout());
-		this.panelTxt = new JPanel(new GridLayout(8, 1));
+		JPanel panelColonne    = new JPanel(new FlowLayout());
+		JPanel panelLigne      = new JPanel(new FlowLayout());
+		JPanel panelNbVirus    = new JPanel(new FlowLayout());
+		JPanel panelNomPlateau = new JPanel(new FlowLayout());
+
+
+		this.panelBouton = new JPanel();
+		this.panelBouton.setLayout(new FlowLayout());
+		this.panelTxt    = new JPanel();
+		this.panelTxt.setLayout(new GridLayout(4, 2));
+
+		this.panelTxt.setBorder(BorderFactory.createEmptyBorder(50, 0, 50, 0));
+
 		this.panelBouton.setOpaque(false);
 		this.panelTxt.setOpaque(false);
+		panelColonne.setOpaque(false);
+		panelLigne.setOpaque(false);
+		panelNbVirus.setOpaque(false);
+		panelNomPlateau.setOpaque(false);
 
 		// Remplissage des panneaux
 		for (JButton btn : tabBtn) this.panelBouton.add(btn);
 
-		this.panelTxt.add(new JLabel("Nombre de lignes :"));
-		this.panelTxt.add(this.txtLigne);
-		this.panelTxt.add(new JLabel("Nombre de colonnes :"));
-		this.panelTxt.add(this.txtColonne);
-		this.panelTxt.add(new JLabel("Nombre de virus :"));
-		this.panelTxt.add(this.txtNbVirus);
-		this.panelTxt.add(new JLabel("Nom du plateau :"));
-		this.panelTxt.add(this.txtNomPlateau);
+		panelColonne.add( new JLabel("Nombre de lignes :"  ));
+		panelColonne.add( this.txtLigne      );
+		panelLigne.add( new JLabel("Nombre de colonnes :"));
+		panelLigne.add( this.txtColonne    );
+		panelNbVirus.add( new JLabel("Nombre de virus :"   ));
+		panelNbVirus.add( this.txtNbVirus    );
+		panelNomPlateau.add( new JLabel("Nom du plateau :"   ));
+		panelNomPlateau.add( this.txtNomPlateau );
+
+		this.panelTxt.add(panelColonne);
+		this.panelTxt.add(panelLigne);
+		this.panelTxt.add(panelNbVirus);
+		this.panelTxt.add(panelNomPlateau);
 
 		this.add(this.panelTxt, BorderLayout.CENTER);
 		this.add(this.panelBouton, BorderLayout.SOUTH);
