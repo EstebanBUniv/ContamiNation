@@ -37,10 +37,10 @@ public class PanelRenommer extends JPanel implements ActionListener
 
 	public PanelRenommer(FrameRenommer frame, Controleur ctrl, File fichier, PanelSauvegarde panelSauvegarde)
 	{
-		this.frameMere = frame;
+		this.frameMere       = frame;
 		this.panelSauvegarde = panelSauvegarde;
-		this.ctrl      = ctrl;
-		this.fichier   = fichier;
+		this.ctrl            = ctrl;
+		this.fichier         = fichier;
 
 		this.setLayout(new BorderLayout());
 
@@ -84,13 +84,15 @@ public class PanelRenommer extends JPanel implements ActionListener
 
 		
 	}
-
+	
+	//Ferme la fenetre en appuyant sur annuler
 	public void actionPerformed(ActionEvent e)
 	{
 		if ( e.getSource() == this.btnAnnuler )
 			this.frameMere.dispose();
 	}
 
+	// Change le nom quand on appuie sur valider
 	private void valider()
 	{
 		if ( !this.txtNom.getText().isBlank() )

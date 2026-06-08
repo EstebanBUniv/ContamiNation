@@ -74,44 +74,24 @@ public class FrameSommet extends JFrame
 		this.revalidate();
 		this.repaint();
 	}
+	
+	//-------------------------------//
+	// Getters                       //
+	//-------------------------------//
+	
+	public Case        getCase       (int lig, int col) { return this.ctrl.getCase(lig, col) ; }
+	public boolean     getmodeBase   ()                 { return this.modeBase               ; }
+	public PanelGrille getPanelGrille()                 { return this.panelGrille            ; }
+	public Controleur  getCtrl       ()                 { return this.ctrl                   ; }
+	public JPanel      getVitre      ()                 { return (JPanel)this.getGlassPane() ; }
+	public int         getNbVirus    ()                 { return this.cptVirus               ; }
 
 	// Méthode qui creer un bouton pour chaque case du plateau
 	public void initBtn(String valeur, int lig, int col)
 	{
 		this.panelGrille.initBtn(valeur, lig, col);
 		this.panelArrete.repaint();
-	}
-
-	// Création des getters
-	public Case getCase(int lig, int col)
-	{
-		return this.ctrl.getCase(lig, col);
-	}
-
-	public boolean getmodeBase()
-	{
-		return this.modeBase;
-	}
-
-	public PanelGrille getPanelGrille()
-	{
-		return this.panelGrille;
-	}
-
-	public Controleur getCtrl()
-	{
-		return this.ctrl;
-	}
-
-	public JPanel getVitre()
-	{
-		return (JPanel)this.getGlassPane();
-	}
-
-	public int getNbVirus()
-	{
-		return this.cptVirus;
-	}
+	}	
 
 	// Méthode qui défini si l'on peut poser les bases
 	public void modeBase(boolean valeur)
@@ -125,5 +105,4 @@ public class FrameSommet extends JFrame
 		this.cptVirus = cptVirus;
 		this.panelOutils.updateTexteBouton(this.cptVirus);
 	}
-
 }
