@@ -111,22 +111,6 @@ public class PanelVirus extends JPanel implements ActionListener
 
 	private void valider()
 	{
-		/* 
-		if ( !this.txtNomVirus.getText().isBlank() )
-		{
-			this.frameMere.creerVirus(this.txtNomVirus.getText());
-			this.cptVirus++;
-			if (this.cptVirus < this.nbVirus )
-				this.creerVirus();
-			else
-			{
-				this.frameMere.setEstNouveau(true);
-				this.frameMere.changerGrille(this.lig, this.col);
-				this.frameMere.setEstNouveau(true);
-			}
-		}
-		this.frameMere.setResizable(true);
-		*/
 
 		for (int cpt = 0 ; cpt < this.txtNomVirus.length ; cpt++)
 		{
