@@ -53,7 +53,7 @@ public class Case
 	/*  Méthodes                  */
 	/*----------------------------*/
 	
-	public boolean verifZone()        { return this.zone != 0; }
+	public boolean verifZone()        { return this.zone != 0; } //vérifie si la case a une zone
 	
 	public String toString()
 	{
