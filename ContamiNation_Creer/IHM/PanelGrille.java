@@ -2,16 +2,16 @@ package ContamiNation_Creer.IHM;
 
 import ContamiNation_Creer.Controleur;
 
+import ContamiNation_Creer.Metier.Sommet;
+
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Point;
-
 import java.awt.event.*;
-
 import javax.swing.*;
 
 /* 
@@ -22,13 +22,15 @@ SAE 2.01 | Développement d'une application
 
 public class PanelGrille extends JPanel implements ActionListener, MouseListener, MouseMotionListener
 {
-	private int cptVirus;
+	// Attribut d'instance
+	private int         cptVirus;
  
 	private JButton[][]  tabBtn;
 	private Controleur   ctrl;
 	private boolean      modeZone;
 	private JPanel       panelGrille;
 	private JPanel       panelBoutton, panelMode;
+
 
 	private FrameSommet  frameMere;
 	private JButton      btnValider;

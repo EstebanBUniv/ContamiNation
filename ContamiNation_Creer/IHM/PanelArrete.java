@@ -2,13 +2,11 @@ package ContamiNation_Creer.IHM;
 
 import ContamiNation_Creer.Controleur;
 import ContamiNation_Creer.Metier.*;
-
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Color;
-
 import javax.swing.*;
 
 /* 
@@ -19,6 +17,7 @@ SAE 2.01 | Développement d'une application
 
 public class PanelArrete extends JPanel
 {
+	// Attribut d'instance
 	private Controleur ctrl;
 
 	public PanelArrete(Controleur ctrl)
