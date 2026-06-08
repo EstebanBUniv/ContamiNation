@@ -1,4 +1,6 @@
 ./IHM/FrameJeu.java
-./IHM/PanelJeu.java
+./IHM/PanelNiveau.java
+./IHM/PanelPlateau.java
+./IHM/PanelCase.java
 
 ./Controleur.java
