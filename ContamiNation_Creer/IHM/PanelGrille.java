@@ -90,6 +90,7 @@ public class PanelGrille extends JPanel implements ActionListener
 				button.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 				button.addMouseListener(gereSouris);
 				button.addActionListener(this);
+				button.addMouseMotionListener(gereSouris);
 				button.putClientProperty("coords", new Point(lig, col));
 
 				this.tabBtn[lig][col] = button;
