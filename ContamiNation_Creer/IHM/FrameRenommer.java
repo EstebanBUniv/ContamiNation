@@ -25,10 +25,9 @@ public class FrameRenommer extends JFrame
 		this.setSize(300, 120);
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
-
-		this.add(new PanelRenommer(this, this.ctrl, this.fichier, panelSauvegarde ));
-
 		
+		//Ajout du panel renommer
+		this.add(new PanelRenommer(this, this.ctrl, this.fichier, panelSauvegarde ));
 
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 

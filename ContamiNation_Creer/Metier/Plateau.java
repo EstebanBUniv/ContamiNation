@@ -34,7 +34,7 @@ public class Plateau
 	/*  Constructeur de la classe */
 	/*----------------------------*/
 	
-	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
+	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl) //factory 
 	{
 		if ( col <= 0 || lig <= 0 || nbVirus <=0)
 				return null;
@@ -58,7 +58,7 @@ public class Plateau
 		this.creaCase();
 	}
 	
-	private void creaCase()
+	private void creaCase() // permet de creer un tableau de case
 	{
 		for (int i = 0; i < this.lig; i++ )
 		{
@@ -76,9 +76,9 @@ public class Plateau
 	public int    getLig         () { return this.lig              ; }
 	public int    getCol         () { return this.col              ; }
 	public int    getNbVirus     () { return this.nbVirus          ; }
-	public int    getNumero      () { return this.ctrl.nbPlateau() ; }
+	public int    getNumero      () { return this.ctrl.nbPlateau() ; } // renvoie le nombre de plateau
 	public String getNom         () { return this.nom              ; }
-	public File getFichierSource () { return this.fichierSource    ; }
+	public File getFichierSource () { return this.fichierSource    ; } // renvoie le fichier.data (choisie sur la page de selection des plateau)
 	
 	public Case getCase(int lig, int col)
 	{
@@ -107,7 +107,7 @@ public class Plateau
 	/*----------------------------*/
 
 	public void setNom           (String nom)  { this.nom           = nom ; }
-	public void setFichierSource (File   file) { this.fichierSource = file; }
+	public void setFichierSource (File   file) { this.fichierSource = file; } // donne le nom du fichier
 
 	
 	/*----------------------------*/
@@ -140,7 +140,8 @@ public class Plateau
 		this.tabCases[lig][col].supprimerSommet();
 	}
 	
-	public void relierTousLesSommets()
+	// permet de verifier les voisins de chaques sommets et de retirer les arrêtes qui ne doivent plus exister quand un sommet est enlever
+	public void relierTousLesSommets() 
 	{
 		for (int i = 0; i < this.lig; i++)
 			for (int j = 0; j < this.col; j++)
@@ -161,6 +162,7 @@ public class Plateau
 		}
 	}
 	
+	//indique les 8 directions et ajoute les voisins de chaques sommets
 	private void chercherVoisins(int lig, int col, Sommet sommetCourant)
 	{
 		int[][] directions = {
@@ -221,11 +223,13 @@ public class Plateau
 		return numZone;
 	}
 	
+	// ajoute toute les zone quand on charge le fichier
 	public void ajouterZoneDirecte(int lig, int col, int zone)
 	{
 		this.tabCases[lig][col].ajouterZone(zone);
 	}
 	
+	// initialise le tableau de bouton quand on appuie sur modifier
 	public void initBtn()
 	{
 		for (int lig = 0; lig < this.lig; lig++ )
@@ -303,6 +307,7 @@ public class Plateau
 			this.tabCases[lig][col].ajouterZone(zoneCible);
 	}
 
+	// permet de compléter toute les case tu tableau de la même couleur
 	public void full(int lig, int col, int ancienneZone, int nouvelleZone, boolean[][] visite) 
 	{
 		if (lig < 0 || lig >= this.lig || col < 0 || col >= this.col || visite[lig][col]) return;
@@ -311,12 +316,14 @@ public class Plateau
 		this.tabCases[lig][col].ajouterZone(nouvelleZone);
 		visite[lig][col] = true;
 
+		//appele récursive de la méthode
 		full(lig + 1, col, ancienneZone, nouvelleZone, visite);
 		full(lig - 1, col, ancienneZone, nouvelleZone, visite);
 		full(lig, col + 1, ancienneZone, nouvelleZone, visite);
 		full(lig, col - 1, ancienneZone, nouvelleZone, visite);
 	}
 	
+	// c'est pour supprimer les zone de certaines case quand c'est possible
 	private int compterCasesConnectees(int l, int c, int zoneCible, boolean[][] visite)
 	{
 		if (l < 0 || l >= this.lig || c < 0 || c >= this.col)
@@ -328,6 +335,7 @@ public class Plateau
 		visite[l][c] = true;
 		int nb = 1;
 		
+		//appele récursive de la méthode
 		nb += this.compterCasesConnectees(l - 1, c, zoneCible, visite);
 		nb += this.compterCasesConnectees(l + 1, c, zoneCible, visite);
 		nb += this.compterCasesConnectees(l, c - 1, zoneCible, visite);
