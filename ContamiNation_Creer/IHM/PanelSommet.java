@@ -107,36 +107,33 @@ public class PanelSommet extends JPanel implements MouseListener, MouseMotionLis
 			JPanel vitre = this.frameMere.getVitre();
 			PanelGrille panelCible = this.frameMere.getPanelGrille();
 
+			// 1. Convertir les coordonnées
 			Point ptPanel = SwingUtilities.convertPoint((Component) e.getSource(), e.getPoint(), panelCible);
+
+			// 2. Trouver le bouton sous la souris
+			Component c = SwingUtilities.getDeepestComponentAt(panelCible, ptPanel.x, ptPanel.y);
 
 			vitre.remove(this.labelVolant);
 			vitre.setVisible(false);
 			vitre.repaint();
 
-			JButton cible = panelCible.getButtonAtPoint(ptPanel);
-
-			if (cible != null)
+			if (c instanceof JButton)
 			{
-				boolean trouve = false;
+				JButton cible = (JButton) c;
+				// 3. Récupérer les coordonnées directement via la propriété
+				Point p = (Point) cible.getClientProperty("coords");
 
-				for (int lig = 0; lig < this.frameMere.getPanelGrille().getNbLig() && !trouve; lig++)
+				if (p != null)
 				{
-					for (int col = 0; col < this.frameMere.getPanelGrille().getNbCol(); col++)
+					int lig = p.x;
+					int col = p.y;
+					
+					int baseExistante = this.frameMere.getCtrl().getEstBaseSommet(lig, col);
+					this.frameMere.getCtrl().ajouterSommet(lig, col, this.symboleChoisi);
+
+					if (baseExistante != 0)
 					{
-						if (this.frameMere.getPanelGrille().getButton(lig, col) == cible && !trouve)
-						{
-							// Utilisation directe des méthodes relais du contrôleur
-							int baseExistante = this.frameMere.getCtrl().getEstBaseSommet(lig, col);
-
-							this.frameMere.getCtrl().ajouterSommet(lig, col, this.symboleChoisi);
-
-							if (baseExistante != 0)
-							{
-								this.frameMere.getCtrl().setBaseSommet(lig, col, baseExistante);
-							}
-
-							trouve = true;
-						}
+						this.frameMere.getCtrl().setBaseSommet(lig, col, baseExistante);
 					}
 				}
 			}
