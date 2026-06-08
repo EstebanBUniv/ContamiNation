@@ -25,7 +25,6 @@ public class Plateau
 	private int        nbVirus;
 	private int        tailleCases;
 	private String     nom;
-	private String[]   couleurs;
 	private Case[][]   tabCases;
 	private File fichierSource = null;
 
@@ -53,7 +52,6 @@ public class Plateau
 		this.nom = nom;
 		
 		this.nbVirus   = nbVirus;
-		this.couleurs    = new String[this.nbVirus];
 		
 		this.tailleCases = 50;
 		this.tabCases    = new Case[this.lig][this.col];
@@ -89,12 +87,18 @@ public class Plateau
 
 	public Virus getVirus (int index)
 	{
-		return this.lstVirus.get(index);
+		if (index >= 0 && index < this.lstVirus.size())
+			return this.lstVirus.get(index);
+			
+		return new Virus("Virus_Inconnu_" + (index + 1));
 	}
 	
-	public String getNomVirus(int nomVirus)
+	public String getNomVirus(int index)
 	{
-		return this.lstVirus.get(nomVirus).getNom();
+		if (index >= 0 && index < this.lstVirus.size())
+			return this.lstVirus.get(index).getNom();
+			
+		return "Virus_Inconnu_" + (index + 1);
 	}
 
 
@@ -188,10 +192,11 @@ public class Plateau
 		}
 	}
 	
-	public void ajouterZone (int lig, int col, int numZone)
+	public int ajouterZone (int lig, int col, int numZone)
 	{
 		if (this.tabCases[lig][col].getZone() != 0 )
-			return;
+			return this.tabCases[lig][col].getZone();
+
 		for (int i = 0; i < this.lig; i++ )
 		{
 			for(int j = 0; j < this.col; j++)
@@ -199,19 +204,21 @@ public class Plateau
 				if (this.tabCases[i][j].getZone() == numZone)
 				{
 					 if ( (lig > 0 ? this.tabCases[lig - 1][col].getZone() == numZone : false) ||
-					      (lig < this.lig - 1 ? this.tabCases[lig + 1][col].getZone() == numZone : false) ||
-					      (col > 0 ? this.tabCases[lig][col - 1].getZone() == numZone : false) ||
-					      (col < this.col - 1 ? this.tabCases[lig][col + 1].getZone() == numZone : false) )
-					
-							this.tabCases[lig][col].ajouterZone(numZone);
+						  (lig < this.lig - 1 ? this.tabCases[lig + 1][col].getZone() == numZone : false) ||
+						  (col > 0 ? this.tabCases[lig][col - 1].getZone() == numZone : false) ||
+						  (col < this.col - 1 ? this.tabCases[lig][col + 1].getZone() == numZone : false) )
+					 {
+						this.tabCases[lig][col].ajouterZone(numZone);
+						return numZone;
+					 }
 					else 
-						this.ajouterZone(lig, col, numZone + 1);
-					return;
+						return this.ajouterZone(lig, col, numZone + 1);
 				}
 			}
 		}
 		
 		this.tabCases[lig][col].ajouterZone(numZone);
+		return numZone;
 	}
 	
 	public void ajouterZoneDirecte(int lig, int col, int zone)
@@ -296,6 +303,20 @@ public class Plateau
 			this.tabCases[lig][col].ajouterZone(zoneCible);
 	}
 
+	public void full(int lig, int col, int ancienneZone, int nouvelleZone, boolean[][] visite) 
+	{
+		if (lig < 0 || lig >= this.lig || col < 0 || col >= this.col || visite[lig][col]) return;
+		if (this.tabCases[lig][col].getZone() != ancienneZone) return;
+
+		this.tabCases[lig][col].ajouterZone(nouvelleZone);
+		visite[lig][col] = true;
+
+		full(lig + 1, col, ancienneZone, nouvelleZone, visite);
+		full(lig - 1, col, ancienneZone, nouvelleZone, visite);
+		full(lig, col + 1, ancienneZone, nouvelleZone, visite);
+		full(lig, col - 1, ancienneZone, nouvelleZone, visite);
+	}
+	
 	private int compterCasesConnectees(int l, int c, int zoneCible, boolean[][] visite)
 	{
 		if (l < 0 || l >= this.lig || c < 0 || c >= this.col)

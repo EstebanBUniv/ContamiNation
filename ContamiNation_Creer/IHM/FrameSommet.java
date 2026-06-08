@@ -22,9 +22,6 @@ public class FrameSommet extends JFrame
 	private Controleur  ctrl;
 	private PanelArrete panelArrete;
 
-	//private JButton     btnSave;
-	//private JButton     btnRetour;
-	//private JPanel      panelBouton;
 	private Boolean     modeBase;
 	private int         cptVirus;
 
