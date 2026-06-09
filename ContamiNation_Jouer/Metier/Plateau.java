@@ -207,6 +207,22 @@ public class Plateau
 		int scoreFinal = nbSommetParZone * zonesVisitees.size(); 
 		return scoreFinal;
 	}
-
+	
+	public boolean verifSommet(Case caseAVerif, Carte carteTire)
+	{
+		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		
+		if ( caseAVerif .getAUnSommet()                                          && // Vérification sommet présent (Correction : getAUnSommet())
+			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())           && // a un voisin à une extrémité du virus
+			 !caseAVerif.getSommet().getContamine()                              && // Le sommet n'est pas encore contaminé
+			 carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ) // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
+		{
+			virusActuel.ajouterSommetContamine(caseAVerif.getSommet());
+			caseAVerif.getSommet().setContamine(true);
+			return true;
+		}
+		
+		return false;
+	}
 
 }

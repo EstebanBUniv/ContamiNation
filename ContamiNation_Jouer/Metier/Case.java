@@ -18,7 +18,6 @@ public class Case
 	private Sommet    sommet;
 	private int       zone;
 
-	private boolean   aUnSommet;
 	private boolean   estTraverse;
 	
 	/*----------------------------*/
@@ -31,7 +30,6 @@ public class Case
 		this.posCol      = col;
 		this.zone        = 0;
 		this.sommet      = null;
-		this.aUnSommet   = false;
 		this.estTraverse = false;
 	}
 	
@@ -43,7 +41,7 @@ public class Case
 	public int     getLig        () { return this.posLig      ; }
 	public int     getCol        () { return this.posCol      ; }
 	public Sommet  getSommet     () { return this.sommet      ; }
-	public boolean getAUnSommet  () { return this.aUnSommet   ; }
+	public boolean getAUnSommet  () { return this.sommet != null   ; }
 	public boolean getEstTraverse() { return this.estTraverse ; }
 	
 	/*----------------------------*/
@@ -51,7 +49,7 @@ public class Case
 	/*----------------------------*/
 	
 	public void ajouterZone  (int    zone   ) { this.zone   = zone; }
-	public void ajouterSommet(String symbole) { this.sommet = new Sommet(symbole, this); this.aUnSommet = true; }
+	public void ajouterSommet(String symbole) { this.sommet = new Sommet(symbole, this); }
 	
 	/*----------------------------*/
 	/*  Méthodes                  */

@@ -35,7 +35,7 @@ public class PanelMenu extends JPanel implements ActionListener
 
 	private Image      imgFond;
 	private Graphics2D g2;
-
+	
 	public PanelMenu(Controleur ctrl, FrameJeu frame)
 	{
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));

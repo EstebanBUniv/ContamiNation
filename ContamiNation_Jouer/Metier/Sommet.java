@@ -49,6 +49,11 @@ public class Sommet
 	/*----------------------------*/
 	/*  Méthodes                  */
 	/*----------------------------*/
+	
+	public void setContamine (boolean b)
+	{
+		this.contamine = b;
+	}
 
 	// Ajoute un voisin selon une direction spécifique (0-7)
 	public void ajouterVoisin(int direction, Sommet voisin)

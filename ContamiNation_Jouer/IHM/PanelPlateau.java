@@ -34,7 +34,7 @@ public class PanelPlateau extends JPanel
 		{
 			for ( int cptCol = 0; cptCol < this.col; cptCol++ )
 			{
-				this.tabPanel[cptLig][cptCol] = new PanelCase(this.ctrl.getPlateau().getCase(cptLig, cptCol));
+				this.tabPanel[cptLig][cptCol] = new PanelCase(this.ctrl.getPlateau().getCase(cptLig, cptCol), this.ctrl);
 				this.add(this.tabPanel[cptLig][cptCol]);
 			}
 		}
