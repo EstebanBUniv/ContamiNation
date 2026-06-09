@@ -4,6 +4,8 @@ import ContamiNation_Jouer.Controleur;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -160,5 +162,16 @@ public class PanelNiveau extends JPanel implements ActionListener
 				return this;
 			}
 		};
+	}
+
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+
+		Graphics g2 = (Graphics2D) g;
+		
+		// Ajout de l'image du fond
+		if ( imgFond != null )
+			g2.drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
 	}
 }

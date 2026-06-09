@@ -40,14 +40,16 @@ public class FrameJeu extends JFrame
 		this.setVisible(true);
 	}
 
+	public PanelPlateau getPanelPlateau()
+	{
+		return this.panelPlateau;
+	}
+
 	public void changerPanel(JPanel panel)
 	{
 		this.remove(this.panel);
 		this.panel = panel;
 		this.add(this.panel);
-
-		/*if ( panel instanceof PanelPlateau )
-			this.add(new PanelArrete(this.ctrl));*/
 
 		this.revalidate();
 		this.repaint();
@@ -83,4 +85,5 @@ public class FrameJeu extends JFrame
 	{
 		return this.panelPlateau.getTabPanel();
 	}
+
 }

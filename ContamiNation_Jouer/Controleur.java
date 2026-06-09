@@ -12,6 +12,8 @@ import ContamiNation_Jouer.Metier.*;
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 /* 
@@ -29,10 +31,14 @@ public class Controleur
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134); // couleur de fond
 	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230); // couleur de texte
 
+	private Map<Integer, Color> couleursZones = new HashMap<>();
 	private JPanel[][] tabPanel;
 	private FrameJeu frame;
 	private Plateau  plateau;
 	private Pioche   pioche;
+	private int r;
+	private int g;
+	private int b;
 
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -50,6 +56,11 @@ public class Controleur
 	public Plateau getPlateau()
 	{
 		return this.plateau;
+	}
+
+	public int getTailleCase()
+	{
+		return this.frame.getPanelPlateau().getTailleCase();
 	}
 
 	/*----------------------------*/
@@ -80,9 +91,31 @@ public class Controleur
 		return this.tabPanel[lig][col];
 	}
 
-	public static void main (String[] args)
+	// Retourne la structure de données associant chaque identifiant de zone à sa couleur.
+	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
+
+	// Génère ou récupère la couleur unique associée à un numéro de zone spécifique.
+	public Color getCouleurZone(int numZone)
 	{
-		new Controleur();
+		if (numZone == 0) return Color.WHITE;
+
+		if (!this.couleursZones.containsKey(numZone))
+		{
+			this.r = (this.r + 67) % 256;
+			this.g = (this.g + 113) % 256;
+			this.b = (this.b + 193) % 256;
+			this.couleursZones.put(numZone, new Color(this.r, this.g, this.b));
+		}
+		return this.couleursZones.get(numZone);
+	}
+
+	// Réinitialise le générateur pseudo-aléatoire servant à colorier les zones à l'écran.
+	public void resetCouleurs()
+	{
+		this.couleursZones.clear();
+		this.r = 0;
+		this.g = 0;
+		this.b = 0;
 	}
 
 	public void initierPioche ()
@@ -121,5 +154,10 @@ public class Controleur
 		}
 		else
 			System.out.println("Fin de tout le jeu");
+	}
+
+	public static void main (String[] args)
+	{
+		new Controleur();
 	}
 }
