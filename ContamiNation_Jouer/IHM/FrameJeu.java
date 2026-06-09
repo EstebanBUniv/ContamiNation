@@ -9,6 +9,7 @@ public class FrameJeu extends JFrame
 {
 	private Controleur  ctrl;
 	private JPanel      panel;
+	private PanelPioche panelPioche;
 	
 	public FrameJeu(Controleur ctrl)
 	{
@@ -17,7 +18,8 @@ public class FrameJeu extends JFrame
 		this.setSize(600, 300);
 		this.setLocationRelativeTo(null);
 
-		this.panel = new PanelMenu(this.ctrl, this);
+		this.panelPioche = new PanelPioche(this.ctrl);
+		this.panel       = new PanelMenu(this.ctrl, this);
 		
 		this.add(this.panel);
 
