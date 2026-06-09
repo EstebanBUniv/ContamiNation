@@ -107,9 +107,6 @@ public class Plateau
 
 	public void relierTousLesSommets() 
 	{
-		// C'est ici que nous allons recréer le graphe de sommets plus tard
-		// pour que l'algorithme de jeu puisse fonctionner.
-
 		for (int i = 0; i < this.lig; i++)
 			for (int j = 0; j < this.col; j++)
 				if (this.tabCases[i][j].getSommet() != null)
@@ -130,6 +127,7 @@ public class Plateau
 	}
 
 	//indique les 8 directions et ajoute les voisins de chaques sommets
+
 	private void chercherVoisins(int lig, int col, Sommet sommetCourant)
 	{
 		int[][] directions = {
