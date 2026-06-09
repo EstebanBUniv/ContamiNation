@@ -29,10 +29,13 @@ public class Controleur
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134); // couleur de fond
 	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230); // couleur de texte
 
-	private JPanel[][] tabPanel;
-	private FrameJeu frame;
-	private Plateau  plateau;
-	private Pioche   pioche;
+	private JPanel[][]        tabPanel;
+	private FrameJeu          frame;
+	private Plateau           plateau;
+	private Pioche            pioche;
+	private FrameChoixCarte   frameChoixCarte;
+
+	private boolean           modeDebiche = false;
 
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -71,6 +74,9 @@ public class Controleur
 	public void chargerNiveau(File fichier)
 	{
 		this.plateau = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
+
+		if (this.getModeDebiche())
+			this.appelerChoixCarte();
 	}
 
 	public JPanel getPanel(int lig, int col)
@@ -122,4 +128,32 @@ public class Controleur
 		else
 			System.out.println("Fin de tout le jeu");
 	}
+
+	public void setModeDebiche()
+	{
+		this.modeDebiche = true;
+	}
+
+	public void appelerChoixCarte()
+	{
+		this.frameChoixCarte = new FrameChoixCarte(this);
+	}
+
+	public Carte getCarte(int indice)
+	{
+		return this.pioche.getCarte(indice);
+	}
+
+	public int getTaillePioche()
+	{
+		return this.pioche.getTaillePioche();
+	}
+
+	public boolean getModeDebiche()
+	{
+		return this.modeDebiche;
+	}
+
+
+
 }

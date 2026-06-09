@@ -5,6 +5,8 @@
 ./IHM/PanelMenu.java
 ./IHM/PanelArrete.java
 ./IHM/PanelPioche.java
+./IHM/FrameChoixCarte.java
+./IHM/PanelChoixCarte.java
 
 ./Metier/Virus.java
 ./Metier/Sommet.java
