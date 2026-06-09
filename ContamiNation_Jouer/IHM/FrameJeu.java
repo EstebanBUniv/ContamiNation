@@ -1,5 +1,7 @@
 package ContamiNation_Jouer.IHM;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -16,6 +18,7 @@ public class FrameJeu extends JFrame
 		this.ctrl = ctrl;
 		this.setTitle("ContamiNation");
 		this.setSize(600, 300);
+		this.setMinimumSize(new Dimension(600, 300));
 		this.setLocationRelativeTo(null);
 
 		this.panelPioche = new PanelPioche(this.ctrl);
