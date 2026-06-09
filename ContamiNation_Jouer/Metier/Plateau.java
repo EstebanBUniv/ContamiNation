@@ -1,7 +1,6 @@
 package ContamiNation_Jouer.Metier;
 
 import ContamiNation_Jouer.Controleur;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,14 +12,13 @@ public class Plateau
 	private int        lig;
 	private int        nbVirus;
 	private String     nom;
-	private String[]   couleurs;
-	//private Case[][]   tabCases;
+	private Case[][]   tabCases; 
 	private File       fichierSource = null;
+	private List<Virus> lstVirus; 
 
 	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
 	{
-		if ( col <= 0 || lig <= 0 || nbVirus <=0)
-				return null;
+		if ( col <= 0 || lig <= 0 || nbVirus <=0) return null;
 		return new Plateau(lig, col, nbVirus, nom, ctrl);
 	}
 
@@ -30,121 +28,76 @@ public class Plateau
 		this.col  = col;
 		this.lig  = lig;
 		this.nom  = nom;
+		this.nbVirus  = nbVirus;
+		this.lstVirus = new ArrayList<>();
+		this.tabCases = new Case[lig][col];
 
-		this.nbVirus   = nbVirus;
-		this.couleurs  = new String[this.nbVirus];
+		// CRUCIAL : Initialisation de la grille de jeu
+		for (int i = 0; i < lig; i++) {
+			for (int j = 0; j < col; j++) {
+				this.tabCases[i][j] = new Case(i, j);
+			}
+		}
 	}
 
 	/*----------------------------*/
-	/*  Getters                   */
+	/* Getters                   */
 	/*----------------------------*/
 
 	public int getLig() { return this.lig; }
 	public int getCol() { return this.col; }
+	public int getNbVirus() { return this.nbVirus; }
+	public String getNom() { return this.nom; }
+	public File getFichierSource() { return this.fichierSource; }
+	public Case getCase(int lig, int col) { return this.tabCases[lig][col]; }
+
+	public int getNumero() 
+	{
+		if (this.fichierSource != null) {
+			String name = this.fichierSource.getName();
+			name = name.replaceAll("[^0-9]", ""); // Garde uniquement les chiffres
+			if (!name.isEmpty()) return Integer.parseInt(name);
+		}
+		return 0;
+	}
+
+	public String getNomVirus(int index) 
+	{
+		if (index >= 0 && index < this.lstVirus.size()) 
+			return this.lstVirus.get(index).getNom();
+		return "";
+	}
 
 	/*----------------------------*/
-	/*  Setters                   */
+	/* Setters et Méthodes       */
 	/*----------------------------*/
 
-	public void setFichierSource(File fichier)
+	public void setFichierSource(File fichier) { this.fichierSource = fichier; }
+	
+	public void creerVirus(String nom) { this.lstVirus.add(new Virus(nom)); }
+
+	public void ajouterZoneDirecte(int lig, int col, int zone) {
+		this.tabCases[lig][col].ajouterZone(zone);
+	}
+
+	public void ajouterSommet(int lig, int col, String symbole) {
+		this.tabCases[lig][col].ajouterSommet(symbole);
+	}
+
+	public void relierTousLesSommets() 
 	{
-		this.fichierSource = fichier;
+		// C'est ici que nous allons recréer le graphe de sommets plus tard
+		// pour que l'algorithme de jeu puisse fonctionner.
 	}
 	
-	public void enregistrer()
+	// Initialise le point de départ pour une manche précise (le virus associé)
+	public void initialiserBaseVirus(Sommet base, int numeroManche)
 	{
-		Enregistrement save = new Enregistrement(this);
-		save.enregistrer();
-	}
-
-	public String toString()
-	{
-		String res = "";
-
-		for (int i = 0; i < this.lig; i++ )
+		// L'index dans la liste (lstVirus) commence à 0, donc on fait numeroManche - 1
+		if (numeroManche > 0 && numeroManche <= this.lstVirus.size()) 
 		{
-			for(int j = 0; j < this.col; j++)
-			{
-				res += this.tabCases[i][j] ;
-			}
-			res += "\n";
+			Virus v = this.lstVirus.get(numeroManche - 1);
+			v.setBaseDepart(base);
 		}
-		
-		return res;
 	}
-
-	public void creerVirus(String nom)
-	{
-		this.lstVirus.add(new Virus(nom));
-	}
-
-
-	public void supprimerZone(int lig, int col)
-	{
-		int zoneCible = this.tabCases[lig][col].getZone();
-		
-		if (zoneCible == 0)
-			return;
-			
-		int totalCasesZone = 0;
-		int ligDepart      = -1;
-		int colDepart      = -1;
-		
-		for (int i = 0; i < this.lig; i++)
-			for (int j = 0; j < this.col; j++)
-				if (this.tabCases[i][j].getZone() == zoneCible)
-				{
-					totalCasesZone++;
-					if (i != lig || j != col)
-					{
-						ligDepart = i;
-						colDepart = j;
-					}
-				}
-				
-		if (totalCasesZone <= 1)
-		{
-			this.tabCases[lig][col].supprimerZone();
-			return;
-		}
-		
-		this.tabCases[lig][col].supprimerZone();
-		
-		boolean[][] visite          = new boolean[this.lig][this.col];
-		int         casesConnectees = this.compterCasesConnectees(ligDepart, colDepart, zoneCible, visite);
-		
-		if (casesConnectees < totalCasesZone - 1)
-			this.tabCases[lig][col].ajouterZone(zoneCible);
-	}
-
-	private int compterCasesConnectees(int l, int c, int zoneCible, boolean[][] visite)
-	{
-		if (l < 0 || l >= this.lig || c < 0 || c >= this.col)
-			return 0;
-			
-		if (visite[l][c] || this.tabCases[l][c].getZone() != zoneCible)
-			return 0;
-			
-		visite[l][c] = true;
-		int nb = 1;
-		
-		nb += this.compterCasesConnectees(l - 1, c, zoneCible, visite);
-		nb += this.compterCasesConnectees(l + 1, c, zoneCible, visite);
-		nb += this.compterCasesConnectees(l, c - 1, zoneCible, visite);
-		nb += this.compterCasesConnectees(l, c + 1, zoneCible, visite);
-		
-		return nb;
-	}
-
-
-	public boolean VerifChemin( Case caseAVerif)
-	{
-		if (! case.getAUnSommet() && case.getEstTraverse())
-			return false;
-		if (case.getNbChemin() == 0)
-			return false;
-		return true;
-	}
-	
-
 }

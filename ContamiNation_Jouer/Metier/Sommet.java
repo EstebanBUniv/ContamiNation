@@ -1,4 +1,4 @@
-package ContamiNation_Creer.Metier;
+package ContamiNation_Jouer.Metier;
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -46,7 +46,7 @@ public class Sommet
 	/*----------------------------*/
 	/*  Méthodes                  */
 	/*----------------------------*/
-	
+
 	// Ajoute un voisin selon une direction spécifique (0-7)
 	public void ajouterVoisin(int direction, Sommet voisin)
 	{

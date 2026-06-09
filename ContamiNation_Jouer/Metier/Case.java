@@ -1,4 +1,4 @@
-package ContamiNation_Creer.Metier;
+package ContamiNation_Jouer.Metier;
 
 /* 
 SAE 2.01 | Développement d'une application 
@@ -52,9 +52,6 @@ public class Case
 	
 	public void ajouterZone  (int    zone   ) { this.zone   = zone; }
 	public void ajouterSommet(String symbole) { this.sommet = new Sommet(symbole, this); this.aUnSommet = true; }
-	
-	public void supprimerZone  () { this.zone   = 0    ; }
-	public void supprimerSommet() { this.sommet = null ;}
 	
 	/*----------------------------*/
 	/*  Méthodes                  */

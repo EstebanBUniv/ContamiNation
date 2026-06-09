@@ -1,5 +1,7 @@
 package ContamiNation_Jouer.IHM;
 
+import ContamiNation_Jouer.Metier.Case;
+
 import ContamiNation_Jouer.Controleur;
 
 import java.awt.GridLayout;
@@ -24,9 +26,14 @@ public class PanelPlateau extends JPanel
 
 		this.setLayout(new GridLayout(lig, col));
 
-		//for ( int cptLig = 0; cptLig < this.lig; cptLig++ )
-			//for ( int cptCol = 0; cptCol < this.col; cptCol++ )
-				//this.add(new PanelCase(this.plateau.getCase()));
+		for ( int cptLig = 0; cptLig < this.lig; cptLig++ )
+		{
+			for ( int cptCol = 0; cptCol < this.col; cptCol++ )
+			{
+				Case caseActuelle = this.ctrl.getPlateau().getCase(cptLig, cptCol);
+				this.add(new PanelCase(caseActuelle));
+			}
+		}
 
 
 	}

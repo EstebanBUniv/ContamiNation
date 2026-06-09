@@ -2,6 +2,10 @@ package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.IHM.FrameJeu;
 
+import ContamiNation_Jouer.Metier.Case;
+import java.awt.Image;
+import java.awt.Graphics2D;
+
 import java.awt.BorderLayout;
 
 import javax.swing.ImageIcon;
@@ -30,4 +34,5 @@ public class PanelCase extends JPanel
 
 		this.add(this.btnCase);
 	}
+	
 }

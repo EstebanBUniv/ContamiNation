@@ -13,6 +13,7 @@ import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Component;
+import java.awt.Color;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,7 +22,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
-import ContamiNation_Creer.IHM.FrameCreer;
 import ContamiNation_Jouer.IHM.FrameJeu;
 import ContamiNation_Jouer.IHM.PanelMenu;
 
@@ -96,8 +96,8 @@ public class PanelNiveau extends JPanel implements ActionListener
 		{
 			if (lignes.length == 1)
 			{
-				//this.ctrl.chargerNiveau(this.fichiersDossier.get(lignes[0]));
-				System.out.println("Hop et voila");
+				this.ctrl.chargerNiveau(this.fichiersDossier.get(lignes[0]));
+				this.frameMere.changerPanel(new PanelPlateau(this.frameMere, this.ctrl));
 			}
 				
 		}
@@ -150,7 +150,7 @@ public class PanelNiveau extends JPanel implements ActionListener
 				super.getTableCellRendererComponent(t, value, isSelected, hasFocus, row, col);
 				
 				if (isSelected)
-					setBackground(FrameCreer.COLOR_SELECT);
+					setBackground(new Color (127,87,67));
 				else
 					setBackground(Controleur.COLOR_BACKGROUND);
 				
