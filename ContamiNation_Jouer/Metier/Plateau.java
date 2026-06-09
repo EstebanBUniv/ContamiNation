@@ -103,4 +103,43 @@ public class Plateau
 		}
 	}
 
+	public int calculManche()
+	{
+		int nbSommetParZone = 0; // Pas fini
+		
+		ArrayList<Integer> zonesVisitees = new ArrayList<>();
+		for (int lig = 0; lig < this.lig; lig++)
+		{
+			for (int col = 0; col < this.col; col++) 
+			{
+				Case caseActuelle = this.tabCases[lig][col];
+				if (caseActuelle.getAUnSommet() && this.tabCases[lig][col].getSommet().estContamine())
+				{
+					int zoneDeLaCase = caseActuelle.getZone();
+					if (zoneDeLaCase != 0 && !zonesVisitees.contains(zoneDeLaCase))
+					{
+						zonesVisitees.add(zoneDeLaCase); 
+						int tmpNbSommet = 1;
+						for (int tmpLig = 0; tmpLig < this.lig; tmpLig++)
+						{
+							for (int tmpCol = 0; tmpCol < this.col; tmpCol++) 
+							{
+								if (zoneDeLaCase == this.tabCases[tmpLig][tmpCol].getZone()   && 
+								    caseActuelle != this.tabCases[tmpLig][tmpCol]             && 
+									this.tabCases[tmpLig][tmpCol].getAUnSommet()              && 
+									this.tabCases[tmpLig][tmpCol].getSommet().estContamine())
+								{
+									tmpNbSommet++;
+								}
+							}
+						}
+						if (tmpNbSommet > nbSommetParZone)
+							nbSommetParZone = tmpNbSommet;
+					}
+				}
+			}
+		}
+		int scoreFinal = nbSommetParZone * zonesVisitees.size(); 
+		return scoreFinal;
+	}
 }
