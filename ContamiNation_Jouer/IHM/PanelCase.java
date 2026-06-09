@@ -33,8 +33,6 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	private Image      imgFond;
 	private Graphics2D g2;
 	
-	private Controleur ctrl;
-
 	public PanelCase(Case casePlateau, Controleur ctrl)
 	{
 		this.ctrl = ctrl;
@@ -78,7 +76,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	public int getTailleCase()
 	{
 		return Math.max(this.getWidth(), this.getHeight());
-  {
+	}
 	
 	public void paintComponent(Graphics g)
 	{
