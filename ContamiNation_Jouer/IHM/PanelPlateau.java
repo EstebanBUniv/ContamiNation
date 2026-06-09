@@ -24,7 +24,7 @@ public class PanelPlateau extends JPanel
 		this.lig = this.ctrl.getPlateau().getLig();
 		this.col = this.ctrl.getPlateau().getCol();
 
-		this.setLayout(new GridLayout(lig, col));
+		this.setLayout(new GridLayout(lig, col, 0, 0));
 
 		for ( int cptLig = 0; cptLig < this.lig; cptLig++ )
 		{

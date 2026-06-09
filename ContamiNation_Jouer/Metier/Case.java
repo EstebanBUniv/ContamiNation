@@ -39,10 +39,10 @@ public class Case
 	/*  Getters                   */
 	/*----------------------------*/
 	
-	public int    getZone  ()       { return this.zone        ; }
-	public int    getLig   ()       { return this.posLig      ; }
-	public int    getCol   ()       { return this.posCol      ; }
-	public Sommet getSommet()       { return this.sommet      ; }
+	public int     getZone  ()      { return this.zone        ; }
+	public int     getLig   ()      { return this.posLig      ; }
+	public int     getCol   ()      { return this.posCol      ; }
+	public Sommet  getSommet()      { return this.sommet      ; }
 	public boolean getAUnSommet()   { return this.aUnSommet   ; }
 	public boolean getEstTraverse() { return this.estTraverse ; }
 	
