@@ -92,7 +92,12 @@ public class Controleur
 
 	public void nouvelleManche()
 	{
-		initierPioche();
-		melangerPioche();
+		if (this.plateau.mancheSuivante())
+		{
+			initierPioche();
+			melangerPioche();
+		}
+		else
+			System.out.println("Fin de tout le jeu");
 	}
 }

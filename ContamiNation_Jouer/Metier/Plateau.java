@@ -11,10 +11,12 @@ public class Plateau
 	private int         col;
 	private int         lig;
 	private int         nbVirus;
+	private int         numManche;
+	private int         pointTotal;
 	private String      nom;
 	private Case[][]    tabCases; 
 	private File        fichierSource = null;
-	private List<Virus> lstVirus; 
+	private List<Virus> lstVirus;
 
 	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
 	{
@@ -31,6 +33,8 @@ public class Plateau
 		this.nbVirus  = nbVirus;
 		this.lstVirus = new ArrayList<>();
 		this.tabCases = new Case[lig][col];
+		this.numManche  = 1;
+		this.pointTotal = 0;
 
 		// CRUCIAL : Initialisation de la grille de jeu
 		for (int i = 0; i < lig; i++) {
@@ -75,6 +79,13 @@ public class Plateau
 	public void setFichierSource(File fichier) { this.fichierSource = fichier; }
 	
 	public void creerVirus(String nom) { this.lstVirus.add(new Virus(nom)); }
+	
+	public boolean mancheSuivante()
+	{
+		this.numManche++;
+		this.pointTotal += this.calculManche();
+		return this.numManche < this.lstVirus.size();
+	}
 
 	public void ajouterZoneDirecte(int lig, int col, int zone) 
 	{
@@ -92,10 +103,8 @@ public class Plateau
 		// pour que l'algorithme de jeu puisse fonctionner.
 	}
 	
-	// Initialise le point de départ pour une manche précise (le virus associé)
 	public void initialiserBaseVirus(Sommet base, int numeroManche)
 	{
-		// L'index dans la liste (lstVirus) commence à 0, donc on fait numeroManche - 1
 		if (numeroManche > 0 && numeroManche <= this.lstVirus.size()) 
 		{
 			Virus v = this.lstVirus.get(numeroManche - 1);
@@ -105,7 +114,7 @@ public class Plateau
 
 	public int calculManche()
 	{
-		int nbSommetParZone = 0; // Pas fini
+		int nbSommetParZone = 0;
 		
 		ArrayList<Integer> zonesVisitees = new ArrayList<>();
 		for (int lig = 0; lig < this.lig; lig++)
@@ -113,7 +122,7 @@ public class Plateau
 			for (int col = 0; col < this.col; col++) 
 			{
 				Case caseActuelle = this.tabCases[lig][col];
-				if (caseActuelle.getAUnSommet() && this.tabCases[lig][col].getSommet().estContamine())
+				if (caseActuelle.getAUnSommet() && this.tabCases[lig][col].getSommet().getContamine())
 				{
 					int zoneDeLaCase = caseActuelle.getZone();
 					if (zoneDeLaCase != 0 && !zonesVisitees.contains(zoneDeLaCase))
@@ -127,7 +136,7 @@ public class Plateau
 								if (zoneDeLaCase == this.tabCases[tmpLig][tmpCol].getZone()   && 
 								    caseActuelle != this.tabCases[tmpLig][tmpCol]             && 
 									this.tabCases[tmpLig][tmpCol].getAUnSommet()              && 
-									this.tabCases[tmpLig][tmpCol].getSommet().estContamine())
+									this.tabCases[tmpLig][tmpCol].getSommet().getContamine())
 								{
 									tmpNbSommet++;
 								}
