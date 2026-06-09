@@ -3,6 +3,7 @@
 ./IHM/PanelPlateau.java
 ./IHM/PanelCase.java
 ./IHM/PanelMenu.java
+./IHM/PanelPioche.java
 
 ./Metier/Virus.java
 ./Metier/Sommet.java
@@ -10,6 +11,7 @@
 ./Metier/Case.java
 ./Metier/Enregistrement.java
 ./Metier/Carte.java
+./Metier/Pioche.java
 
 
 ./Controleur.java

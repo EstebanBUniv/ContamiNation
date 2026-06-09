@@ -10,4 +10,12 @@ public class Carte
 		this.symbole = symbole;
 		this.estClair = estClair;
 	}
+	
+	public boolean getEstClair () { return this.estClair; }
+	public String  getSymbole  () { return this.symbole ; }
+	
+	public String toString()
+	{
+		return this.symbole + "_" + ((this.estClair) ? "clair" : "fonce");
+	}
 }
