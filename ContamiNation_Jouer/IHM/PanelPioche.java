@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import ContamiNation_Jouer.Controleur;
-import ContamiNation_Jouer.Metier.Pioche;
 
 public class PanelPioche extends JPanel implements ActionListener
 {
@@ -26,15 +25,15 @@ public class PanelPioche extends JPanel implements ActionListener
 
 	private int     cptManche;
 	
-	private Pioche pioche;
+	//private Pioche pioche;
 
 	public PanelPioche(Controleur ctrl)
 	{
 		this.ctrl = ctrl;
 
 		this.setLayout(new BorderLayout());
-		this.pioche = new Pioche();
-		this.pioche.melanger();
+		this.ctrl.initierPioche();
+		this.ctrl.melangerPioche();
 		
 		JPanel panelGauche;
 		//-------------------------//
@@ -44,7 +43,7 @@ public class PanelPioche extends JPanel implements ActionListener
 
 		panelGauche.setLayout(new GridLayout(3,1));
 		
-		ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.pioche.tirerCarte(0) + ".png");
+		ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.tirerCarte(0) + ".png");
 		Image img50 = iconOriginal.getImage().getScaledInstance(50, 100, Image.SCALE_SMOOTH);
 		ImageIcon icon50 = new ImageIcon(img50);
 		
@@ -91,12 +90,12 @@ public class PanelPioche extends JPanel implements ActionListener
 
 		if(e.getSource() == btnPiocher)
 		{
-			if (!this.pioche.verifFinManche())
+			if (!this.ctrl.verifFinManche())
 			{
-				ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.pioche.tirerCarte(0) + ".png");
+				ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.tirerCarte(0) + ".png");
 				Image img50 = iconOriginal.getImage().getScaledInstance(50, 100, Image.SCALE_SMOOTH);
 				ImageIcon icon50 = new ImageIcon(img50);
-				ImageIcon iconOriginalPremiere = new ImageIcon("../images/cartes/" + this.pioche.premiereCarte() + ".png");
+				ImageIcon iconOriginalPremiere = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
 				Image img60 = iconOriginalPremiere.getImage().getScaledInstance(50, 100, Image.SCALE_SMOOTH);
 				ImageIcon icon60 = new ImageIcon(img60);
 				this.btnPiocher.setIcon(icon60);

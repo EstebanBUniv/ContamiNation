@@ -3,6 +3,8 @@ package ContamiNation_Jouer;
 import ContamiNation_Jouer.IHM.*;
 import javax.swing.JFrame;
 
+import ContamiNation_Jouer.Metier.Pioche;
+import ContamiNation_Jouer.Metier.Carte;
 import ContamiNation_Jouer.Metier.Plateau;
 
 import java.awt.Color;
@@ -30,6 +32,7 @@ public class Controleur
 
 	private FrameJeu frame;
 	private Plateau  plateau;
+	private Pioche   pioche;
 
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -61,5 +64,32 @@ public class Controleur
 	public static void main (String[] args)
 	{
 		new Controleur();
+	}
+
+	public void initierPioche ()
+	{
+		this.pioche = new Pioche();
+	}
+
+	public void melangerPioche()
+	{
+		this.pioche.melanger();
+	}
+
+
+	public Carte tirerCarte(int indice)
+	{
+		return this.pioche.tirerCarte(indice);
+	}
+
+	public Carte premiereCarte()
+	{
+		return this.pioche.premiereCarte();
+	}
+
+
+	public boolean verifFinManche()
+	{
+		return this.pioche.verifFinManche();
 	}
 }
