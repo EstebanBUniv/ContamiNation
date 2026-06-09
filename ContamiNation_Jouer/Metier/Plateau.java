@@ -7,14 +7,16 @@ import java.util.List;
 
 public class Plateau
 {
-	private Controleur ctrl;
-	private int        col;
-	private int        lig;
-	private int        nbVirus;
-	private String     nom;
-	private Case[][]   tabCases; 
-	private File       fichierSource = null;
-	private List<Virus> lstVirus; 
+	private Controleur  ctrl;
+	private int         col;
+	private int         lig;
+	private int         nbVirus;
+	private int         numManche;
+	private int         pointTotal;
+	private String      nom;
+	private Case[][]    tabCases; 
+	private File        fichierSource = null;
+	private List<Virus> lstVirus;
 
 	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
 	{
@@ -31,6 +33,8 @@ public class Plateau
 		this.nbVirus  = nbVirus;
 		this.lstVirus = new ArrayList<>();
 		this.tabCases = new Case[lig][col];
+		this.numManche  = 1;
+		this.pointTotal = 0;
 
 		// CRUCIAL : Initialisation de la grille de jeu
 		for (int i = 0; i < lig; i++) {
@@ -41,15 +45,15 @@ public class Plateau
 	}
 
 	/*----------------------------*/
-	/* Getters                   */
+	/* Getters                    */
 	/*----------------------------*/
 
-	public int getLig() { return this.lig; }
-	public int getCol() { return this.col; }
-	public int getNbVirus() { return this.nbVirus; }
-	public String getNom() { return this.nom; }
-	public File getFichierSource() { return this.fichierSource; }
-	public Case getCase(int lig, int col) { return this.tabCases[lig][col]; }
+	public int    getLig()                   { return this.lig                ; }
+	public int    getCol()                   { return this.col                ; }
+	public int    getNbVirus()               { return this.nbVirus            ; }
+	public String getNom()                   { return this.nom                ; }
+	public File   getFichierSource()         { return this.fichierSource      ; }
+	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col] ; }
 
 	public int getNumero() 
 	{
@@ -69,18 +73,27 @@ public class Plateau
 	}
 
 	/*----------------------------*/
-	/* Setters et Méthodes       */
+	/* Setters et Méthodes        */
 	/*----------------------------*/
 
 	public void setFichierSource(File fichier) { this.fichierSource = fichier; }
 	
 	public void creerVirus(String nom) { this.lstVirus.add(new Virus(nom)); }
+	
+	public boolean mancheSuivante()
+	{
+		this.numManche++;
+		this.pointTotal += this.calculManche();
+		return this.numManche < this.lstVirus.size();
+	}
 
-	public void ajouterZoneDirecte(int lig, int col, int zone) {
+	public void ajouterZoneDirecte(int lig, int col, int zone) 
+	{
 		this.tabCases[lig][col].ajouterZone(zone);
 	}
 
-	public void ajouterSommet(int lig, int col, String symbole) {
+	public void ajouterSommet(int lig, int col, String symbole) 
+	{
 		this.tabCases[lig][col].ajouterSommet(symbole);
 	}
 
@@ -140,14 +153,52 @@ public class Plateau
 		}
 	}
 	
-	// Initialise le point de départ pour une manche précise (le virus associé)
 	public void initialiserBaseVirus(Sommet base, int numeroManche)
 	{
-		// L'index dans la liste (lstVirus) commence à 0, donc on fait numeroManche - 1
 		if (numeroManche > 0 && numeroManche <= this.lstVirus.size()) 
 		{
 			Virus v = this.lstVirus.get(numeroManche - 1);
 			v.setBaseDepart(base);
 		}
+	}
+
+	public int calculManche()
+	{
+		int nbSommetParZone = 0;
+		
+		ArrayList<Integer> zonesVisitees = new ArrayList<>();
+		for (int lig = 0; lig < this.lig; lig++)
+		{
+			for (int col = 0; col < this.col; col++) 
+			{
+				Case caseActuelle = this.tabCases[lig][col];
+				if (caseActuelle.getAUnSommet() && this.tabCases[lig][col].getSommet().getContamine())
+				{
+					int zoneDeLaCase = caseActuelle.getZone();
+					if (zoneDeLaCase != 0 && !zonesVisitees.contains(zoneDeLaCase))
+					{
+						zonesVisitees.add(zoneDeLaCase); 
+						int tmpNbSommet = 1;
+						for (int tmpLig = 0; tmpLig < this.lig; tmpLig++)
+						{
+							for (int tmpCol = 0; tmpCol < this.col; tmpCol++) 
+							{
+								if (zoneDeLaCase == this.tabCases[tmpLig][tmpCol].getZone()   && 
+								    caseActuelle != this.tabCases[tmpLig][tmpCol]             && 
+									this.tabCases[tmpLig][tmpCol].getAUnSommet()              && 
+									this.tabCases[tmpLig][tmpCol].getSommet().getContamine())
+								{
+									tmpNbSommet++;
+								}
+							}
+						}
+						if (tmpNbSommet > nbSommetParZone)
+							nbSommetParZone = tmpNbSommet;
+					}
+				}
+			}
+		}
+		int scoreFinal = nbSommetParZone * zonesVisitees.size(); 
+		return scoreFinal;
 	}
 }

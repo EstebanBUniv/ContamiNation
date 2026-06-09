@@ -21,6 +21,7 @@ public class FrameJeu extends JFrame
 
 	private PanelPlateau panelPlateau;
 	private PanelArrete  panelArrete;
+	private PanelPioche panelPioche;
 	
 	public FrameJeu(Controleur ctrl)
 	{
@@ -30,7 +31,8 @@ public class FrameJeu extends JFrame
 		this.setMinimumSize(new Dimension(600, 300));
 		this.setLocationRelativeTo(null);
 
-		this.panel = new PanelMenu(this.ctrl, this);
+		this.panelPioche = new PanelPioche(this.ctrl);
+		this.panel       = new PanelMenu(this.ctrl, this);
 		
 		this.add(this.panel);
 

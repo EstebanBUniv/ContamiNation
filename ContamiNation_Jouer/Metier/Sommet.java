@@ -18,6 +18,7 @@ public class Sommet
 	private Case     caseSommet;
 
 	private int      nbChemin;
+	private boolean  contamine;
 	
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -30,6 +31,7 @@ public class Sommet
 		this.estBase    = 0;
 		this.caseSommet = caseSommet;
 		this.nbChemin   = 0;
+		this.contamine  = false;
 	}
 	
 	/*----------------------------*/
@@ -40,8 +42,9 @@ public class Sommet
 	public Sommet[] getLstVoisin() { return this.lstVoisins         ; }
 	public int      getLigSommet() { return this.caseSommet.getLig(); }
 	public int      getColSommet() { return this.caseSommet.getCol(); }
-	public int      getEstBase()   { return this.estBase            ; }
-	public int      getNbChemin()  { return this.nbChemin           ; }
+	public int      getEstBase  () { return this.estBase            ; }
+	public int      getNbChemin () { return this.nbChemin           ; }
+	public boolean  getContamine() { return this.contamine          ; }
 	
 	/*----------------------------*/
 	/*  Méthodes                  */
@@ -93,5 +96,7 @@ public class Sommet
 	{
 		return this.symbole + "\t" + this.estBase;
 	}
+	
+	public void resetContamine() { this.contamine = false; }
 
 }

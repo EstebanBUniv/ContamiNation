@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 
 import ContamiNation_Jouer.Metier.*;
 
+
 import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,9 +29,10 @@ public class Controleur
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134); // couleur de fond
 	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230); // couleur de texte
 
-	private FrameJeu   frame;
-	private Plateau    plateau;
 	private JPanel[][] tabPanel;
+	private FrameJeu frame;
+	private Plateau  plateau;
+	private Pioche   pioche;
 
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -81,5 +83,43 @@ public class Controleur
 	public static void main (String[] args)
 	{
 		new Controleur();
+	}
+
+	public void initierPioche ()
+	{
+		this.pioche = new Pioche();
+	}
+
+	public void melangerPioche()
+	{
+		this.pioche.melanger();
+	}
+
+
+	public Carte tirerCarte(int indice)
+	{
+		return this.pioche.tirerCarte(indice);
+	}
+
+	public Carte premiereCarte()
+	{
+		return this.pioche.premiereCarte();
+	}
+
+
+	public boolean verifFinManche()
+	{
+		return this.pioche.verifFinManche();
+	}
+
+	public void nouvelleManche()
+	{
+		if (this.plateau.mancheSuivante())
+		{
+			initierPioche();
+			melangerPioche();
+		}
+		else
+			System.out.println("Fin de tout le jeu");
 	}
 }

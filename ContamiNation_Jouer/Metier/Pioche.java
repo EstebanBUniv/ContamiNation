@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 
-
 public class Pioche
 {
 	private List<Carte> pioche;
 	private String[]    nomSymboles = {"Aeroport", "Entrepot", "Hopital", "Laboratoire", "Ville", "Epidemie"};
-
-
+	
 	public Pioche ()
 	{
 		int nbCarte = 12;
@@ -27,24 +25,46 @@ public class Pioche
 			}
 		}
 	}
-
-
+	
 	public Carte tirerCarte(int indiceCarte)
 	{
 		Carte carteTire;
 		
-		if (indiceCarte <= 0 || indiceCarte > this.pioche.size())
+		if (indiceCarte < 0 || indiceCarte > this.pioche.size())
 			return null;
 		
 		carteTire = this.pioche.get(indiceCarte);
+		
 		this.pioche.remove(indiceCarte);
 		
 		return carteTire;
 	}
-
-
+	
+	public Carte premiereCarte()
+	{
+		return this.pioche.get(0);
+	}
+	
 	public void melanger()
 	{
 		Collections.shuffle(this.pioche);
+	}
+	
+	public boolean verifFinManche ()
+	{
+		for ( Carte c : pioche)
+		{
+			if (!c.getEstClair())
+				return false;
+		}
+		return true;
+	}
+	
+	public String toString()
+	{
+		String sRep = "";
+		for ( Carte c : pioche)
+			sRep += c + " , ";
+		return sRep;
 	}
 }
