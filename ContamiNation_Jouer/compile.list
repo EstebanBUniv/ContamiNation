@@ -10,6 +10,7 @@
 ./Metier/Case.java
 ./Metier/Enregistrement.java
 ./Metier/Carte.java
+./Metier/Pioche.java
 
 
 ./Controleur.java

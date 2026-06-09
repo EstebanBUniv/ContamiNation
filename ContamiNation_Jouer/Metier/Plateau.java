@@ -7,13 +7,13 @@ import java.util.List;
 
 public class Plateau
 {
-	private Controleur ctrl;
-	private int        col;
-	private int        lig;
-	private int        nbVirus;
-	private String     nom;
-	private Case[][]   tabCases; 
-	private File       fichierSource = null;
+	private Controleur  ctrl;
+	private int         col;
+	private int         lig;
+	private int         nbVirus;
+	private String      nom;
+	private Case[][]    tabCases; 
+	private File        fichierSource = null;
 	private List<Virus> lstVirus; 
 
 	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
@@ -41,15 +41,15 @@ public class Plateau
 	}
 
 	/*----------------------------*/
-	/* Getters                   */
+	/* Getters                    */
 	/*----------------------------*/
 
-	public int getLig() { return this.lig; }
-	public int getCol() { return this.col; }
-	public int getNbVirus() { return this.nbVirus; }
-	public String getNom() { return this.nom; }
-	public File getFichierSource() { return this.fichierSource; }
-	public Case getCase(int lig, int col) { return this.tabCases[lig][col]; }
+	public int    getLig()                   { return this.lig                ; }
+	public int    getCol()                   { return this.col                ; }
+	public int    getNbVirus()               { return this.nbVirus            ; }
+	public String getNom()                   { return this.nom                ; }
+	public File   getFichierSource()         { return this.fichierSource      ; }
+	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col] ; }
 
 	public int getNumero() 
 	{
@@ -69,18 +69,20 @@ public class Plateau
 	}
 
 	/*----------------------------*/
-	/* Setters et Méthodes       */
+	/* Setters et Méthodes        */
 	/*----------------------------*/
 
 	public void setFichierSource(File fichier) { this.fichierSource = fichier; }
 	
 	public void creerVirus(String nom) { this.lstVirus.add(new Virus(nom)); }
 
-	public void ajouterZoneDirecte(int lig, int col, int zone) {
+	public void ajouterZoneDirecte(int lig, int col, int zone) 
+	{
 		this.tabCases[lig][col].ajouterZone(zone);
 	}
 
-	public void ajouterSommet(int lig, int col, String symbole) {
+	public void ajouterSommet(int lig, int col, String symbole) 
+	{
 		this.tabCases[lig][col].ajouterSommet(symbole);
 	}
 
