@@ -102,4 +102,11 @@ public class Plateau
 			v.setBaseDepart(base);
 		}
 	}
+
+	public Pioche nouvelleManche()
+	{
+		Pioche pioche = new Pioche();
+		pioche.melanger();
+		return pioche;
+	}
 }
