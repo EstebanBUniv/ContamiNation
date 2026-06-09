@@ -13,6 +13,8 @@ public class PanelPlateau extends JPanel
 	private FrameJeu frameMere;
 	private Controleur ctrl;
 
+	private JPanel[][] tabPanel;
+
 	private int lig;
 	private int col;
 
@@ -24,17 +26,19 @@ public class PanelPlateau extends JPanel
 		this.lig = this.ctrl.getPlateau().getLig();
 		this.col = this.ctrl.getPlateau().getCol();
 
+		this.tabPanel = new JPanel[this.lig][this.col];
+
 		this.setLayout(new GridLayout(lig, col, 0, 0));
 
 		for ( int cptLig = 0; cptLig < this.lig; cptLig++ )
 		{
 			for ( int cptCol = 0; cptCol < this.col; cptCol++ )
 			{
-				Case caseActuelle = this.ctrl.getPlateau().getCase(cptLig, cptCol);
-				this.add(new PanelCase(caseActuelle));
+				this.tabPanel[cptLig][cptCol] = new PanelCase(this.ctrl.getPlateau().getCase(cptLig, cptCol));
+				this.add(this.tabPanel[cptLig][cptCol]);
 			}
 		}
-
-
 	}
+
+	public JPanel[][] getTabPanel() { return this.tabPanel; }
 }
