@@ -16,7 +16,7 @@ public class PanelPioche extends JPanel implements ActionListener
 {
 	private Controleur ctrl;
 
-	private JButton btnPasser;
+	//private JButton btnPasser; PAS SUPPRIMER
 	private JButton btnCartePiocher; // afficher les cartes déjà piocher
 	private JButton btnPiocher;
 
@@ -25,7 +25,6 @@ public class PanelPioche extends JPanel implements ActionListener
 
 	private int     cptManche;
 	
-	//private Pioche pioche;
 
 	public PanelPioche(Controleur ctrl)
 	{
@@ -33,7 +32,6 @@ public class PanelPioche extends JPanel implements ActionListener
 
 		this.setLayout(new BorderLayout());
 		this.ctrl.initierPioche();
-		//this.ctrl.melangerPioche();
 		
 		JPanel panelGauche;
 		//-------------------------//
@@ -47,7 +45,7 @@ public class PanelPioche extends JPanel implements ActionListener
 		Image img50 = iconOriginal.getImage().getScaledInstance(50, 100, Image.SCALE_SMOOTH);
 		ImageIcon icon50 = new ImageIcon(img50);
 		
-		this.btnPasser       = new JButton();
+		//this.btnPasser       = new JButton(); PAS SUPRRIMER
 		this.btnCartePiocher = new JButton();
 		this.btnPiocher      = new JButton(icon50);
 		
@@ -67,7 +65,7 @@ public class PanelPioche extends JPanel implements ActionListener
 		// positionnement des composants //
 		//-------------------------------//
 
-		this       .add(this.btnPasser, BorderLayout.EAST      );
+		// this       .add(this.btnPasser, BorderLayout.EAST      ); PAS SUPPRIMER
 		panelGauche.add(this.btnCartePiocher                   );
 		panelGauche.add(this.lblCarteActive                    );
 		panelGauche.add(this.btnPiocher                        );
@@ -78,14 +76,14 @@ public class PanelPioche extends JPanel implements ActionListener
 		/* ------------------------------ */
 		/* Activation des composants      */
 		/* ------------------------------ */
-        this.btnPasser      .addActionListener(this);
+        //this.btnPasser      .addActionListener(this); PAS SUPPRIMER
 		this.btnCartePiocher.addActionListener(this);
 		this.btnPiocher     .addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource() == btnPasser){}
+		//if(e.getSource() == btnPasser){} PAS SUPPRIMER
 
 		if(e.getSource() == btnCartePiocher) {}
 

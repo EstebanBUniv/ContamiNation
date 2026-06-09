@@ -44,6 +44,16 @@ public class Pioche
 	{
 		return this.pioche.get(0);
 	}
+
+	public Carte getCarte(int indice)
+	{
+		return this.pioche.get(indice);
+	}
+
+	public int getTaillePioche()
+	{
+		return this.pioche.size();
+	}
 	
 	public void melanger()
 	{

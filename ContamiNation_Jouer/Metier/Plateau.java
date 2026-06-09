@@ -18,10 +18,14 @@ public class Plateau
 	private File        fichierSource = null;
 	private List<Virus> lstVirus;
 
+	private boolean     modeDebiche = false;
+
 	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
 	{
 		if ( col <= 0 || lig <= 0 || nbVirus <=0) return null;
 		return new Plateau(lig, col, nbVirus, nom, ctrl);
+
+		
 	}
 
 	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
@@ -42,6 +46,10 @@ public class Plateau
 				this.tabCases[i][j] = new Case(i, j);
 			}
 		}
+		
+		if (this.modeDebiche)
+			this.ctrl.appelerChoixCarte();
+
 	}
 
 	/*----------------------------*/
@@ -201,4 +209,6 @@ public class Plateau
 		int scoreFinal = nbSommetParZone * zonesVisitees.size(); 
 		return scoreFinal;
 	}
+
+
 }
