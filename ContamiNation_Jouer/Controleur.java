@@ -55,31 +55,7 @@ public class Controleur
 
 	public void chargerNiveau(File fichier)
 	{
-		Plateau plateau = null;
-
-		try
-		{
-			Scanner sc = new Scanner(new FileInputStream(fichier));
-			
-
-			int    lig       = sc.nextInt ();
-			int    col       = sc.nextInt ();
-			int    nbVirus   = sc.nextInt ();
-			                   sc.nextLine();
-			String nom       = sc.nextLine();
-			
-			plateau = Plateau.creerPlateau(lig, col, nbVirus, nom, this);
-			
-			sc.close();
-			
-			plateau.setFichierSource(fichier);
-			//plateau.relierTousLesSommets();
-		}
-		catch (Exception e) { e.printStackTrace(); }
-
-		this.frame.changerPanel(new PanelPlateau(this.frame, this));
-
-		this.plateau = plateau;
+		this.plateau = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
 	}
 
 	public static void main (String[] args)

@@ -1,4 +1,4 @@
-package ContamiNation.Metier;
+package ContamiNation_Jouer.Metier;
 
 import java.util.ArrayList;
 import java.util.List;

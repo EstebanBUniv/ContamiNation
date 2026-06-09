@@ -1,8 +1,11 @@
-package ContamiNation_Creer.Metier;
+package ContamiNation_Jouer.Metier;
 
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
+
+import java.util.LinkedList;
+import ContamiNation_Jouer.Metier.Sommet;
 
 /* SAE 2.01 | Développement d'une application 
 @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban
@@ -14,6 +17,7 @@ public class Virus
 	private static int compteurId = 1; 
 
 	private static Map<Integer, Color> couleursVirus = new HashMap<>();
+	private LinkedList<Sommet> cheminConquis = new LinkedList<>();
 
 	private static int r = 0;
 	private static int g = 0;
@@ -67,6 +71,12 @@ public class Virus
 		if (couleursVirus.containsKey(id))
 			return couleursVirus.get(id);
 		return Color.BLACK;
+	}
+	
+	public void setBaseDepart(Sommet base)
+	{
+		this.cheminConquis.add(base);
+		// base.setProprietaire(this); // (À décommenter plus tard quand on fera la logique des sommets)
 	}
 
 	public String toString()

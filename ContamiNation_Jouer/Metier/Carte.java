@@ -1,4 +1,4 @@
-package ContamiNation.Metier;
+package ContamiNation_Jouer.Metier;
 
 public class Carte
 {
