@@ -2,6 +2,7 @@ package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
 import ContamiNation_Jouer.IHM.FrameJeu;
+import ContamiNation_Jouer.Controleur;
 import ContamiNation_Jouer.Metier.Case;
 
 import java.awt.Image;
@@ -9,6 +10,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+
+import java.awt.event.*;
 import java.awt.BorderLayout;
 import java.awt.AlphaComposite;
 
@@ -17,7 +20,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class PanelCase extends JPanel implements ComponentListener
+
+public class PanelCase extends JPanel implements ComponentListener, ActionListener
 {
 	private Controleur ctrl;
 
@@ -28,12 +32,15 @@ public class PanelCase extends JPanel implements ComponentListener
 	private Image      imgSymbole;
 	private Image      imgFond;
 	private Graphics2D g2;
+	
+	private Controleur ctrl;
 
 	public PanelCase(Case casePlateau, Controleur ctrl)
 	{
 		this.ctrl = ctrl;
 		this.setLayout(new BorderLayout());
 		this.setBorder(null);
+		this.ctrl = ctrl;
 		
 		this.casePlateau = casePlateau;
 		this.imgFond     = getToolkit().getImage("../images/fond/fond_case.png");
@@ -63,13 +70,15 @@ public class PanelCase extends JPanel implements ComponentListener
 
 		this.add(this.btnCase, BorderLayout.CENTER);
 
+
 		this.addComponentListener(this);
+    this.btnCase.addActionListener(this);
 	}
 
 	public int getTailleCase()
 	{
 		return Math.max(this.getWidth(), this.getHeight());
-	}
+  {
 	
 	public void paintComponent(Graphics g)
 	{
@@ -107,4 +116,11 @@ public class PanelCase extends JPanel implements ComponentListener
 	public void componentHidden(ComponentEvent e) {}
 	public void componentShown (ComponentEvent e) {}
 	public void componentMoved (ComponentEvent e) {}
+
+	
+	public void actionPerformed (ActionEvent e)
+	{
+		if (e.getSource() == this.btnCase)
+			this.ctrl.verifSommet(this.casePlateau);
+	}
 }

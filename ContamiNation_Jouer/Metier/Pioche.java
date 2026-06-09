@@ -7,12 +7,14 @@ import java.util.Collections;
 public class Pioche
 {
 	private List<Carte> pioche;
+	private Carte       carteTire;
 	private String[]    nomSymboles = {"Aeroport", "Entrepot", "Hopital", "Laboratoire", "Ville", "Epidemie"};
 	
 	public Pioche ()
 	{
 		int nbCarte = 12;
 		this.pioche = new ArrayList<>();
+		this.carteTire = null;
 		for (int cpt = 0 ; cpt < nbCarte ; cpt++)
 		{
 			if( cpt%2 == 1)
@@ -26,6 +28,8 @@ public class Pioche
 		}
 	}
 	
+	public Carte getCarteTire() { return this.carteTire; }
+	
 	public Carte tirerCarte(int indiceCarte)
 	{
 		Carte carteTire;
@@ -33,16 +37,26 @@ public class Pioche
 		if (indiceCarte < 0 || indiceCarte > this.pioche.size())
 			return null;
 		
-		carteTire = this.pioche.get(indiceCarte);
+		this.carteTire = this.pioche.get(indiceCarte);
 		
 		this.pioche.remove(indiceCarte);
 		
-		return carteTire;
+		return this.carteTire;
 	}
 	
 	public Carte premiereCarte()
 	{
 		return this.pioche.get(0);
+	}
+
+	public Carte getCarte(int indice)
+	{
+		return this.pioche.get(indice);
+	}
+
+	public int getTaillePioche()
+	{
+		return this.pioche.size();
 	}
 	
 	public void melanger()

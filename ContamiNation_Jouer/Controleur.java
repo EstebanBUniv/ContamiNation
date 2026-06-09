@@ -31,14 +31,18 @@ public class Controleur
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134); // couleur de fond
 	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230); // couleur de texte
 
-	private Map<Integer, Color> couleursZones = new HashMap<>();
-	private JPanel[][] tabPanel;
-	private FrameJeu frame;
-	private Plateau  plateau;
-	private Pioche   pioche;
-	private int r;
-	private int g;
-	private int b;
+	private JPanel[][]          tabPanel;
+	private FrameJeu            frame;
+	private Plateau             plateau;
+	private Pioche              pioche;
+  private FrameChoixCarte     frameChoixCarte;
+  private Map<Integer, Color> couleursZones = new HashMap<>();
+	private int                 r;
+	private int                 g;
+	private int                 b;
+  
+  private boolean             modeDebiche = false;
+
 
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -82,6 +86,9 @@ public class Controleur
 	public void chargerNiveau(File fichier)
 	{
 		this.plateau = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
+
+		if (this.getModeDebiche())
+			this.appelerChoixCarte();
 	}
 
 	public JPanel getPanel(int lig, int col)
@@ -91,9 +98,14 @@ public class Controleur
 		return this.tabPanel[lig][col];
 	}
 
-	// Retourne la structure de données associant chaque identifiant de zone à sa couleur.
+	public Virus getVirus(int index)
+	{
+		return this.plateau.getVirus(index);
+	}
+  
+  // Retourne la structure de données associant chaque identifiant de zone à sa couleur.
 	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
-
+	
 	// Génère ou récupère la couleur unique associée à un numéro de zone spécifique.
 	public Color getCouleurZone(int numZone)
 	{
@@ -155,9 +167,44 @@ public class Controleur
 		else
 			System.out.println("Fin de tout le jeu");
 	}
+	
+	public void verifSommet(Case caseAVerif)
+	{
+		this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire());
+		//croise pas un autre chemin
+		//commence par une extremité
+		//pas déjà relié a un sommet contaminé
+		//avoir la bonne carte
+	}
 
-	public static void main (String[] args)
+
+	public void setModeDebiche()
+	{
+		this.modeDebiche = true;
+	}
+
+	public void appelerChoixCarte()
+	{
+		this.frameChoixCarte = new FrameChoixCarte(this);
+	}
+
+	public Carte getCarte(int indice)
+	{
+		return this.pioche.getCarte(indice);
+	}
+
+	public int getTaillePioche()
+	{
+		return this.pioche.getTaillePioche();
+	}
+
+	public boolean getModeDebiche()
+	{
+		return this.modeDebiche;
+	}
+
+  public static void main (String[] args)
 	{
 		new Controleur();
 	}
-}
+ }

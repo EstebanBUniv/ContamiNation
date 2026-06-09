@@ -16,9 +16,10 @@ public class PanelPioche extends JPanel implements ActionListener
 {
 	private Controleur ctrl;
 
-	private JButton  btnPasser;
-	private JButton  btnCartePiocher; // afficher les cartes déjà piocher
-	private JButton  btnPiocher;
+
+	//private JButton btnPasser; PAS SUPPRIMER
+	private JButton btnCartePiocher; // afficher les cartes déjà piocher
+	private JButton btnPiocher;
 
 	private JLabel   lblCarteActive;
 	private JLabel   lblManche;
@@ -28,7 +29,6 @@ public class PanelPioche extends JPanel implements ActionListener
 
 	private int     cptManche;
 	
-	//private Pioche pioche;
 
 	public PanelPioche(Controleur ctrl)
 	{
@@ -53,9 +53,14 @@ public class PanelPioche extends JPanel implements ActionListener
 		Image img50            = iconOriginal.getImage().getScaledInstance(50, 100, Image.SCALE_SMOOTH);
 		ImageIcon icon50       = new ImageIcon(img50);
 		
+
+		this.btnCartePiocher = new JButton();
+		this.btnPiocher      = new JButton(icon50);
+=======
 		this.btnPasser        = new JButton();
 		this.btnCartePiocher  = new JButton();
 		this.btnPiocher       = new JButton(icon50);
+
 		
 		this.btnPiocher.setOpaque           (false);
 		this.btnPiocher.setContentAreaFilled(false);
@@ -72,6 +77,16 @@ public class PanelPioche extends JPanel implements ActionListener
 		//-------------------------------//
 		// positionnement des composants //
 		//-------------------------------//
+
+
+
+		panelGauche.add(this.btnCartePiocher                   );
+		panelGauche.add(this.lblCarteActive                    );
+		panelGauche.add(this.btnPiocher                        );
+	
+		this       .add(this.lblManche  ,BorderLayout.NORTH    );
+		this       .add(panelGauche     ,BorderLayout.WEST     );
+
 		
 		panelGauche.add(this.btnCartePiocher                          );
 		panelGauche.add(this.lblCarteActive                           );
@@ -82,17 +97,18 @@ public class PanelPioche extends JPanel implements ActionListener
 		this       .add(this.lblManche       ,BorderLayout.NORTH      );
 		this       .add(panelGauche          ,BorderLayout.WEST       );
 
+
 		/* ------------------------------ */
 		/* Activation des composants      */
 		/* ------------------------------ */
-        this.btnPasser      .addActionListener(this);
+        
 		this.btnCartePiocher.addActionListener(this);
 		this.btnPiocher     .addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource() == btnPasser){}
+		
 
 		if(e.getSource() == btnCartePiocher) {}
 

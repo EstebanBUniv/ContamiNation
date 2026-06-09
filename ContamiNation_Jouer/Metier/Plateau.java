@@ -18,10 +18,14 @@ public class Plateau
 	private File        fichierSource = null;
 	private List<Virus> lstVirus;
 
+	private boolean     modeDebiche = false;
+
 	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
 	{
 		if ( col <= 0 || lig <= 0 || nbVirus <=0) return null;
 		return new Plateau(lig, col, nbVirus, nom, ctrl);
+
+		
 	}
 
 	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
@@ -42,6 +46,10 @@ public class Plateau
 				this.tabCases[i][j] = new Case(i, j);
 			}
 		}
+		
+		if (this.modeDebiche)
+			this.ctrl.appelerChoixCarte();
+
 	}
 
 	/*----------------------------*/
@@ -54,6 +62,7 @@ public class Plateau
 	public String getNom()                   { return this.nom                ; }
 	public File   getFichierSource()         { return this.fichierSource      ; }
 	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col] ; }
+	public Virus  getVirus(int index)        { return this.lstVirus.get(index); }
 
 	public int getNumero() 
 	{
@@ -199,4 +208,22 @@ public class Plateau
 		int scoreFinal = nbSommetParZone * zonesVisitees.size(); 
 		return scoreFinal;
 	}
+	
+	public boolean verifSommet(Case caseAVerif, Carte carteTire)
+	{
+		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		
+		if ( caseAVerif .getAUnSommet()                                          && // Vérification sommet présent (Correction : getAUnSommet())
+			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())           && // a un voisin à une extrémité du virus
+			 !caseAVerif.getSommet().getContamine()                              && // Le sommet n'est pas encore contaminé
+			 carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ) // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
+		{
+			virusActuel.ajouterSommetContamine(caseAVerif.getSommet());
+			caseAVerif.getSommet().setContamine(true);
+			return true;
+		}
+		
+		return false;
+	}
+
 }

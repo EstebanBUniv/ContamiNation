@@ -17,7 +17,7 @@ public class Virus
 	private static int compteurId = 1; 
 
 	private static Map<Integer, Color> couleursVirus = new HashMap<>();
-	private LinkedList<Sommet> cheminConquis = new LinkedList<>();
+	private LinkedList<Sommet> cheminContamine = new LinkedList<>();
 
 	private static int r = 0;
 	private static int g = 0;
@@ -39,10 +39,11 @@ public class Virus
 	/*  Getters                   */
 	/*----------------------------*/
 
-	public int    getId()      { return this.idVirus; }
-	public String getNom()     { return this.nom;     }
+	public int                getId()  { return this.idVirus;                        }
+	public String             getNom() { return this.nom;                            }
 
-	public Color  getCouleur() { return couleursVirus.get(this.idVirus); }
+	public Color              getCouleur() { return couleursVirus.get(this.idVirus); }
+	public LinkedList<Sommet> getConquis() { return this.cheminConquis;              }
 
 
 	/*----------------------------*/
@@ -73,8 +74,51 @@ public class Virus
 	
 	public void setBaseDepart(Sommet base)
 	{
-		this.cheminConquis.add(base);
+		this.cheminContamine.add(base);
 		// base.setProprietaire(this); // (À décommenter plus tard quand on fera la logique des sommets)
+	}
+	
+	public boolean estExtremite(Sommet s)
+	{
+		return s.equals(cheminContamine.getFirst()) || s.equals(cheminContamine.getLast());
+	}
+	
+	public void ajouterSommetContamine (Sommet s)
+	{
+		int extremite = 0;
+		for (Sommet voisin : s.getLstVoisin())
+		{
+			if (voisin != null)
+			{
+				if (voisin == this.cheminContamine.getFirst()) 
+					extremite = 1;
+				if (voisin == this.cheminContamine.getLast ()) 
+					extremite = 2;
+			}
+		}
+		
+		if (extremite == 1)
+			this.cheminContamine.addFirst(s);
+		if (extremite == 2)
+			this.cheminContamine.addLast(s);
+	}
+	
+	public boolean estVoisinDeLExtremite(Sommet sommetClique)
+	{
+		if (this.cheminContamine.isEmpty()) 
+			return false;
+
+		Sommet tete  = this.cheminContamine.getFirst();
+		Sommet queue = this.cheminContamine.getLast();
+
+		for (Sommet voisin : sommetClique.getLstVoisin())
+		{
+			if (voisin != null && (voisin == tete || voisin == queue))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public String toString()

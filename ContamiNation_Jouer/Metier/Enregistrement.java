@@ -11,6 +11,7 @@ public class Enregistrement
 	public static Plateau Recuperer(File fichier, Controleur ctrl)
 	{
 		Plateau plateau = null;
+		String nomVirus;
 		try (Scanner sc = new Scanner(new FileInputStream(fichier), "UTF-8"))
 		{
 			int lig      = sc.nextInt();
@@ -22,7 +23,12 @@ public class Enregistrement
 			plateau = Plateau.creerPlateau(lig, col, nbVirus, nom, ctrl);
 			
 			for (int i = 0; i < nbVirus; i++)
-				plateau.creerVirus(sc.nextLine());
+			{
+				nomVirus = sc.nextLine();
+				plateau.creerVirus(nomVirus);
+				if (nomVirus.equals("debiche"))
+					ctrl.setModeDebiche();
+			}
 			
 			while (sc.hasNextInt())
 			{

@@ -19,6 +19,9 @@ import java.awt.Point;
 import java.awt.event.ComponentListener;
 import java.awt.event.ComponentEvent;
 
+import java.util.LinkedList;
+
+
 public class PanelArrete extends JPanel implements ComponentListener
 {
 	private Controleur ctrl;
@@ -26,8 +29,9 @@ public class PanelArrete extends JPanel implements ComponentListener
 
 	public PanelArrete(Controleur ctrl)
 	{
-		this.ctrl = ctrl;
+		this.ctrl     = ctrl;
 		this.setOpaque(false);
+
 	}
 
 	public void componentResized(ComponentEvent e)
@@ -94,12 +98,28 @@ public class PanelArrete extends JPanel implements ComponentListener
 								// Condition pour éviter de dessiner si les sommets sont trop proches
 								if (distance > marge * 2)
 								{
-									g2d.drawLine(debutX, debutY, finX, finY);
+									if(s.getEstBase() != 0)
+									{
+										Virus virus = this.ctrl.getVirus(s.getEstBase() - 1);
+										LinkedList<Sommet> lstConquis = virus.getConquis();
+										for (Sommet sommet : lstConquis)
+										{
+											g2d.setColor(virus.getCouleur());
+											g2d.drawLine(debutX, debutY, finX, finY);
+										}
+									}
+									else
+									{
+										g2d.setColor(Color.BLACK);
+										g2d.drawLine(debutX, debutY, finX, finY);
+									}	
+
 								}
 							}
 						}
 					}
 				}
+
 			}
 		}
 	}
