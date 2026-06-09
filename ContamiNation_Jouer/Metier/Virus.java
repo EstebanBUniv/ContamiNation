@@ -39,10 +39,11 @@ public class Virus
 	/*  Getters                   */
 	/*----------------------------*/
 
-	public int    getId()      { return this.idVirus; }
-	public String getNom()     { return this.nom;     }
+	public int                getId()  { return this.idVirus;                        }
+	public String             getNom() { return this.nom;                            }
 
-	public Color  getCouleur() { return couleursVirus.get(this.idVirus); }
+	public Color              getCouleur() { return couleursVirus.get(this.idVirus); }
+	public LinkedList<Sommet> getConquis() { return this.cheminConquis;              }
 
 
 	/*----------------------------*/
