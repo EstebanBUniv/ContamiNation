@@ -32,9 +32,7 @@ public class Virus
 		this.idVirus = Virus.compteurId++;
 
 		if (!couleursVirus.containsKey(this.idVirus)) 
-		{
 			couleursVirus.put(this.idVirus, nextColor());
-		}
 	}
 
 	/*----------------------------*/
