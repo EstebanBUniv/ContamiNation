@@ -97,7 +97,7 @@ public class PanelNiveau extends JPanel implements ActionListener
 			if (lignes.length == 1)
 			{
 				this.ctrl.chargerNiveau(this.fichiersDossier.get(lignes[0]));
-				this.frameMere.changerPanel(new PanelPioche(this.ctrl));
+				this.frameMere.afficherPlateau();
 			}
 				
 		}

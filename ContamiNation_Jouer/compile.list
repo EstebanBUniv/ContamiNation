@@ -3,6 +3,7 @@
 ./IHM/PanelPlateau.java
 ./IHM/PanelCase.java
 ./IHM/PanelMenu.java
+./IHM/PanelArrete.java
 ./IHM/PanelPioche.java
 
 ./Metier/Virus.java

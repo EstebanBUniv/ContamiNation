@@ -4,7 +4,7 @@
 
 ## Fonctionnalités Principales
 
-* **Configuration ** : Définition des dimensions de la grille (lignes/colonnes) et configuration du nombre et du nom des virus.
+* **Configuration** : Définition des dimensions de la grille (lignes/colonnes) et configuration du nombre et du nom des virus.
 * **Édition des zones** : Outils de dessin (pinceau et pot de peinture) avec génération de couleurs dynamiques et algorithmes de vérification de l'intégrité des zones.
 * **Gestion du Graphe** : Placement en "Drag & Drop" des sommets (Aéroport, Ville, Laboratoire, etc.) et assignation des bases virales.
 * **Génération automatique** : Calcul et tracé des arêtes reliant les différents sommets du plateau.

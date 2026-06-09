@@ -117,7 +117,9 @@ public class Plateau
 			}
 		}
 	}
-	
+
+	//indique les 8 directions et ajoute les voisins de chaques sommets
+
 	private void chercherVoisins(int lig, int col, Sommet sommetCourant)
 	{
 		int[][] directions = {
