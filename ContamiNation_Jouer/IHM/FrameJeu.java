@@ -24,7 +24,7 @@ public class FrameJeu extends JFrame
 		this.panelPioche = new PanelPioche(this.ctrl);
 		this.panel       = new PanelMenu(this.ctrl, this);
 		
-		this.add(this.panelPioche);
+		this.add(this.panel);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
