@@ -20,12 +20,10 @@ import java.util.LinkedList;
 public class PanelArrete extends JPanel
 {
 	private Controleur ctrl;
-	private int        cptVirus;
 
 	public PanelArrete(Controleur ctrl)
 	{
 		this.ctrl     = ctrl;
-		this.cptVirus = 0;
 		this.setOpaque(false);
 
 	}
@@ -87,8 +85,7 @@ public class PanelArrete extends JPanel
 								{
 									if(s.getEstBase() != 0)
 									{
-										Virus virus = this.ctrl.getVirus(cptVirus);
-										this.cptVirus++;
+										Virus virus = this.ctrl.getVirus(s.getEstBase() - 1);
 										LinkedList<Sommet> lstConquis = virus.getConquis();
 										for (Sommet sommet : lstConquis)
 										{
@@ -100,8 +97,7 @@ public class PanelArrete extends JPanel
 									{
 										g2d.setColor(Color.BLACK);
 										g2d.drawLine(debutX, debutY, finX, finY);
-									}
-									
+									}	
 
 								}
 							}
