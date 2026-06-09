@@ -1,6 +1,7 @@
 package ContamiNation_Jouer.IHM;
 
 import java.awt.Dimension;
+import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JLayeredPane;
@@ -21,7 +22,7 @@ public class FrameJeu extends JFrame
 
 	private PanelPlateau panelPlateau;
 	private PanelArrete  panelArrete;
-	private PanelPioche panelPioche;
+	private PanelPioche  panelPioche;
 	
 	public FrameJeu(Controleur ctrl)
 	{
@@ -33,6 +34,7 @@ public class FrameJeu extends JFrame
 
 		this.panelPioche = new PanelPioche(this.ctrl);
 		this.panel       = new PanelMenu(this.ctrl, this);
+
 		
 		this.add(this.panel);
 
@@ -45,9 +47,6 @@ public class FrameJeu extends JFrame
 		this.remove(this.panel);
 		this.panel = panel;
 		this.add(this.panel);
-
-		/*if ( panel instanceof PanelPlateau )
-			this.add(new PanelArrete(this.ctrl));*/
 
 		this.revalidate();
 		this.repaint();
@@ -77,6 +76,7 @@ public class FrameJeu extends JFrame
 		centerPanel.add(this.panelPlateau);
 
 		this.changerPanel(centerPanel);
+		this.add(this.panelPioche, BorderLayout.WEST);
 	}
 
 	public JPanel[][] getTabPanel()
