@@ -1,14 +1,14 @@
 package ContamiNation_Jouer;
 
 import ContamiNation_Jouer.IHM.*;
-import javax.swing.JFrame;
 
-import ContamiNation_Jouer.Metier.Plateau;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+import ContamiNation_Jouer.Metier.*;
 
 import java.awt.Color;
-
-import ContamiNation_Jouer.IHM.PanelPlateau;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Scanner;
@@ -28,8 +28,9 @@ public class Controleur
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134); // couleur de fond
 	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230); // couleur de texte
 
-	private FrameJeu frame;
-	private Plateau  plateau;
+	private FrameJeu   frame;
+	private Plateau    plateau;
+	private JPanel[][] tabPanel;
 
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -53,9 +54,28 @@ public class Controleur
 	/*  Méthodes                  */
 	/*----------------------------*/
 
+	// Retourne le nombre de lignes du plateau actuel.
+	public int getLig() { return plateau.getLig() ; }
+	
+	// Retourne le nombre de colonnes du plateau actuel.
+	public int getCol() { return plateau.getCol() ; }
+
+	// Retourne l'objet métier Case situé aux coordonnées spécifiées.
+	public Case getCase(int lig, int col)
+	{
+		return this.plateau.getCase(lig, col);
+	}
+
 	public void chargerNiveau(File fichier)
 	{
 		this.plateau = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
+	}
+
+	public JPanel getPanel(int lig, int col)
+	{
+		this.tabPanel = this.frame.getTabPanel();
+
+		return this.tabPanel[lig][col];
 	}
 
 	public static void main (String[] args)
