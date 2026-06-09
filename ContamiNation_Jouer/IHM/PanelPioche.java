@@ -17,7 +17,7 @@ public class PanelPioche extends JPanel implements ActionListener
 	private Controleur ctrl;
 
 
-	//private JButton btnPasser; PAS SUPPRIMER
+	private JButton btnPasser;
 	private JButton btnCartePiocher; // afficher les cartes déjà piocher
 	private JButton btnPiocher;
 
@@ -54,12 +54,9 @@ public class PanelPioche extends JPanel implements ActionListener
 		ImageIcon icon50       = new ImageIcon(img50);
 		
 
-		this.btnCartePiocher = new JButton();
 		this.btnPiocher      = new JButton(icon50);
-=======
 		this.btnPasser        = new JButton();
 		this.btnCartePiocher  = new JButton();
-		this.btnPiocher       = new JButton(icon50);
 
 		
 		this.btnPiocher.setOpaque           (false);
