@@ -8,9 +8,6 @@ import ContamiNation_Jouer.Metier.Carte;
 import ContamiNation_Jouer.Metier.Plateau;
 
 import java.awt.Color;
-
-import ContamiNation_Jouer.IHM.PanelPlateau;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Scanner;
@@ -91,5 +88,11 @@ public class Controleur
 	public boolean verifFinManche()
 	{
 		return this.pioche.verifFinManche();
+	}
+
+	public void nouvelleManche()
+	{
+		initierPioche();
+		melangerPioche();
 	}
 }

@@ -103,10 +103,4 @@ public class Plateau
 		}
 	}
 
-	public Pioche nouvelleManche()
-	{
-		Pioche pioche = new Pioche();
-		pioche.melanger();
-		return pioche;
-	}
 }
