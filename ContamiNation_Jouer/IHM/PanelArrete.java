@@ -2,6 +2,7 @@ package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -15,11 +16,16 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.event.ComponentListener;
+import java.awt.event.ComponentEvent;
+
 import java.util.LinkedList;
 
-public class PanelArrete extends JPanel
+
+public class PanelArrete extends JPanel implements ComponentListener
 {
 	private Controleur ctrl;
+	private int        marge;
 
 	public PanelArrete(Controleur ctrl)
 	{
@@ -28,6 +34,15 @@ public class PanelArrete extends JPanel
 
 	}
 
+	public void componentResized(ComponentEvent e)
+	{
+		this.marge = (int)(this.ctrl.getTailleCase() * 0.1);
+	}
+
+	public void componentHidden(ComponentEvent e) {}
+	public void componentShown (ComponentEvent e) {}
+	public void componentMoved (ComponentEvent e) {}
+
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -35,7 +50,7 @@ public class PanelArrete extends JPanel
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setStroke(new BasicStroke(3.0f));
 
-		int marge   = 30;
+		this.marge = (int)(this.ctrl.getTailleCase() * 0.1);
 
 		for (int lig = 0; lig < ctrl.getLig(); lig++)
 		{
