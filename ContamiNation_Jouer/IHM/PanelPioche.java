@@ -33,7 +33,7 @@ public class PanelPioche extends JPanel implements ActionListener
 
 		this.setLayout(new BorderLayout());
 		this.ctrl.initierPioche();
-		this.ctrl.melangerPioche();
+		//this.ctrl.melangerPioche();
 		
 		JPanel panelGauche;
 		//-------------------------//
@@ -56,11 +56,12 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.btnPiocher.setBorderPainted(false);
 		this.btnPiocher.setFocusPainted(false);
 
+		this.cptManche = 1;
 
 		this.lblCarteActive  = new JLabel( "Carte active");
-		this.lblManche       = new JLabel("Manche n°");
+		this.lblManche       = new JLabel("Manche n°" + Integer.toString(cptManche));
 
-		this.cptManche = 0;
+		
 
 		//-------------------------------//
 		// positionnement des composants //
@@ -102,7 +103,12 @@ public class PanelPioche extends JPanel implements ActionListener
 				this.lblCarteActive.setIcon(icon50);
 			}
 			else
-				System.out.println("Fin de la partie");
+			{
+				System.out.println("Fin de Manche");
+				this.cptManche++;
+				this.lblManche.setText("Manche n°" + Integer.toString(cptManche));
+				this.ctrl.nouvelleManche();
+			}
 		}
 	}
 
