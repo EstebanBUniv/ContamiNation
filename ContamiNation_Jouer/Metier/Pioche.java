@@ -40,6 +40,11 @@ public class Pioche
 		return carteTire;
 	}
 	
+	public Carte premiereCarte()
+	{
+		return this.pioche.get(0);
+	}
+	
 	public void melanger()
 	{
 		Collections.shuffle(this.pioche);
