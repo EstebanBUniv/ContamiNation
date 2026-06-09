@@ -122,4 +122,13 @@ public class Controleur
 		else
 			System.out.println("Fin de tout le jeu");
 	}
+	
+	public void verifSommet(Case caseAVerif)
+	{
+		this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire());
+		//croise pas un autre chemin
+		//commence par une extremité
+		//pas déjà relié a un sommet contaminé
+		//avoir la bonne carte
+	}
 }
