@@ -99,8 +99,54 @@ public class Plateau
 
 	public void relierTousLesSommets() 
 	{
-		// C'est ici que nous allons recréer le graphe de sommets plus tard
-		// pour que l'algorithme de jeu puisse fonctionner.
+		for (int i = 0; i < this.lig; i++)
+			for (int j = 0; j < this.col; j++)
+				if (this.tabCases[i][j].getSommet() != null)
+					this.tabCases[i][j].getSommet().resetVoisins();
+			
+		for (int i = 0; i < this.lig; i++)
+		{
+			for(int j = 0; j < this.col; j++)
+			{
+				Sommet sommetCourant = this.tabCases[i][j].getSommet();
+				
+				if (sommetCourant != null)
+				{
+					chercherVoisins(i, j, sommetCourant);
+				}
+			}
+		}
+	}
+	
+	private void chercherVoisins(int lig, int col, Sommet sommetCourant)
+	{
+		int[][] directions = {
+			{-1, 0}, {1, 0}, {0, -1}, {0, 1}, 
+			{-1, -1}, {-1, 1}, {1, -1}, {1, 1}
+		};
+		
+		for (int i = 0; i < directions.length; i++)
+		{
+			int dLig = directions[i][0];
+			int dCol = directions[i][1];
+			
+			int ligCherche = lig + dLig;
+			int colCherche = col + dCol;
+			
+			boolean continuer = true;
+			while (ligCherche >= 0 && ligCherche < this.lig && colCherche >= 0 && colCherche < this.col && continuer)
+			{
+				Sommet sommetTrouve = this.tabCases[ligCherche][colCherche].getSommet();
+				
+				if (sommetTrouve != null)
+				{
+					sommetCourant.ajouterVoisin(i, sommetTrouve);
+					continuer = false; 
+				}
+				ligCherche += dLig;
+				colCherche += dCol;
+			}
+		}
 	}
 	
 	public void initialiserBaseVirus(Sommet base, int numeroManche)
