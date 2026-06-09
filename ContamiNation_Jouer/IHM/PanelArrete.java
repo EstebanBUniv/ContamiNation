@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.LinkedList;
 
 public class PanelArrete extends JPanel
 {
@@ -22,8 +23,9 @@ public class PanelArrete extends JPanel
 
 	public PanelArrete(Controleur ctrl)
 	{
-		this.ctrl = ctrl;
+		this.ctrl     = ctrl;
 		this.setOpaque(false);
+
 	}
 
 	public void paintComponent(Graphics g)
@@ -81,12 +83,28 @@ public class PanelArrete extends JPanel
 								// Condition pour éviter de dessiner si les sommets sont trop proches
 								if (distance > marge * 2)
 								{
-									g2d.drawLine(debutX, debutY, finX, finY);
+									if(s.getEstBase() != 0)
+									{
+										Virus virus = this.ctrl.getVirus(s.getEstBase() - 1);
+										LinkedList<Sommet> lstConquis = virus.getConquis();
+										for (Sommet sommet : lstConquis)
+										{
+											g2d.setColor(virus.getCouleur());
+											g2d.drawLine(debutX, debutY, finX, finY);
+										}
+									}
+									else
+									{
+										g2d.setColor(Color.BLACK);
+										g2d.drawLine(debutX, debutY, finX, finY);
+									}	
+
 								}
 							}
 						}
 					}
 				}
+
 			}
 		}
 	}

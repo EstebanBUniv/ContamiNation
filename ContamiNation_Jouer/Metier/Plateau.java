@@ -62,6 +62,7 @@ public class Plateau
 	public String getNom()                   { return this.nom                ; }
 	public File   getFichierSource()         { return this.fichierSource      ; }
 	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col] ; }
+	public Virus  getVirus(int index)        { return this.lstVirus.get(index); }
 
 	public int getNumero() 
 	{

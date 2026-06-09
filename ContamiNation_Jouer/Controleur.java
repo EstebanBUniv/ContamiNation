@@ -86,6 +86,12 @@ public class Controleur
 		return this.tabPanel[lig][col];
 	}
 
+	public Virus getVirus(int index)
+	{
+		return this.plateau.getVirus(index);
+	}
+	
+
 	public static void main (String[] args)
 	{
 		new Controleur();
