@@ -192,40 +192,52 @@ public class Plateau
 		return nbSommetParZone * zonesVisitees.size();
 	}
 
-	public boolean verifSommet(Case caseAVerif, Carte carteTire, int choixForce) {
+	public boolean verifSommet(Case caseAVerif, Carte carteTire, int choixForce)
+	{
 		if (!this.estCoupValide(caseAVerif, carteTire)) return false;
 
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		Sommet nouveauSommet = caseAVerif.getSommet();
 
-		boolean diagonaleInterdite = false;
-		if (!virusActuel.getConquis().isEmpty() && nouveauSommet != null) {
-			for (Sommet voisin : nouveauSommet.getLstVoisin()) {
-				if (voisin != null && virusActuel.getConquis().contains(voisin)) {
-					if (this.estDiagonaleCroisee(voisin, nouveauSommet)) {
-						diagonaleInterdite = true;
-						break;
-					}
-				}
+		if (virusActuel == null || nouveauSommet == null) return false;
+		if (virusActuel.getConquis().isEmpty()) return false;
+
+		LinkedList<Sommet> chemin = virusActuel.getConquis();
+		Sommet tete = chemin.getFirst();
+		Sommet queue = chemin.getLast();
+
+		boolean peutTete = virusActuel.toucheTete(nouveauSommet);
+		boolean peutQueue = virusActuel.toucheQueue(nouveauSommet);
+
+		if (!peutTete && !peutQueue) return false;
+
+		Sommet extremiteChoisie = null;
+
+		if (peutTete && !peutQueue) extremiteChoisie = tete;
+		if (!peutTete && peutQueue) extremiteChoisie = queue;
+
+		if (peutTete && peutQueue)
+		{
+			if (choixForce == 1) extremiteChoisie = tete;
+			else if (choixForce == 2) extremiteChoisie = queue;
+			else
+			{
+				boolean tetePossible = !this.arreteDejaColoree(tete, nouveauSommet)
+									&& !this.estCroisementInterdit(tete, nouveauSommet);
+
+				boolean queuePossible = !this.arreteDejaColoree(queue, nouveauSommet)
+									 && !this.estCroisementInterdit(queue, nouveauSommet);
+
+				if (tetePossible && !queuePossible) extremiteChoisie = tete;
+				else if (!tetePossible && queuePossible) extremiteChoisie = queue;
+				else if (tetePossible) extremiteChoisie = tete;
+				else return false;
 			}
 		}
 
-		boolean arreteOccupee = false;
-		if (!virusActuel.getConquis().isEmpty() && nouveauSommet != null) {
-			Sommet tete = virusActuel.getConquis().getFirst();
-			Sommet queue = virusActuel.getConquis().getLast();
-
-			for (Sommet voisin : nouveauSommet.getLstVoisin()) {
-				if (voisin == tete || voisin == queue) {
-					if (this.arreteDejaColoree(nouveauSommet, voisin)) {
-						arreteOccupee = true;
-						break;
-					}
-				}
-			}
-		}
-
-		if (diagonaleInterdite || arreteOccupee) return false;
+		if (extremiteChoisie == null) return false;
+		if (this.arreteDejaColoree(extremiteChoisie, nouveauSommet)) return false;
+		if (this.estCroisementInterdit(extremiteChoisie, nouveauSommet)) return false;
 
 		virusActuel.ajouterSommetContamine(nouveauSommet, choixForce);
 		nouveauSommet.setContamine(true);
@@ -233,42 +245,59 @@ public class Plateau
 		return true;
 	}
 
-	public boolean estDiagonaleCroisee(Sommet s1, Sommet s2) {
-		if (s1 == null || s2 == null) return false;
+	private boolean estCroisementInterdit(Sommet a, Sommet b)
+	{
+		if (a == null || b == null) return false;
 
-		int dx = s2.getCol() - s1.getCol();
-		int dy = s2.getLig() - s1.getLig();
+		int l1 = a.getLigSommet();
+		int c1 = a.getColSommet();
+		int l2 = b.getLigSommet();
+		int c2 = b.getColSommet();
 
-		if (Math.abs(dx) != 1 || Math.abs(dy) != 1) return false;
+		if (Math.abs(l1 - l2) != 1 || Math.abs(c1 - c2) != 1)
+			return false;
 
-		int ligA = s1.getLig();
-		int colA = s2.getCol();
-		int ligB = s2.getLig();
-		int colB = s1.getCol();
+		Sommet coin1 = null;
+		Sommet coin2 = null;
 
-		if (ligA < 0 || ligA >= this.lig || colA < 0 || colA >= this.col) return false;
-		if (ligB < 0 || ligB >= this.lig || colB < 0 || colB >= this.col) return false;
+		for (int i = 0; i < this.tabCases.length; i++)
+		{
+			for (int j = 0; j < this.tabCases[i].length; j++)
+			{
+				Case ca = this.tabCases[i][j];
+				if (ca == null || ca.getSommet() == null) continue;
 
-		Case caseA = this.tabCases[ligA][colA];
-		Case caseB = this.tabCases[ligB][colB];
+				Sommet s = ca.getSommet();
 
-		if (!caseA.getAUnSommet() || !caseB.getAUnSommet()) return false;
+				if (s.getLigSommet() == l1 && s.getColSommet() == c2)
+					coin1 = s;
 
-		Sommet a = caseA.getSommet();
-		Sommet b = caseB.getSommet();
+				if (s.getLigSommet() == l2 && s.getColSommet() == c1)
+					coin2 = s;
+			}
+		}
 
-		return this.arreteDejaColoree(a, b);
+		if (coin1 == null || coin2 == null) return false;
+
+		return this.arreteDejaColoree(coin1, coin2);
 	}
 
-	private boolean arreteDejaColoree(Sommet s1, Sommet s2) {
-		for (Virus v : this.lstVirus) {
-			LinkedList<Sommet> chemin = v.getConquis();
+	private boolean arreteDejaColoree(Sommet s1, Sommet s2)
+	{
+		if (s1 == null || s2 == null) return false;
 
-			for (int i = 0; i < chemin.size() - 1; i++) {
+		for (Virus v : this.lstVirus)
+		{
+			if (v == null || v.getConquis() == null) continue;
+
+			LinkedList<Sommet> chemin = v.getConquis();
+			for (int i = 0; i < chemin.size() - 1; i++)
+			{
 				Sommet a = chemin.get(i);
 				Sommet b = chemin.get(i + 1);
 
-				if ((a == s1 && b == s2) || (a == s2 && b == s1)) {
+				if ((a == s1 && b == s2) || (a == s2 && b == s1))
+				{
 					return true;
 				}
 			}

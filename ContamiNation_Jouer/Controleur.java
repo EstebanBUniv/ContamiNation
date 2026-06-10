@@ -106,9 +106,6 @@ public class Controleur
 			this.frame.repaint();
 			return;
 		}
-	
-	public void verifSommet(Case caseAVerif)
-	{
 
 		if (this.plateau.estCoupValide(caseAVerif, carteActive) && this.estVoisinAtteignable(caseAVerif))
 		{
