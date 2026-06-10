@@ -47,6 +47,7 @@ public class Sommet
 	public int      getEstBase  ()      { return this.estBase            ; }
 	public int      getNbChemin ()      { return this.nbChemin           ; }
 	public boolean  getContamine()      { return this.contamine          ; }
+	public Virus    getVirus    ()      { return this.virus              ; }
 	
 	/*----------------------------*/
 	/*  Méthodes                  */
@@ -56,15 +57,15 @@ public class Sommet
 	{
 		this.contamine = b;
 	}
+	
+	public void resetContamine() 
+	{ 
+		this.contamine = false; 
+	}
 
 	public void setProprietaire(Virus v)
 	{
 		this.virus = v;
-	}
-
-	public Virus getVirus()
-	{
-		return this.virus;
 	}
 
 	// Ajoute un voisin selon une direction spécifique (0-7)
@@ -120,7 +121,5 @@ public class Sommet
 	{
 		return this.symbole + "\t" + this.estBase;
 	}
-	
-	public void resetContamine() { this.contamine = false; }
 
 }

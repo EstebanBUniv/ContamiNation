@@ -1,16 +1,18 @@
 package ContamiNation_Jouer.IHM;
 
+import ContamiNation_Jouer.Controleur;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GridLayout;
+
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import ContamiNation_Jouer.Controleur;
-import ContamiNation_Jouer.Metier.Case;
-import ContamiNation_Jouer.Controleur;
+
 
 public class FrameJeu extends JFrame
 {
@@ -83,7 +85,7 @@ public class FrameJeu extends JFrame
 		this.revalidate();
 		this.repaint();
 	}
-
+/*
 	// Méthode qui permet l'affichage correcte du plateau de jeu
 	public void afficherPlateau()
 	{
@@ -114,6 +116,51 @@ public class FrameJeu extends JFrame
 
 		this.changerPanel(centerPanel);
 		this.add(this.panelPioche, BorderLayout.WEST);
+	}
+*/
+	public void afficherPlateauMulti(int nbJoueurs)
+	{
+		this.setLayout(new BorderLayout());
+
+		// Layout adaptatif : 1 ligne si 2 joueurs, 2 lignes si 3 ou 4 joueurs
+		int lignesIHM = (nbJoueurs <= 2) ? 1 : 2;
+		int colonnesIHM = 2;
+		JPanel conteneurPlateaux = new JPanel(new GridLayout(lignesIHM, colonnesIHM, 10, 10));
+
+		for (int i = 0; i < nbJoueurs; i++) 
+		{
+			PanelPlateau panelPlateau = new PanelPlateau(this, this.ctrl, i);
+			PanelArrete panelArrete   = new PanelArrete(this.ctrl, i, panelPlateau);
+
+			// Superposition du plateau et des arrêtes pour CHAQUE joueur
+			JPanel splitPanel = new JPanel(null) 
+			{
+				public boolean isOptimizedDrawingEnabled() { return false; }
+			};
+
+			// Gestion des redimensionnements par plateau individuel
+			final int id = i;
+			splitPanel.addComponentListener(new ComponentAdapter() 
+			{
+				public void componentResized(ComponentEvent e) 
+				{
+					int w = splitPanel.getWidth();
+					int h = splitPanel.getHeight();
+					panelPlateau.setBounds(0, 0, w, h);
+					panelArrete.setBounds(0, 0, w, h);
+					panelPlateau.revalidate();
+					panelArrete.repaint();
+				}
+			});
+
+			splitPanel.add(panelArrete);
+			splitPanel.add(panelPlateau);
+			
+			conteneurPlateaux.add(splitPanel);
+		}
+
+		this.changerPanel(conteneurPlateaux);
+		this.add(this.panelPioche, BorderLayout.WEST); // La pioche reste partagée sur le côté
 	}
 
 	// Permet de mettre a jour l'affichage de la pioche
