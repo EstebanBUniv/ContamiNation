@@ -1,18 +1,16 @@
 package ContamiNation_Jouer.IHM;
 
+import ContamiNation_Jouer.Controleur;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.ImageIcon;
-import java.awt.Image;
-import java.awt.Dimension;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import ContamiNation_Jouer.Controleur;
 
 public class PanelPioche extends JPanel implements ActionListener
 {
@@ -99,49 +97,55 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.btnPasser.addActionListener(this);
 	}
 
+	// Méthode qui s'occupe du déroulement de la pioche
+	public void passerTour()
+	{
+		if (!this.ctrl.verifFinManche())
+		{
+			ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.tirerCarte(0) + ".png");
+			Image img50 = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
+			ImageIcon icon50 = new ImageIcon(img50);
+			
+			this.defausse[this.numTour] = new JLabel(icon50);
+			this.panelDefausse.add(this.defausse[this.numTour++]);
+			this.lblCarteActive.setIcon(icon50);
+			
+			if (!this.ctrl.verifFinManche()) 
+			{
+				ImageIcon iconOriginalPremiere = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
+				Image img60 = iconOriginalPremiere.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
+				this.lblPioche.setIcon(new ImageIcon(img60));
+			}
+			else
+			{
+				this.lblPioche.setIcon(null); 
+			}
+
+			this.panelDefausse.revalidate();
+			this.panelDefausse.repaint();
+		}
+		else
+		{
+			System.out.println("Fin de Manche");
+			this.cptManche++;
+			this.lblManche.setText("Manche n°" + this.cptManche);
+			
+			this.panelDefausse.removeAll();
+			this.panelDefausse.revalidate();
+			this.panelDefausse.repaint();
+			this.numTour = 0; 
+			
+			this.ctrl.nouvelleManche();
+		}
+	}
+
 	public void actionPerformed(ActionEvent e)
 	{
 		
 		if(e.getSource() == this.btnPasser)
 		{
-			if (!this.ctrl.verifFinManche())
-			{
-				ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.tirerCarte(0) + ".png");
-				Image img50 = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
-				ImageIcon icon50 = new ImageIcon(img50);
-				
-				this.defausse[this.numTour] = new JLabel(icon50);
-				this.panelDefausse.add(this.defausse[this.numTour++]);
-				this.lblCarteActive.setIcon(icon50);
-				
-				if (!this.ctrl.verifFinManche()) 
-				{
-					ImageIcon iconOriginalPremiere = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
-					Image img60 = iconOriginalPremiere.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
-					this.lblPioche.setIcon(new ImageIcon(img60));
-				}
-				else
-				{
-					this.lblPioche.setIcon(null); 
-				}
-
-				this.panelDefausse.revalidate();
-				this.panelDefausse.repaint();
-			}
-			else
-			{
-				System.out.println("Fin de Manche");
-				this.cptManche++;
-				this.lblManche.setText("Manche n°" + this.cptManche);
-				
-				this.panelDefausse.removeAll();
-				this.panelDefausse.revalidate();
-				this.panelDefausse.repaint();
-				this.numTour = 0; 
-				
-				this.ctrl.nouvelleManche();
-			}
+			this.passerTour();
 		}
 	}
-
 }
+

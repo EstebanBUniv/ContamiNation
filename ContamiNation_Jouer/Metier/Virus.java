@@ -25,6 +25,7 @@ public class Virus
 
 	private int    idVirus;
 	private String nom;
+	private Sommet baseDepart;
 
 	public Virus(String nom)
 	{
@@ -44,7 +45,7 @@ public class Virus
 
 	public Color              getCouleur() { return couleursVirus.get(this.idVirus); }
 	public LinkedList<Sommet> getConquis() { return this.cheminContamine;            }
-
+	public Sommet getBaseDepart() { return this.baseDepart; }
 
 	/*----------------------------*/
 	/* Méthodes Utilitaires       */
@@ -63,6 +64,9 @@ public class Virus
 	{
 		compteurId = 1;
 		couleursVirus.clear();
+		r = 0;
+		g = 0;
+		b = 0;
 	}
 
 	public static Color getCouleur(int id)
@@ -74,33 +78,61 @@ public class Virus
 	
 	public void setBaseDepart(Sommet base)
 	{
+		if (this.baseDepart != null) return;
+		this.baseDepart = base;
 		this.cheminContamine.add(base);
-		// base.setProprietaire(this); // (À décommenter plus tard quand on fera la logique des sommets)
+		base.setProprietaire(this);
+		base.setContamine(true);
 	}
-	
+
 	public boolean estExtremite(Sommet s)
 	{
-		return s.equals(cheminContamine.getFirst()) || s.equals(cheminContamine.getLast());
+    	if (s == null) return false;
+    	return s.equals(cheminContamine.getFirst()) || s.equals(cheminContamine.getLast());
 	}
 	
-	public void ajouterSommetContamine (Sommet s)
+	public boolean toucheTete(Sommet s)
 	{
-		int extremite = 0;
-		for (Sommet voisin : s.getLstVoisin())
+		for (Sommet voisin : s.getLstVoisin()) 
+			if (voisin != null && voisin == this.cheminContamine.getFirst()) return true;
+		return false;
+	}
+
+	public boolean toucheQueue(Sommet s)
+	{
+		for (Sommet voisin : s.getLstVoisin()) 
+			if (voisin != null && voisin == this.cheminContamine.getLast()) return true;
+		return false;
+	}
+
+	public void ajouterSommetContamine(Sommet s, int choixForce)
+	{
+		if (s == null) return;
+		if (choixForce == 1) 
 		{
-			if (voisin != null)
-			{
-				if (voisin == this.cheminContamine.getFirst()) 
-					extremite = 1;
-				if (voisin == this.cheminContamine.getLast ()) 
-					extremite = 2;
-			}
-		}
-		
-		if (extremite == 1)
 			this.cheminContamine.addFirst(s);
-		if (extremite == 2)
+			return;
+		}
+		if (choixForce == 2) 
+		{
 			this.cheminContamine.addLast(s);
+			return;
+		}
+		if (this.cheminContamine.size() <= 1) 
+		{
+			this.cheminContamine.addLast(s);
+			return;
+		}
+		if (toucheTete(s)) {
+			this.cheminContamine.addFirst(s);
+			return;
+		}
+		if (toucheQueue(s)) 
+		{
+			this.cheminContamine.addLast(s);
+			return;
+		}
+		throw new IllegalStateException("Le sommet ne touche aucune extrémité du chemin.");
 	}
 
 	public void enleverSommetContamine (Sommet s)
@@ -144,6 +176,11 @@ public class Virus
 			}
 		}
 		return false;
+	}
+	
+	public int getTailleChemin() 
+	{ 
+		return this.cheminContamine.size(); 
 	}
 
 	public String toString()
