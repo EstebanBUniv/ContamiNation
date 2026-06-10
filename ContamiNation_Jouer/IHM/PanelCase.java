@@ -1,6 +1,7 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
+import ContamiNation_Jouer.Metier.Case;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -39,8 +40,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.setLayout(new BorderLayout());
 		this.setBorder(null);
 
-		this.imgFond = getToolkit().getImage("../images/fond/fond_case_0.png");
-		this.imgBase = getToolkit().getImage("../images/fond/case/base.png");
+		this.initImgFond();
 
 		if (this.ctrl.getCase(lig, col).getSommet() != null)
 		{
@@ -71,6 +71,51 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		return Math.max(this.getWidth(), this.getHeight());
 	}
 
+	private void initImgFond()
+	{
+		int[][] directions =
+		{
+			{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}
+		};
+
+		// côtés adjacents à chaque coin
+		int[][] dependances = { {0, 2}, {0, 3}, {1, 2}, {1, 3} };
+
+		boolean[] memeZone = new boolean[8];
+		int        zoneCourante = this.ctrl.getCase(this.lig, this.col).getZone();
+
+		// teste les 8 directions
+		for (int cptDir = 0; cptDir < 8; cptDir++)
+		{
+			int ligVoisin = this.lig + directions[cptDir][0];
+			int colVoisin = this.col + directions[cptDir][1];
+
+			memeZone[cptDir] = ligVoisin >= 0 && ligVoisin < this.ctrl.getLig() &&
+							colVoisin >= 0 && colVoisin < this.ctrl.getCol() &&
+							this.ctrl.getCase(ligVoisin, colVoisin).getZone() == zoneCourante;
+		}
+
+		// annuler les coins si leurs côtés adjacents ne sont pas tous dans la même zone
+		for (int cptCoin = 0; cptCoin < 4; cptCoin++)
+		{
+			int indiceCoin = cptCoin + 4;
+			int cote1      = dependances[cptCoin][0];
+			int cote2      = dependances[cptCoin][1];
+
+			if (!memeZone[cote1] || !memeZone[cote2])
+				memeZone[indiceCoin] = false; // coin ignoré
+		}
+
+		// construire le nom du fichier
+		StringBuilder numeroCase = new StringBuilder();
+		for (int cptDir = 0; cptDir < 8; cptDir++)
+			if (memeZone[cptDir])
+				numeroCase.append(cptDir);
+
+		this.imgFond = getToolkit().getImage("../images/fond/case/fond_case_" + numeroCase + ".png");
+		this.imgBase = getToolkit().getImage("../images/fond/case/base.png");
+	}
+
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -83,7 +128,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		// 2. Image de fond texturée
 		if (this.imgFond != null)
 		{
-			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
+			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
 			this.g2.drawImage(this.imgFond, 0, 0, getWidth(), getHeight(), this);
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		}

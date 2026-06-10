@@ -1,0 +1,24 @@
+10
+10
+10
+mort presque imminante
+1
+2
+3
+4
+5
+-
+è
+_
+ç
+à
+0	0	1	null	0	1	3	Hopital	8	0	2	13	null	0	3	13	null	0	4	13	null	0	5	9	null	0	6	9	null	0	7	9	Aeroport	7	0	8	16	null	0	9	16	null	
+1	0	3	null	1	1	3	null	1	2	13	null	1	3	13	null	1	4	13	null	1	5	9	null	1	6	12	null	1	7	9	null	1	8	9	null	1	9	16	null	
+2	0	8	null	2	1	8	Hopital	5	2	2	13	null	2	3	4	null	2	4	4	null	2	5	4	Entrepot	6	2	6	4	null	2	7	11	null	2	8	9	null	2	9	16	null	
+3	0	8	null	3	1	8	null	3	2	13	null	3	3	4	null	3	4	3	null	3	5	3	null	3	6	4	null	3	7	11	null	3	8	16	null	3	9	16	null	
+4	0	17	null	4	1	8	null	4	2	4	null	4	3	4	Aeroport	4	4	4	3	null	4	5	3	null	4	6	4	null	4	7	16	null	4	8	16	Hopital	10	4	9	16	null	
+5	0	17	null	5	1	8	null	5	2	4	null	5	3	3	null	5	4	3	null	5	5	3	null	5	6	4	null	5	7	9	null	5	8	16	null	5	9	14	null	
+6	0	17	null	6	1	8	Ville	3	6	2	4	null	6	3	4	null	6	4	4	null	6	5	4	null	6	6	4	Laboratoire	0	6	7	9	null	6	8	12	null	6	9	12	null	
+7	0	6	null	7	1	6	null	7	2	6	null	7	3	11	Hopital	0	7	4	4	null	7	5	4	null	7	6	9	null	7	7	9	null	7	8	12	null	7	9	12	null	
+8	0	6	null	8	1	7	Laboratoire	0	8	2	6	null	8	3	11	null	8	4	8	null	8	5	8	Laboratoire	2	8	6	10	null	8	7	10	null	8	8	10	null	8	9	15	Laboratoire	9	
+9	0	6	Entrepot	0	9	1	6	null	9	2	6	null	9	3	11	null	9	4	8	null	9	5	8	null	9	6	8	null	9	7	8	Laboratoire	1	9	8	8	null	9	9	2	null	
