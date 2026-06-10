@@ -164,6 +164,7 @@ public class Controleur
 			this.plateau.preparerNouvelleManche();
 			initierPioche();
 			melangerPioche();
+			this.frame.reinitierPanelPioche();
 			if (this.frame != null) 
 			{
 				this.frame.repaint();
