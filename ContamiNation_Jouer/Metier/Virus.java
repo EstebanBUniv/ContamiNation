@@ -82,6 +82,7 @@ public class Virus
 		this.baseDepart = base;
 		this.cheminContamine.add(base);
 		base.setProprietaire(this);
+		base.setContamine(true);
 	}
 
 	public boolean estExtremite(Sommet s)
@@ -107,16 +108,31 @@ public class Virus
 	public void ajouterSommetContamine(Sommet s, int choixForce)
 	{
 		if (s == null) return;
-
-		if (choixForce == 1)      this.cheminContamine.addFirst(s);
-		else if (choixForce == 2) this.cheminContamine.addLast(s);
-		else 
+		if (choixForce == 1) 
 		{
-			// Cas normal sans conflit
-			if (this.cheminContamine.size() <= 1) this.cheminContamine.addLast(s);
-			else if (toucheTete(s))               this.cheminContamine.addFirst(s);
-			else                                  this.cheminContamine.addLast(s);
+			this.cheminContamine.addFirst(s);
+			return;
 		}
+		if (choixForce == 2) 
+		{
+			this.cheminContamine.addLast(s);
+			return;
+		}
+		if (this.cheminContamine.size() <= 1) 
+		{
+			this.cheminContamine.addLast(s);
+			return;
+		}
+		if (toucheTete(s)) {
+			this.cheminContamine.addFirst(s);
+			return;
+		}
+		if (toucheQueue(s)) 
+		{
+			this.cheminContamine.addLast(s);
+			return;
+		}
+		throw new IllegalStateException("Le sommet ne touche aucune extrémité du chemin.");
 	}
 	
 	public boolean estVoisinDeLExtremite(Sommet sommetClique)

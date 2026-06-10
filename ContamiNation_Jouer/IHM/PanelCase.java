@@ -87,7 +87,6 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		}
 
-		// 3. RESTAURATION DES SURBRILLANCES DE GRÉGORY
 		Case caseSelectionnee = ctrl.getCaseSelectionnee();
 
 		if (caseSelectionnee != null && this.casePlateau.getSommet() != null)
