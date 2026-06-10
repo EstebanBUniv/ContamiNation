@@ -35,8 +35,8 @@ public class Controleur
 	private FrameJeu            frame;
 	private Plateau             plateau;
 	private Pioche              pioche;
-  private FrameChoixCarte     frameChoixCarte;
-  private Map<Integer, Color> couleursZones = new HashMap<>();
+    private FrameChoixCarte     frameChoixCarte;
+    private Map<Integer, Color> couleursZones = new HashMap<>();
 	private int                 r;
 	private int                 g;
 	private int                 b;
@@ -183,6 +183,8 @@ public class Controleur
 		//avoir la bonne carte
 		this.frame.repaint();
 	}
+
+	public boolean estDiagonaleCroisee(Sommet s1, Sommet s2){return this.plateau.estDiagonaleCroisee(s1, s2);}
 
 
 	public void setModeDebiche()

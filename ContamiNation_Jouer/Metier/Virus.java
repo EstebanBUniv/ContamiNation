@@ -43,7 +43,7 @@ public class Virus
 	public String             getNom() { return this.nom;                            }
 
 	public Color              getCouleur() { return couleursVirus.get(this.idVirus); }
-	public LinkedList<Sommet> getConquis() { return this.cheminContamine;              }
+	public LinkedList<Sommet> getConquis() { return this.cheminContamine;            }
 
 
 	/*----------------------------*/
