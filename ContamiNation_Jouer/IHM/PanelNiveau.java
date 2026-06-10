@@ -164,7 +164,6 @@ public class PanelNiveau extends JPanel implements ActionListener
 
 		if ( e.getSource() == this.btnRetour )
 		{
-			// Attention ici, il faut renvoyer sur PanelMenu proprement 
 			this.frameMere.changerPanel(new PanelMenu(this.ctrl, this.frameMere));
 		}
 
@@ -180,7 +179,6 @@ public class PanelNiveau extends JPanel implements ActionListener
 
 		Graphics g2 = (Graphics2D) g;
 		
-		// Ajout de l'image du fond
 		if ( imgFond != null )
 			g2.drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
 	}

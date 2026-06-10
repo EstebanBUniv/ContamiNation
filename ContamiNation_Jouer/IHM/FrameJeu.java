@@ -85,39 +85,7 @@ public class FrameJeu extends JFrame
 		this.revalidate();
 		this.repaint();
 	}
-/*
-	// Méthode qui permet l'affichage correcte du plateau de jeu
-	public void afficherPlateau()
-	{
-		this.setLayout(new BorderLayout());
-		this.panelPlateau = new PanelPlateau(this, this.ctrl);
-		this.panelArrete  = new PanelArrete(this.ctrl);
 
-		JPanel centerPanel = new JPanel(null)
-		{
-			public boolean isOptimizedDrawingEnabled() { return false; }
-		};
-
-		centerPanel.addComponentListener(new ComponentAdapter()
-		{
-			public void componentResized(ComponentEvent e)
-			{
-				int w = centerPanel.getWidth();
-				int h = centerPanel.getHeight();
-				panelPlateau.setBounds(0, 0, w, h);
-				panelArrete.setBounds(0, 0, w, h);
-				panelPlateau.revalidate();
-				panelArrete.repaint();
-			}
-		});
-
-		centerPanel.add(this.panelArrete);
-		centerPanel.add(this.panelPlateau);
-
-		this.changerPanel(centerPanel);
-		this.add(this.panelPioche, BorderLayout.WEST);
-	}
-*/
 	public void afficherPlateauMulti(int nbJoueurs)
 	{
 		this.setLayout(new BorderLayout());
