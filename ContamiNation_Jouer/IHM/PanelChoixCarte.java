@@ -2,16 +2,17 @@ package ContamiNation_Jouer.IHM;
 
 
 import ContamiNation_Jouer.Controleur;
-import java.awt.event.*;
-import java.awt.Image;
-import javax.swing.*;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.event.*;
+import javax.swing.*;
 
 
 public class PanelChoixCarte extends JPanel implements ActionListener
 {
+	// Attribut d'instance
 	private Controleur  ctrl;
-	private Image[] pioche;
+	private Image[]     pioche;
 
 	private JButton[]   cartes;
 

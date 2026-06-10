@@ -1,18 +1,16 @@
 package ContamiNation_Jouer.IHM;
 
+import ContamiNation_Jouer.Controleur;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.*;
 import javax.swing.ImageIcon;
-import java.awt.Image;
-import java.awt.Dimension;
-
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-
-import ContamiNation_Jouer.Controleur;
 
 public class PanelPioche extends JPanel implements ActionListener
 {
@@ -99,16 +97,7 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.btnPasser.addActionListener(this);
 	}
 
-	public void actionPerformed(ActionEvent e)
-	{
-		
-		if(e.getSource() == this.btnPasser)
-		{
-			this.passerTour();
-		}
-	}
-
-
+	// Méthode qui s'occupe du déroulement de la pioche
 	public void passerTour()
 	{
 		if (!this.ctrl.verifFinManche())
@@ -147,6 +136,15 @@ public class PanelPioche extends JPanel implements ActionListener
 			this.numTour = 0; 
 			
 			this.ctrl.nouvelleManche();
+		}
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		
+		if(e.getSource() == this.btnPasser)
+		{
+			this.passerTour();
 		}
 	}
 }
