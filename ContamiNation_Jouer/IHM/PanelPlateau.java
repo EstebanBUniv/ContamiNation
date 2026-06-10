@@ -1,11 +1,8 @@
 package ContamiNation_Jouer.IHM;
 
-import ContamiNation_Jouer.Metier.Case;
-
 import ContamiNation_Jouer.Controleur;
 
 import java.awt.GridLayout;
-
 import javax.swing.JPanel;
 
 public class PanelPlateau extends JPanel
@@ -34,7 +31,7 @@ public class PanelPlateau extends JPanel
 		{
 			for ( int cptCol = 0; cptCol < this.col; cptCol++ )
 			{
-				this.tabPanel[cptLig][cptCol] = new PanelCase(this.ctrl.getPlateau().getCase(cptLig, cptCol), this.ctrl);
+				this.tabPanel[cptLig][cptCol] = new PanelCase(cptLig, cptCol, this.ctrl);
 				this.add(this.tabPanel[cptLig][cptCol]);
 			}
 		}

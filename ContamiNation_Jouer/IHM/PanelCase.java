@@ -2,8 +2,6 @@ package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
 import ContamiNation_Jouer.IHM.FrameJeu;
-import ContamiNation_Jouer.Controleur;
-import ContamiNation_Jouer.Metier.Case;
 
 import java.awt.Image;
 import java.awt.Graphics;
@@ -24,8 +22,6 @@ import javax.swing.JPanel;
 public class PanelCase extends JPanel implements ComponentListener, ActionListener
 {
 	private Controleur ctrl;
-
-	private Case       casePlateau;
 	
 	private JButton    btnCase;
 
@@ -34,27 +30,29 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	private Image      imgBase;
 	private Graphics2D g2;
 	private int        taille;
+	private int        lig;
+	private int        col;
 	
-	public PanelCase(Case casePlateau, Controleur ctrl)
+	public PanelCase(int lig, int col, Controleur ctrl)
 	{
 		this.ctrl = ctrl;
+		this.lig  = lig;
+		this.col  = col;
 		this.setLayout(new BorderLayout());
 		this.setBorder(null);
-		this.ctrl = ctrl;
 		
-		this.casePlateau = casePlateau;
 		this.imgFond     = getToolkit().getImage("../images/fond/fond_case.png");
 		this.imgBase     = getToolkit().getImage("../images/fond/base.png");
 
 
-		if (this.casePlateau.getSommet() != null)
+		if (this.ctrl.getCase(this.lig, this.col).getSommet() != null)
 		{
 			this.btnCase = new JButton();
 
-			String symbole = this.casePlateau.getSommet().getSymbole();
+			String symbole = this.ctrl.getCase(this.lig, this.col).getSommet().getSymbole();
 
 			this.imgSymbole = getToolkit().getImage("../images/symboles/symbole_" + symbole + ".png");
-			Image img        = imgSymbole.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			Image img       = imgSymbole.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 			btnCase.setIcon(new ImageIcon(img));
 		}
 		else
@@ -66,8 +64,6 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.btnCase.setContentAreaFilled(false);
 		this.btnCase.setBorderPainted(false);
 		this.btnCase.setFocusPainted(false);
-
-		this.casePlateau = casePlateau;
 
 		this.add(this.btnCase, BorderLayout.CENTER);
 
@@ -87,7 +83,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 
 		this.g2 = (Graphics2D) g.create();
 
-		this.g2.setColor(ctrl.getCouleurZone(this.casePlateau.getZone()));
+		this.g2.setColor(ctrl.getCouleurZone(this.ctrl.getCase(this.lig, this.col).getZone()));
 		this.g2.fillRect(0, 0, getWidth(), getHeight());
 
 		// dessine une image de fond
@@ -98,13 +94,13 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		}
 
 		// dessine un symbole si il s'agit d'une base
-		if (this.casePlateau.getSommet() != null)
-			if (this.casePlateau.getSommet().getEstBase() > 0)
+		if (this.ctrl.getCase(this.lig, this.col).getSommet() != null)
+			if (this.ctrl.getCase(this.lig, this.col).getSommet().getEstBase() > 0)
 			{
 				this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f)); // remet l'opacité à 100%
 				// change la couleur de imgBase
 				Image baseTeintee = this.teinteImage(this.imgBase, getWidth(), getHeight(),
-									this.casePlateau.getSommet().getVirus().getCouleur());
+									this.ctrl.getCase(this.lig, this.col).getSommet().getVirus().getCouleur());
 				
 				// dessine la nouvelle imgBase avec sa couleur
 				this.g2.drawImage(baseTeintee, 0, 0, getWidth(), getHeight(), this);
@@ -137,7 +133,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	public void actionPerformed (ActionEvent e)
 	{
 		if (e.getSource() == this.btnCase)
-			this.ctrl.verifSommet(this.casePlateau);
+			this.ctrl.verifSommet(this.ctrl.getCase(this.lig, this.col));
 	}
 
 	private Image teinteImage(Image img, int w, int h, Color couleur)
