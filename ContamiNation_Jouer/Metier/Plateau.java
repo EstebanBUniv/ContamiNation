@@ -56,13 +56,15 @@ public class Plateau
 	/* Getters                    */
 	/*----------------------------*/
 
-	public int    getLig()                   { return this.lig                ; }
-	public int    getCol()                   { return this.col                ; }
-	public int    getNbVirus()               { return this.nbVirus            ; }
-	public String getNom()                   { return this.nom                ; }
-	public File   getFichierSource()         { return this.fichierSource      ; }
-	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col] ; }
-	public Virus  getVirus(int index)        { return this.lstVirus.get(index); }
+	public int    getLig()                   { return this.lig                			   ; }
+	public int    getCol()                   { return this.col                			   ; }
+	public int    getNbVirus()               { return this.nbVirus            			   ; }
+	public String getNom()                   { return this.nom                			   ; }
+	public File   getFichierSource()         { return this.fichierSource      			   ; }
+	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col] 			   ; }
+	public Virus  getVirus(int index)        { return this.lstVirus.get(index)			   ; }
+	public Virus getVirusActif() 			 { return this.lstVirus.get(this.numManche - 1); }
+
 
 	public int getNumero() 
 	{
@@ -212,20 +214,30 @@ public class Plateau
 	public boolean verifSommet(Case caseAVerif, Carte carteTire)
 	{
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
-		
-		if ( carteTire != null &&
-		     caseAVerif .getAUnSommet()                                          && // Vérification sommet présent (Correction : getAUnSommet())
-			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())           && // a un voisin à une extrémité du virus
-			 !caseAVerif.getSommet().getContamine()                              && // Le sommet n'est pas encore contaminé
-			 (carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ||
-			  carteTire.getSymbole().equals("Epidemie"))) // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
-		{
-			virusActuel.ajouterSommetContamine(caseAVerif.getSommet());
-			caseAVerif.getSommet().setContamine(true);
-			return true;
-		}
-		
-		return false;
+
+		if (carteTire == null)
+			return false;
+
+		if (!caseAVerif.getAUnSommet())
+			return false;
+
+		// Le sommet est déjà dans le chemin du virus : interdit (inclut le sommet de départ)
+		if (virusActuel.getConquis().contains(caseAVerif.getSommet()))
+			return false;
+
+		// La carte doit correspondre au symbole
+		if (!carteTire.getSymbole().equals(caseAVerif.getSommet().getSymbole()) &&
+			!carteTire.getSymbole().equals("Epidemie"))
+			return false;
+
+		// Le sommet doit être voisin direct de l'extrémité sélectionnée dans le contrôleur
+		// On délègue cette vérification au virus via le chemin contaminé
+		if (!virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet()))
+			return false;
+
+		virusActuel.ajouterSommetContamine(caseAVerif.getSommet());
+		caseAVerif.getSommet().setContamine(true);
+		return true;
 	}
 	
 	public void preparerNouvelleManche()

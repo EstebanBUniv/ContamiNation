@@ -1,26 +1,14 @@
 package ContamiNation_Jouer;
 
 import ContamiNation_Jouer.IHM.*;
-
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import ContamiNation_Jouer.Metier.*;
 
+import javax.swing.JPanel;
 
 import java.awt.Color;
 import java.io.File;
-import java.io.FileInputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
-
-/* 
-SAE 2.01 | Développement d'une application 
-* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
-* Groupe   : 3
-*/
 
 public class Controleur
 {
@@ -28,20 +16,21 @@ public class Controleur
 	/*  Attributs de la classe    */
 	/*----------------------------*/
 
-	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134); // couleur de fond
-	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230); // couleur de texte
+	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134);
+	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230);
 
 	private JPanel[][]          tabPanel;
 	private FrameJeu            frame;
 	private Plateau             plateau;
 	private Pioche              pioche;
-  private FrameChoixCarte     frameChoixCarte;
-  private Map<Integer, Color> couleursZones = new HashMap<>();
+	private FrameChoixCarte     frameChoixCarte;
+	private Map<Integer, Color> couleursZones    = new HashMap<>();
 	private int                 r;
 	private int                 g;
 	private int                 b;
-  
-  private boolean             modeDebiche = false;
+	private boolean             estClique        = false;
+	private boolean             modeDebiche      = false;
+	private Case                caseSelectionnee = null;
 
 
 	/*----------------------------*/
@@ -53,35 +42,65 @@ public class Controleur
 		this.frame = new FrameJeu(this);
 	}
 
+
 	/*----------------------------*/
 	/*  Getters                   */
 	/*----------------------------*/
 
-	public Plateau getPlateau()
-	{
-		return this.plateau;
-	}
+	public Plateau getPlateau()          { return this.plateau;          }
+	public boolean getModeDebiche()      { return this.modeDebiche;      }
+	public Case    getCaseSelectionnee() { return this.caseSelectionnee; }
 
 	public int getTailleCase()
 	{
 		return this.frame.getPanelPlateau().getTailleCase();
 	}
 
-	/*----------------------------*/
-	/*  Méthodes                  */
-	/*----------------------------*/
+	public int getLig() { return this.plateau.getLig(); }
+	public int getCol() { return this.plateau.getCol(); }
 
-	// Retourne le nombre de lignes du plateau actuel.
-	public int getLig() { return plateau.getLig() ; }
-	
-	// Retourne le nombre de colonnes du plateau actuel.
-	public int getCol() { return plateau.getCol() ; }
-
-	// Retourne l'objet métier Case situé aux coordonnées spécifiées.
 	public Case getCase(int lig, int col)
 	{
 		return this.plateau.getCase(lig, col);
 	}
+
+	public JPanel getPanel(int lig, int col)
+	{
+		this.tabPanel = this.frame.getTabPanel();
+		return this.tabPanel[lig][col];
+	}
+
+	public Virus getVirus(int index)
+	{
+		return this.plateau.getVirus(index);
+	}
+
+	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
+
+	public Color getCouleurZone(int numZone)
+	{
+		if (numZone == 0) return Color.WHITE;
+
+		if (!this.couleursZones.containsKey(numZone))
+		{
+			this.r = (this.r + 67)  % 256;
+			this.g = (this.g + 113) % 256;
+			this.b = (this.b + 193) % 256;
+			this.couleursZones.put(numZone, new Color(this.r, this.g, this.b));
+		}
+		return this.couleursZones.get(numZone);
+	}
+
+	public Carte   tirerCarte(int indice) { return this.pioche.tirerCarte(indice); }
+	public Carte   premiereCarte()        { return this.pioche.premiereCarte();     }
+	public boolean verifFinManche()       { return this.pioche.verifFinManche();    }
+	public Carte   getCarte(int indice)   { return this.pioche.getCarte(indice);    }
+	public int     getTaillePioche()      { return this.pioche.getTaillePioche();   }
+
+
+	/*----------------------------*/
+	/*  Méthodes                  */
+	/*----------------------------*/
 
 	public void chargerNiveau(File fichier)
 	{
@@ -91,37 +110,6 @@ public class Controleur
 			this.appelerChoixCarte();
 	}
 
-	public JPanel getPanel(int lig, int col)
-	{
-		this.tabPanel = this.frame.getTabPanel();
-
-		return this.tabPanel[lig][col];
-	}
-
-	public Virus getVirus(int index)
-	{
-		return this.plateau.getVirus(index);
-	}
-  
-  // Retourne la structure de données associant chaque identifiant de zone à sa couleur.
-	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
-	
-	// Génère ou récupère la couleur unique associée à un numéro de zone spécifique.
-	public Color getCouleurZone(int numZone)
-	{
-		if (numZone == 0) return Color.WHITE;
-
-		if (!this.couleursZones.containsKey(numZone))
-		{
-			this.r = (this.r + 67) % 256;
-			this.g = (this.g + 113) % 256;
-			this.b = (this.b + 193) % 256;
-			this.couleursZones.put(numZone, new Color(this.r, this.g, this.b));
-		}
-		return this.couleursZones.get(numZone);
-	}
-
-	// Réinitialise le générateur pseudo-aléatoire servant à colorier les zones à l'écran.
 	public void resetCouleurs()
 	{
 		this.couleursZones.clear();
@@ -130,7 +118,7 @@ public class Controleur
 		this.b = 0;
 	}
 
-	public void initierPioche ()
+	public void initierPioche()
 	{
 		this.pioche = new Pioche();
 	}
@@ -138,23 +126,6 @@ public class Controleur
 	public void melangerPioche()
 	{
 		this.pioche.melanger();
-	}
-
-
-	public Carte tirerCarte(int indice)
-	{
-		return this.pioche.tirerCarte(indice);
-	}
-
-	public Carte premiereCarte()
-	{
-		return this.pioche.premiereCarte();
-	}
-
-
-	public boolean verifFinManche()
-	{
-		return this.pioche.verifFinManche();
 	}
 
 	public void nouvelleManche()
@@ -165,27 +136,77 @@ public class Controleur
 			initierPioche();
 			melangerPioche();
 			this.frame.reinitierPanelPioche();
-			if (this.frame != null) 
-			{
+
+			if (this.frame != null)
 				this.frame.repaint();
-			}
 		}
-		
 		else
+		{
 			System.out.println("Fin de tout le jeu");
+		}
 	}
-	
+
 	public void verifSommet(Case caseAVerif)
 	{
-		if (this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire()))
-			this.frame.reinitierPanelPioche();
-		//croise pas un autre chemin
-		//commence par une extremité
-		//pas déjà relié a un sommet contaminé
-		//avoir la bonne carte
+		if (this.estClique)
+		{
+			if (this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire()))
+			{
+				// Clic valide : on valide le déplacement
+				this.frame.reinitierPanelPioche();
+				this.estClique        = false;
+				this.caseSelectionnee = null;
+			}
+			else
+			{
+				// Clic invalide : on désélectionne
+				this.estClique        = false;
+				this.caseSelectionnee = null;
+			}
+		}
+		else
+		{
+			Virus virusActu = this.plateau.getVirusActif();
+
+			if (virusActu.estExtremite(caseAVerif.getSommet()))
+			{
+				this.estClique        = true;
+				this.caseSelectionnee = caseAVerif;
+				this.frame.SommetClique(this.estClique, caseAVerif);
+			}
+		}
+
 		this.frame.repaint();
 	}
 
+	// Vérifie si une case est un voisin atteignable selon les règles métier
+	public boolean estVoisinAtteignable(Case caseAVerif)
+	{
+		if (this.caseSelectionnee == null || caseAVerif.getSommet() == null)
+			return false;
+
+		// Le sommet est déjà dans le chemin du virus : interdit (inclut le sommet de départ)
+		if (this.plateau.getVirusActif().getConquis().contains(caseAVerif.getSommet()))
+			return false;
+
+		// La carte tirée ne correspond pas au symbole : interdit
+		Carte carteTiree = this.pioche.getCarteTire();
+		if (carteTiree == null)
+			return false;
+
+		if (!carteTiree.getSymbole().equals(caseAVerif.getSommet().getSymbole()) &&
+			!carteTiree.getSymbole().equals("Epidemie"))
+			return false;
+
+		// On vérifie uniquement les voisins du sommet sélectionné
+		Sommet sommetSelectionne = this.caseSelectionnee.getSommet();
+		for (Sommet voisin : sommetSelectionne.getLstVoisin())
+		{
+			if (voisin == caseAVerif.getSommet())
+				return true;
+		}
+		return false;
+	}
 
 	public void setModeDebiche()
 	{
@@ -197,23 +218,8 @@ public class Controleur
 		this.frameChoixCarte = new FrameChoixCarte(this);
 	}
 
-	public Carte getCarte(int indice)
-	{
-		return this.pioche.getCarte(indice);
-	}
-
-	public int getTaillePioche()
-	{
-		return this.pioche.getTaillePioche();
-	}
-
-	public boolean getModeDebiche()
-	{
-		return this.modeDebiche;
-	}
-
-  public static void main (String[] args)
+	public static void main(String[] args)
 	{
 		new Controleur();
 	}
- }
+}

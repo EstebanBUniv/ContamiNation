@@ -77,10 +77,11 @@ public class Virus
 		this.cheminContamine.add(base);
 		// base.setProprietaire(this); // (À décommenter plus tard quand on fera la logique des sommets)
 	}
-	
+
 	public boolean estExtremite(Sommet s)
 	{
-		return s.equals(cheminContamine.getFirst()) || s.equals(cheminContamine.getLast());
+    	if (s == null) return false;
+    	return s.equals(cheminContamine.getFirst()) || s.equals(cheminContamine.getLast());
 	}
 	
 	public void ajouterSommetContamine (Sommet s)
