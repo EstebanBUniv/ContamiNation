@@ -1,34 +1,29 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
-
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
-
-import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.Component;
-import java.awt.Color;
-
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-
-import ContamiNation_Jouer.IHM.FrameJeu;
-import ContamiNation_Jouer.IHM.PanelMenu;
 
 public class PanelNiveau extends JPanel implements ActionListener
 {
+	// Attribut d'instance
 	private JTable      tabNiveau;
 	private JScrollPane scroll;
 
@@ -90,27 +85,9 @@ public class PanelNiveau extends JPanel implements ActionListener
 		this.btnRetour.addActionListener(this);
 	}
 
-	public void actionPerformed(ActionEvent e)
-	{
-		int[] lignes = this.tabNiveau.getSelectedRows();
-
-		if ( e.getSource() == this.btnJouer )
-		{
-			if (lignes.length == 1)
-			{
-				this.ctrl.chargerNiveau(this.fichiersDossier.get(lignes[0]));
-				this.frameMere.afficherPlateau();
-				
-			}
-				
-		}
-
-		if ( e.getSource() == this.btnRetour )
-		{
-			this.frameMere.changerPanel(new PanelMenu(this.ctrl, this.frameMere));
-		}
-	}
-
+	//-------------//
+	//   getters   //
+	//-------------//
 	public String[][] getFichier(String chemin)
 	{
 		File   dossier  = new File(chemin);
@@ -143,6 +120,38 @@ public class PanelNiveau extends JPanel implements ActionListener
 		return tabPlateau;
 	}
 
+	public void actionPerformed(ActionEvent e)
+	{
+		int[] lignes = this.tabNiveau.getSelectedRows();
+
+		if ( e.getSource() == this.btnJouer )
+		{
+			if (lignes.length == 1)
+			{
+				this.ctrl.chargerNiveau(this.fichiersDossier.get(lignes[0]));
+				this.frameMere.afficherPlateau();
+				
+			}
+				
+		}
+
+		if ( e.getSource() == this.btnRetour )
+		{
+			this.frameMere.changerPanel(new PanelMenu(this.ctrl, this.frameMere));
+		}
+	}
+
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+
+		Graphics g2 = (Graphics2D) g;
+		
+		// Ajout de l'image du fond
+		if ( imgFond != null )
+			g2.drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
+	}
+
 	private DefaultTableCellRenderer creerRenderer()
 	{
 		return new DefaultTableCellRenderer()
@@ -163,16 +172,5 @@ public class PanelNiveau extends JPanel implements ActionListener
 				return this;
 			}
 		};
-	}
-
-	public void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-
-		Graphics g2 = (Graphics2D) g;
-		
-		// Ajout de l'image du fond
-		if ( imgFond != null )
-			g2.drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
 	}
 }

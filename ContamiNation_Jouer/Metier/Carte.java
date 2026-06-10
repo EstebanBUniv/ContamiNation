@@ -2,6 +2,10 @@ package ContamiNation_Jouer.Metier;
 
 public class Carte
 {
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private String symbole;
 	private boolean estClair;
 	
@@ -11,6 +15,9 @@ public class Carte
 		this.estClair = estClair;
 	}
 	
+	//------------//
+	//   getters  //
+	//------------//
 	public boolean getEstClair () { return this.estClair; }
 	public String  getSymbole  () { return this.symbole ; }
 	
