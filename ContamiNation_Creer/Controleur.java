@@ -46,10 +46,12 @@ public class Controleur
 	/*----------------------------*/
 	
 	// Retourne le nombre de lignes du plateau actuel.
-	public int getLig() { return plateau.getLig() ; }
+	public int getLig()     { return plateau.getLig() ; }
 	
 	// Retourne le nombre de colonnes du plateau actuel.
-	public int getCol() { return plateau.getCol() ; }
+	public int getCol()     { return plateau.getCol() ; }
+
+	public Color getVirus(int id) { return Virus.getCouleur(id) ;}
 	
 	// Récupère l'instance du bouton graphique correspondant aux coordonnées.
 	public JButton getButton(int lig, int col)

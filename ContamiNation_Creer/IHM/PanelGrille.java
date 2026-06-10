@@ -2,8 +2,6 @@ package ContamiNation_Creer.IHM;
 
 import ContamiNation_Creer.Controleur;
 
-import ContamiNation_Creer.Metier.Sommet;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
