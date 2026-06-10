@@ -236,15 +236,15 @@ public class Plateau
 	public boolean estDiagonaleCroisee(Sommet s1, Sommet s2) {
 		if (s1 == null || s2 == null) return false;
 
-		int dx = s2.getCol() - s1.getCol();
-		int dy = s2.getLig() - s1.getLig();
+		int dx = s2.getColSommet() - s1.getColSommet();
+		int dy = s2.getLigSommet() - s1.getLigSommet();
 
 		if (Math.abs(dx) != 1 || Math.abs(dy) != 1) return false;
 
-		int ligA = s1.getLig();
-		int colA = s2.getCol();
-		int ligB = s2.getLig();
-		int colB = s1.getCol();
+		int ligA = s1.getLigSommet();
+		int colA = s2.getColSommet();
+		int ligB = s2.getLigSommet();
+		int colB = s1.getColSommet();
 
 		if (ligA < 0 || ligA >= this.lig || colA < 0 || colA >= this.col) return false;
 		if (ligB < 0 || ligB >= this.lig || colB < 0 || colB >= this.col) return false;
