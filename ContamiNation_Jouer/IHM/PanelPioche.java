@@ -5,10 +5,12 @@ import java.awt.GridLayout;
 import java.awt.event.*;
 import javax.swing.ImageIcon;
 import java.awt.Image;
+import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import ContamiNation_Jouer.Controleur;
 
@@ -18,8 +20,7 @@ public class PanelPioche extends JPanel implements ActionListener
 
 
 	private JButton btnPasser;
-	private JButton btnCartePiocher; // afficher les cartes déjà piocher
-	private JButton btnPiocher;
+	private JLabel lblPioche;
 
 	private JLabel   lblCarteActive;
 	private JLabel   lblManche;
@@ -38,6 +39,7 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.ctrl.initierPioche();
 		
 		JPanel panelGauche;
+		
 		//-------------------------//
 		// création des composants //
 		//-------------------------//
@@ -45,25 +47,31 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.defausse        = new JLabel[12];
 		this.numTour         = 0;
 		
+		JScrollPane scrollDefausse = new JScrollPane(this.panelDefausse);
+		scrollDefausse.setPreferredSize(new Dimension(0, 100)); 
+		scrollDefausse.setVerticalScrollBarPolicy(javax.swing.JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+		scrollDefausse.setHorizontalScrollBarPolicy(javax.swing.JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		// On enlève les bordures moches du scroll par défaut
+		scrollDefausse.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		
 		panelGauche          = new JPanel ();
 
 		panelGauche.setLayout(new GridLayout(3,1));
 		
-		ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.tirerCarte(0) + ".png");
-		Image img50            = iconOriginal.getImage().getScaledInstance(50, 100, Image.SCALE_SMOOTH);
+		ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
+		Image img50            = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
 		ImageIcon icon50       = new ImageIcon(img50);
 		
 
-		this.btnPiocher      = new JButton(icon50);
-		this.btnPasser        = new JButton();
-		this.btnCartePiocher  = new JButton();
+		this.lblPioche      = new JLabel(icon50);
+		this.btnPasser        = new JButton( "Passer");
 
-		
-		this.btnPiocher.setOpaque           (false);
-		this.btnPiocher.setContentAreaFilled(false);
-		this.btnPiocher.setBorderPainted    (false);
-		this.btnPiocher.setFocusPainted     (false);
-
+		/*
+		this.lblPioche.setOpaque           (false);
+		this.lblPioche.setContentAreaFilled(false);
+		this.lblPioche.setBorderPainted    (false);
+		this.lblPioche.setFocusPainted     (false);
+		*/
 		this.cptManche = 1;
 
 		this.lblCarteActive  = new JLabel( "Carte active");
@@ -74,23 +82,12 @@ public class PanelPioche extends JPanel implements ActionListener
 		//-------------------------------//
 		// positionnement des composants //
 		//-------------------------------//
-
-
-
-		panelGauche.add(this.btnCartePiocher                   );
-		panelGauche.add(this.lblCarteActive                    );
-		panelGauche.add(this.btnPiocher                        );
-	
-		this       .add(this.lblManche  ,BorderLayout.NORTH    );
-		this       .add(panelGauche     ,BorderLayout.WEST     );
-
 		
-		panelGauche.add(this.btnCartePiocher                          );
 		panelGauche.add(this.lblCarteActive                           );
-		panelGauche.add(this.btnPiocher                               );
+		panelGauche.add(this.lblPioche                               );
+		panelGauche.add(this.btnPasser);
 		
-		this       .add(this.btnPasser       , BorderLayout.EAST      );
-		this       .add(this.panelDefausse   , BorderLayout.SOUTH     );
+		this       .add(scrollDefausse   , BorderLayout.SOUTH     );
 		this       .add(this.lblManche       ,BorderLayout.NORTH      );
 		this       .add(panelGauche          ,BorderLayout.WEST       );
 
@@ -99,22 +96,18 @@ public class PanelPioche extends JPanel implements ActionListener
 		/* Activation des composants      */
 		/* ------------------------------ */
         
-		this.btnCartePiocher.addActionListener(this);
-		this.btnPiocher     .addActionListener(this);
+		this.btnPasser.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
 		
-
-		if(e.getSource() == btnCartePiocher) {}
-
-		if(e.getSource() == btnPiocher)
+		if(e.getSource() == this.btnPasser)
 		{
 			if (!this.ctrl.verifFinManche())
 			{
 				ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.tirerCarte(0) + ".png");
-				Image img50 = iconOriginal.getImage().getScaledInstance(50, 100, Image.SCALE_SMOOTH);
+				Image img50 = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
 				ImageIcon icon50 = new ImageIcon(img50);
 				
 				this.defausse[this.numTour] = new JLabel(icon50);
@@ -124,12 +117,12 @@ public class PanelPioche extends JPanel implements ActionListener
 				if (!this.ctrl.verifFinManche()) 
 				{
 					ImageIcon iconOriginalPremiere = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
-					Image img60 = iconOriginalPremiere.getImage().getScaledInstance(50, 100, Image.SCALE_SMOOTH);
-					this.btnPiocher.setIcon(new ImageIcon(img60));
+					Image img60 = iconOriginalPremiere.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
+					this.lblPioche.setIcon(new ImageIcon(img60));
 				}
 				else
 				{
-					this.btnPiocher.setIcon(null); 
+					this.lblPioche.setIcon(null); 
 				}
 
 				this.panelDefausse.revalidate();
