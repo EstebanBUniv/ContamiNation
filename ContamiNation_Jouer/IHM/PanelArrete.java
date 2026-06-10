@@ -24,7 +24,6 @@ public class PanelArrete extends JPanel
 	// Attribut d'instance
 	private Controleur ctrl;
 	private int        marge;
-
 	public PanelArrete(Controleur ctrl)
 	{
 		this.ctrl            = ctrl;
@@ -85,6 +84,7 @@ public class PanelArrete extends JPanel
 				}
 			}
 		}
+
 		for (int i = 0; i < ctrl.getPlateau().getNbVirus(); i++)
 		{
 			Virus v = ctrl.getVirus(i);
@@ -97,20 +97,12 @@ public class PanelArrete extends JPanel
 					Sommet s1 = chemin.get(c);
 					Sommet s2 = chemin.get(c + 1);
 
-					this.cleArrete = creerCle(s1, s2);
-
-					if (arretesColorees.contains(cleArrete)) 
-           			{
-                		continue; // Oui ! On passe au sommet suivant sans dessiner
-            		}
-            
-            		// Si elle est libre, on la note comme "colorée" pour les prochains
-            		arretesColorees.add(cleArrete);
+		
 					g2d.setColor(v.getCouleur());
-					
+						
 					JPanel panel1 = ctrl.getPanel(s1.getLigSommet(), s1.getColSommet());
 					JPanel panel2 = ctrl.getPanel(s2.getLigSommet(), s2.getColSommet());
-
+						
 					Point p1 = SwingUtilities.convertPoint(panel1.getParent(), panel1.getX() + panel1.getWidth() / 2, panel1.getY() + panel1.getHeight() / 2, this);
 					Point p2 = SwingUtilities.convertPoint(panel2.getParent(), panel2.getX() + panel2.getWidth() / 2, panel2.getY() + panel2.getHeight() / 2, this);
 
