@@ -8,6 +8,10 @@ import java.util.List;
 
 public class Plateau
 {
+	/*----------------------------*/
+	/* Attributs de la classe    */
+	/*----------------------------*/
+	
 	private Controleur  ctrl;
 	private int         col;
 	private int         lig;
@@ -25,8 +29,6 @@ public class Plateau
 	{
 		if ( col <= 0 || lig <= 0 || nbVirus <=0) return null;
 		return new Plateau(lig, col, nbVirus, nom, ctrl);
-
-		
 	}
 
 	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl)
@@ -50,20 +52,22 @@ public class Plateau
 		
 		if (this.modeDebiche)
 			this.ctrl.appelerChoixCarte();
-
 	}
 
 	/*----------------------------*/
 	/* Getters                    */
 	/*----------------------------*/
 
-	public int    getLig()                   { return this.lig                ; }
-	public int    getCol()                   { return this.col                ; }
-	public int    getNbVirus()               { return this.nbVirus            ; }
-	public String getNom()                   { return this.nom                ; }
-	public File   getFichierSource()         { return this.fichierSource      ; }
-	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col] ; }
-	public Virus  getVirus(int index)        { return this.lstVirus.get(index); }
+	public int    getLig()                   { return this.lig                               ; }
+	public int    getCol()                   { return this.col                               ; }
+	public int    getNbVirus()               { return this.nbVirus                           ; }
+	public String getNom()                   { return this.nom                               ; }
+	public File   getFichierSource()         { return this.fichierSource                     ; }
+	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col]                ; }
+	public Virus  getVirus(int index)        { return this.lstVirus.get(index)               ; }
+	public Virus  getVirusActif()            { return this.lstVirus.get(this.numManche - 1); }
+	public int    getPointTotal()            { return this.pointTotal         ; }
+	public int    getNumManche ()            { return this.numManche          ; }
 
 	public int getNumero() 
 	{
@@ -129,7 +133,6 @@ public class Plateau
 	}
 
 	//indique les 8 directions et ajoute les voisins de chaques sommets
-
 	private void chercherVoisins(int lig, int col, Sommet sommetCourant)
 	{
 		int[][] directions = {
@@ -210,11 +213,11 @@ public class Plateau
 		return scoreFinal;
 	}
 	
-	public boolean verifSommet(Case caseAVerif, Carte carteTire)
+	public boolean verifSommet(Case caseAVerif, Carte carteTire, int choixForce)
 	{
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 
-		Sommet nouveauSommet = caseAVerif.getSommet();
+  Sommet nouveauSommet = caseAVerif.getSommet();
 
 		boolean diagonaleInterdite = false;
 		if (virusActuel != null && !virusActuel.getConquis().isEmpty() && nouveauSommet != null) 
@@ -234,21 +237,32 @@ public class Plateau
 				}
 			}
 		}
+		// Sécurité de base
+		if (carteTire == null || !caseAVerif.getAUnSommet())
+			return false;
+
+		Sommet s = caseAVerif.getSommet();
+
+		// Le sommet est déjà contaminé (appartient au virus actuel ou base d'un autre) : interdit
+		if (s.getContamine())
+			return false;
+
+		// La carte doit correspondre au symbole ou être la carte joker Epidemie
+		if (!carteTire.getSymbole().equals(s.getSymbole()) && !carteTire.getSymbole().equals("Epidemie"))
+			return false;
+
+		// Le sommet doit être voisin direct de l'extrémité sélectionnée
+		if (!virusActuel.estVoisinDeLExtremite(s))
+			return false;
+    
+    if ( !diagonaleInterdite)
+      return false;
+
+		// Validation finale : ajout au chemin avec gestion de la boucle (choixForce)
+		virusActuel.ajouterSommetContamine(s, choixForce);
+		s.setContamine(true);
 		
-		if ( carteTire != null &&
-		     caseAVerif .getAUnSommet()                                          && // Vérification sommet présent (Correction : getAUnSommet())
-			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())           && // a un voisin à une extrémité du virus
-			 !caseAVerif.getSommet().getContamine()                              && // Le sommet n'est pas encore contaminé
-			 (carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ||
-			  carteTire.getSymbole().equals("epidemie"))                && // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
-			  !diagonaleInterdite)
-		{
-			virusActuel.ajouterSommetContamine(caseAVerif.getSommet());
-			caseAVerif.getSommet().setContamine(true);
-			return true;
-		}
-		
-		return false;
+		return true;
 	}
 
 	public boolean estDiagonaleCroisee(Sommet s1, Sommet s2)
@@ -305,6 +319,7 @@ public class Plateau
 	
 	public void preparerNouvelleManche()
 	{
+		// 1. On remet tous les sommets du plateau à l'état sain
 		for (int l = 0; l < this.lig; l++)
 		{
 			for (int c = 0; c < this.col; c++)
@@ -315,6 +330,36 @@ public class Plateau
 				}
 			}
 		}
-	}
 
+		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		
+		// 2. On reverrouille le chemin du virus ACTUEL pour ne pas qu'il se marche dessus
+		for (Sommet s : virusActuel.getConquis()) 
+		{
+			s.setContamine(true);
+		}
+
+		// 3. On reverrouille les BASES des anciens virus pour empêcher le vol de départ
+		for (Virus v : this.lstVirus)
+		{
+			if (v != virusActuel && !v.getConquis().isEmpty())
+			{
+				v.getConquis().getFirst().setContamine(true);
+			}
+		}
+	}
+	
+	public boolean estCoupValide(Case caseAVerif, Carte carteTire)
+	{
+		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		
+		if (carteTire == null || !caseAVerif.getAUnSommet()) return false;
+		
+		Sommet s = caseAVerif.getSommet();
+		
+		return virusActuel.estVoisinDeLExtremite(s) && 
+			   !s.getContamine()                    && 
+			   (carteTire.getSymbole().equals(s.getSymbole()) ||
+			  carteTire.getSymbole().equals("Epidemie"));
+	}
 }

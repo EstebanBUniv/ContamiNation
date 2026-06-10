@@ -75,32 +75,42 @@ public class Virus
 	public void setBaseDepart(Sommet base)
 	{
 		this.cheminContamine.add(base);
-		// base.setProprietaire(this); // (À décommenter plus tard quand on fera la logique des sommets)
+		base.setProprietaire(this); // (À décommenter plus tard quand on fera la logique des sommets)
 	}
-	
+
 	public boolean estExtremite(Sommet s)
 	{
-		return s.equals(cheminContamine.getFirst()) || s.equals(cheminContamine.getLast());
+    	if (s == null) return false;
+    	return s.equals(cheminContamine.getFirst()) || s.equals(cheminContamine.getLast());
 	}
 	
-	public void ajouterSommetContamine (Sommet s)
+	public boolean toucheTete(Sommet s)
 	{
-		int extremite = 0;
-		for (Sommet voisin : s.getLstVoisin())
+		for (Sommet voisin : s.getLstVoisin()) 
+			if (voisin != null && voisin == this.cheminContamine.getFirst()) return true;
+		return false;
+	}
+
+	public boolean toucheQueue(Sommet s)
+	{
+		for (Sommet voisin : s.getLstVoisin()) 
+			if (voisin != null && voisin == this.cheminContamine.getLast()) return true;
+		return false;
+	}
+
+	public void ajouterSommetContamine(Sommet s, int choixForce)
+	{
+		if (s == null) return;
+
+		if (choixForce == 1)      this.cheminContamine.addFirst(s);
+		else if (choixForce == 2) this.cheminContamine.addLast(s);
+		else 
 		{
-			if (voisin != null)
-			{
-				if (voisin == this.cheminContamine.getFirst()) 
-					extremite = 1;
-				if (voisin == this.cheminContamine.getLast ()) 
-					extremite = 2;
-			}
+			// Cas normal sans conflit
+			if (this.cheminContamine.size() <= 1) this.cheminContamine.addLast(s);
+			else if (toucheTete(s))               this.cheminContamine.addFirst(s);
+			else                                  this.cheminContamine.addLast(s);
 		}
-		
-		if (extremite == 1)
-			this.cheminContamine.addFirst(s);
-		if (extremite == 2)
-			this.cheminContamine.addLast(s);
 	}
 	
 	public boolean estVoisinDeLExtremite(Sommet sommetClique)
@@ -119,6 +129,11 @@ public class Virus
 			}
 		}
 		return false;
+	}
+	
+	public int getTailleChemin() 
+	{ 
+		return this.cheminContamine.size(); 
 	}
 
 	public String toString()

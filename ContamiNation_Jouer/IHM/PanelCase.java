@@ -1,58 +1,54 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
-import ContamiNation_Jouer.IHM.FrameJeu;
-import ContamiNation_Jouer.Controleur;
 import ContamiNation_Jouer.Metier.Case;
 
-import java.awt.Image;
+import java.awt.AlphaComposite;
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
 
-import java.awt.event.*;
-import java.awt.BorderLayout;
-import java.awt.AlphaComposite;
-
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-
 public class PanelCase extends JPanel implements ComponentListener, ActionListener
 {
 	private Controleur ctrl;
-
 	private Case       casePlateau;
 	
 	private JButton    btnCase;
-
 	private Image      imgSymbole;
 	private Image      imgFond;
+	private Image      imgBase;
 	private Graphics2D g2;
-	
+
 	public PanelCase(Case casePlateau, Controleur ctrl)
 	{
-		this.ctrl = ctrl;
+		this.ctrl        = ctrl;
+		this.casePlateau = casePlateau;
+
 		this.setLayout(new BorderLayout());
 		this.setBorder(null);
-		this.ctrl = ctrl;
-		
-		this.casePlateau = casePlateau;
-		this.imgFond     = getToolkit().getImage("../images/fond/fond_case.png");
 
+		this.imgFond = getToolkit().getImage("../images/fond/fond_case.png");
+		this.imgBase = getToolkit().getImage("../images/fond/base.png");
 
 		if (this.casePlateau.getSommet() != null)
 		{
 			this.btnCase = new JButton();
-
-			String symbole = this.casePlateau.getSommet().getSymbole();
-
+			String symbole  = this.casePlateau.getSommet().getSymbole();
 			this.imgSymbole = getToolkit().getImage("../images/symboles/symbole_" + symbole + ".png");
-			Image img        = imgSymbole.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-			btnCase.setIcon(new ImageIcon(img));
+
+			Image img = imgSymbole.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			this.btnCase.setIcon(new ImageIcon(img));
 		}
 		else
 		{
@@ -64,33 +60,59 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.btnCase.setBorderPainted(false);
 		this.btnCase.setFocusPainted(false);
 
-		this.casePlateau = casePlateau;
-
 		this.add(this.btnCase, BorderLayout.CENTER);
-
-
 		this.addComponentListener(this);
-    this.btnCase.addActionListener(this);
+		this.btnCase.addActionListener(this);
 	}
 
 	public int getTailleCase()
 	{
 		return Math.max(this.getWidth(), this.getHeight());
 	}
-	
+
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
-
 		this.g2 = (Graphics2D) g.create();
 
-		this.g2.setColor(ctrl.getCouleurZone(this.casePlateau.getZone()));
+		// 1. Dessin de la couleur de zone
+		this.g2.setColor(this.ctrl.getCouleurZone(this.casePlateau.getZone()));
 		this.g2.fillRect(0, 0, getWidth(), getHeight());
 
+		// 2. Image de fond texturée
 		if (this.imgFond != null)
 		{
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
 			this.g2.drawImage(this.imgFond, 0, 0, getWidth(), getHeight(), this);
+			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+		}
+
+		// 3. RESTAURATION DES SURBRILLANCES DE GRÉGORY
+		Case caseSelectionnee = ctrl.getCaseSelectionnee();
+
+		if (caseSelectionnee != null && this.casePlateau.getSommet() != null)
+		{
+			if (this.casePlateau == caseSelectionnee)
+			{
+				// Premier clic : la case sélectionnée s'allume en Jaune
+				this.g2.setColor(new Color(255, 200, 0, 150));
+				this.g2.fillRect(0, 0, getWidth(), getHeight());
+			}
+			else if (ctrl.estVoisinAtteignable(this.casePlateau))
+			{
+				// Les chemins cibles légaux s'allument en Vert
+				this.g2.setColor(new Color(0, 220, 80, 120));
+				this.g2.fillRect(0, 0, getWidth(), getHeight());
+			}
+		}
+
+		// 4. Dessin de la base du virus colorée
+		if (this.casePlateau.getSommet() != null && this.casePlateau.getSommet().getEstBase() > 0)
+		{
+			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+			Image baseTeintee = this.teinteImage(this.imgBase, getWidth(), getHeight(),
+								this.casePlateau.getSommet().getVirus().getCouleur());
+			this.g2.drawImage(baseTeintee, 0, 0, getWidth(), getHeight(), this);
 		}
 
 		this.g2.dispose();
@@ -98,27 +120,39 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 
 	public void componentResized(ComponentEvent e)
 	{
-		if ( this.imgSymbole != null )
+		if (this.imgSymbole != null)
 		{
-			int taille = (int)(this.getTailleCase() * 0.3); 
-			
-			Image img = imgSymbole.getScaledInstance(taille, taille, Image.SCALE_SMOOTH);
+			int   taille = (int)(this.getTailleCase() * 0.3);
+			Image img    = this.imgSymbole.getScaledInstance(taille, taille, Image.SCALE_SMOOTH);
 			this.btnCase.setIcon(new ImageIcon(img));
-
 			this.revalidate();
 			this.repaint();
 		}
-		
 	}
 
 	public void componentHidden(ComponentEvent e) {}
 	public void componentShown (ComponentEvent e) {}
 	public void componentMoved (ComponentEvent e) {}
 
-	
-	public void actionPerformed (ActionEvent e)
+	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == this.btnCase)
+		{
 			this.ctrl.verifSommet(this.casePlateau);
+		}
+	}
+
+	private Image teinteImage(Image img, int w, int h, Color couleur)
+	{
+		BufferedImage imgRet = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D    g2     = imgRet.createGraphics();
+
+		g2.drawImage(img, 0, 0, w, h, null);
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1f));
+		g2.setColor(couleur);
+		g2.fillRect(0, 0, w, h);
+
+		g2.dispose();
+		return imgRet;
 	}
 }

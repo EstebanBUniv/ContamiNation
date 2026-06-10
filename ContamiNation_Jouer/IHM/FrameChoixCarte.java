@@ -1,13 +1,11 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
-
-import java.awt.event.*;
-
 import javax.swing.*;
 
 public class FrameChoixCarte extends JFrame
 {
+	// Attribut d'instance
 	private Controleur           ctrl;
 	private ImageIcon[]          pioche;
 
