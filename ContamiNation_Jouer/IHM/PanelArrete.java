@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 
-public class PanelArrete extends JPanel implements ComponentListener
+public class PanelArrete extends JPanel
 {
 	// Attribut d'instance
 	private Controleur ctrl;
@@ -47,9 +47,8 @@ public class PanelArrete extends JPanel implements ComponentListener
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setStroke(new BasicStroke(3.0f)); // choix de la taille des traits
-		// int marge = 30;
 		// 1. ON DESSINE LE RÉSEAU DE BASE (TOUT EN NOIR)
-		this.marge = (int)(this.ctrl.getTailleCase() * 0.1);
+		this.marge = (int)(this.ctrl.getTailleCase() * 0.2);
 		for (int lig = 0; lig < ctrl.getLig(); lig++)
 		{
 			for (int col = 0; col < ctrl.getCol(); col++)
@@ -68,10 +67,10 @@ public class PanelArrete extends JPanel implements ComponentListener
 							Point p1 = SwingUtilities.convertPoint(panel1.getParent(), panel1.getX() + panel1.getWidth() / 2, panel1.getY() + panel1.getHeight() / 2, this);
 							Point p2 = SwingUtilities.convertPoint(panel2.getParent(), panel2.getX() + panel2.getWidth() / 2, panel2.getY() + panel2.getHeight() / 2, this);
 
-							if (p1.distance(p2) > marge * 2) {
+							if (p1.distance(p2) > this.marge * 2) {
 								double dirX = (p2.x - p1.x) / p1.distance(p2);
 								double dirY = (p2.y - p1.y) / p1.distance(p2);
-								g2d.drawLine((int)(p1.x + dirX * marge), (int)(p1.y + dirY * marge), (int)(p2.x - dirX * marge), (int)(p2.y - dirY * marge));
+								g2d.drawLine((int)(p1.x + dirX * this.marge), (int)(p1.y + dirY * this.marge), (int)(p2.x - dirX * this.marge), (int)(p2.y - dirY * this.marge));
 							}
 						}
 					}
@@ -103,7 +102,7 @@ public class PanelArrete extends JPanel implements ComponentListener
 
 					double dirX = (p2.x - p1.x) / p1.distance(p2);
 					double dirY = (p2.y - p1.y) / p1.distance(p2);
-					g2d.drawLine((int)(p1.x + dirX * marge), (int)(p1.y + dirY * marge), (int)(p2.x - dirX * marge), (int)(p2.y - dirY * marge));
+					g2d.drawLine((int)(p1.x + dirX * this.marge), (int)(p1.y + dirY * this.marge), (int)(p2.x - dirX * this.marge), (int)(p2.y - dirY * this.marge));
 				}
 			}
 		}

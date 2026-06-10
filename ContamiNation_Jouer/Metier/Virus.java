@@ -75,7 +75,7 @@ public class Virus
 	public void setBaseDepart(Sommet base)
 	{
 		this.cheminContamine.add(base);
-		// base.setProprietaire(this); // (À décommenter plus tard quand on fera la logique des sommets)
+		base.setProprietaire(this); // (À décommenter plus tard quand on fera la logique des sommets)
 	}
 	
 	public boolean estExtremite(Sommet s)
