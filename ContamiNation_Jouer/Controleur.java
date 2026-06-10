@@ -102,9 +102,6 @@ public class Controleur
 	{
 		if (caseAVerif == null) return;
 
-	// --- LE SYSTÈME DE JEU À 2 CLICS ---
-	public void verifSommet(Case caseAVerif) {
-
 		int indexManche = this.plateau.getNumManche() - 1;
 		Virus v = this.getVirus(indexManche);
 		Sommet s = caseAVerif.getSommet();
