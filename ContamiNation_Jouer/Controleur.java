@@ -176,7 +176,8 @@ public class Controleur
 	
 	public void verifSommet(Case caseAVerif)
 	{
-		this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire());
+		if (this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire()))
+			this.frame.reinitierPanelPioche();
 		//croise pas un autre chemin
 		//commence par une extremité
 		//pas déjà relié a un sommet contaminé

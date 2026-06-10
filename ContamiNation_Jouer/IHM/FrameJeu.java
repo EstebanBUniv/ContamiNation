@@ -90,4 +90,10 @@ public class FrameJeu extends JFrame
 		return this.panelPlateau.getTabPanel();
 	}
 
+
+	public void reinitierPanelPioche()
+	{
+		this.panelPioche.passerTour();
+	}
+
 }
