@@ -245,42 +245,57 @@ public class Plateau
 		return true;
 	}
 
-	private boolean estCroisementInterdit(Sommet a, Sommet b)
+	public boolean estCroisementInterdit(Sommet s1, Sommet s2)
 	{
-		if (a == null || b == null) return false;
+		int lig1 = s1.getLigSommet();
+		int col1 = s1.getColSommet();
+		int lig2 = s2.getLigSommet();
+		int col2 = s2.getColSommet();
 
-		int l1 = a.getLigSommet();
-		int c1 = a.getColSommet();
-		int l2 = b.getLigSommet();
-		int c2 = b.getColSommet();
-
-		if (Math.abs(l1 - l2) != 1 || Math.abs(c1 - c2) != 1)
-			return false;
-
-		Sommet coin1 = null;
-		Sommet coin2 = null;
-
-		for (int i = 0; i < this.tabCases.length; i++)
-		{
-			for (int j = 0; j < this.tabCases[i].length; j++)
-			{
-				Case ca = this.tabCases[i][j];
-				if (ca == null || ca.getSommet() == null) continue;
-
-				Sommet s = ca.getSommet();
-
-				if (s.getLigSommet() == l1 && s.getColSommet() == c2)
-					coin1 = s;
-
-				if (s.getLigSommet() == l2 && s.getColSommet() == c1)
-					coin2 = s;
-			}
+		// 1. Vérifier si c'est bien un déplacement diagonal (écart en ligne == écart en colonne)
+		if (Math.abs(lig1 - lig2) != Math.abs(col1 - col2) || Math.abs(lig1 - lig2) == 0) {
+			return false; // Ce n'est pas une diagonale ou c'est le même point, aucun risque !
 		}
 
-		if (coin1 == null || coin2 == null) return false;
+		// 2. Identifier le point le plus haut (ligA) et le point le plus bas (ligB)
+		int ligA = Math.min(lig1, lig2);
+		int ligB = Math.max(lig1, lig2);
+		
+		// Associer les bonnes colonnes
+		int colA = (lig1 < lig2) ? col1 : col2;
+		int colB = (lig1 < lig2) ? col2 : col1;
 
-		return this.arreteDejaColoree(coin1, coin2);
+		// 3. Parcourir tous les virus pour voir si l'un d'eux occupe la diagonale adverse
+		for (int i = 0; i < this.lstVirus.size(); i++)
+		{
+			Virus v = this.lstVirus.get(i);
+			if (v != null && v.getConquis().size() > 1)
+			{
+				LinkedList<Sommet> chemin = v.getConquis();
+				
+				// On regarde chaque segment du chemin du virus
+				for (int c = 0; c < chemin.size() - 1; c++)
+				{
+					Sommet v1 = chemin.get(c);
+					Sommet v2 = chemin.get(c + 1);
+
+					// Est-ce que ce segment relie (ligA, colB) et (ligB, colA) ?
+					boolean conditionDirecte = (v1.getLigSommet() == ligA && v1.getColSommet() == colB && 
+												v2.getLigSommet() == ligB && v2.getColSommet() == colA);
+												
+					boolean conditionInverse = (v2.getLigSommet() == ligA && v2.getColSommet() == colB && 
+												v1.getLigSommet() == ligB && v1.getColSommet() == colA);
+
+					if (conditionDirecte || conditionInverse)
+					{
+						return true; // La diagonale adverse est déjà prise ! Croisement interdit.
+					}
+				}
+			}
+		}
+		return false;
 	}
+
 
 	private boolean arreteDejaColoree(Sommet s1, Sommet s2)
 	{
