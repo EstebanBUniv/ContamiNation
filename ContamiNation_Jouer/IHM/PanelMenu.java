@@ -2,17 +2,11 @@ package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.*;
-
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,10 +14,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 public class PanelMenu extends JPanel implements ActionListener
 {
+	// Attribut d'instance
 	private FrameJeu   frameMere;
 	private Controleur ctrl;
 
@@ -112,6 +106,7 @@ public class PanelMenu extends JPanel implements ActionListener
 			this.g2.drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
 	}
 
+	// Méthode qui renvoi un JLabel contenant le titre sous forme d'image
 	private JLabel creerTitre()
 	{
 		ImageIcon icon    = new ImageIcon("../images/Titre.png");

@@ -10,9 +10,11 @@ import javax.swing.JPanel;
 
 import ContamiNation_Jouer.Controleur;
 import ContamiNation_Jouer.Metier.Case;
+import ContamiNation_Jouer.Controleur;
 
 public class FrameJeu extends JFrame
 {
+	// Attribut d'instance
 	private Controleur   ctrl;
 	private JPanel       panel;
 
@@ -49,6 +51,10 @@ public class FrameJeu extends JFrame
 	/*  Getters                   */
 	/*----------------------------*/
 
+
+	//----------------//
+	//    Getters     //
+	//----------------//
 	public PanelPlateau getPanelPlateau()
 	{
 		return this.panelPlateau;
@@ -64,6 +70,11 @@ public class FrameJeu extends JFrame
 	/*  Méthodes                  */
 	/*----------------------------*/
 
+	//---------------//
+	//    Méthodes   //
+	//---------------//
+
+	// Méthode permettant de changer le panel de la frame avec celui rentré en paramètre
 	public void changerPanel(JPanel panel)
 	{
 		this.remove(this.panel);
@@ -73,6 +84,7 @@ public class FrameJeu extends JFrame
 		this.repaint();
 	}
 
+	// Méthode qui permet l'affichage correcte du plateau de jeu
 	public void afficherPlateau()
 	{
 		this.setLayout(new BorderLayout());
@@ -104,9 +116,25 @@ public class FrameJeu extends JFrame
 		this.add(this.panelPioche, BorderLayout.WEST);
 	}
 
+	// Permet de mettre a jour l'affichage de la pioche
 	public void reinitierPanelPioche()
 	{
 		this.panelPioche.passerTour();
+	}
+	
+	public int demanderChoixBoucle()
+	{
+		Object[] options = {"Côté Tête", "Côté Queue"};
+		int reponse = javax.swing.JOptionPane.showOptionDialog(this, 
+				"Votre virus forme une boucle ! De quel côté voulez-vous vous brancher ?", 
+				"Choix de connexion", 
+				javax.swing.JOptionPane.YES_NO_OPTION, 
+				javax.swing.JOptionPane.QUESTION_MESSAGE, 
+				null, options, options[1]);
+				
+		if (reponse == 0) return 1; // 1 = Tête
+		if (reponse == 1) return 2; // 2 = Queue
+		return 0; // Au cas où on ferme la fenêtre sans répondre
 	}
 
 	/*

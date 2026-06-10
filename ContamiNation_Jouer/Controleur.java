@@ -13,7 +13,7 @@ import java.util.Map;
 public class Controleur
 {
 	/*----------------------------*/
-	/*  Attributs de la classe    */
+	/* Attributs de la classe    */
 	/*----------------------------*/
 
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134);
@@ -34,7 +34,7 @@ public class Controleur
 
 
 	/*----------------------------*/
-	/*  Constructeur de la classe */
+	/* Constructeur de la classe */
 	/*----------------------------*/
 
 	public Controleur()
@@ -44,7 +44,7 @@ public class Controleur
 
 
 	/*----------------------------*/
-	/*  Getters                   */
+	/* Getters                   */
 	/*----------------------------*/
 
 	public Plateau getPlateau()          { return this.plateau;          }
@@ -99,7 +99,7 @@ public class Controleur
 
 
 	/*----------------------------*/
-	/*  Méthodes                  */
+	/* Méthodes                  */
 	/*----------------------------*/
 
 	public void chargerNiveau(File fichier)
@@ -142,37 +142,53 @@ public class Controleur
 		}
 		else
 		{
-			System.out.println("Fin de tout le jeu");
+			System.out.println("Fin de tout le jeu " + this.plateau.getPointTotal());
 		}
 	}
 
 	public void verifSommet(Case caseAVerif)
 	{
+		// 1. On récupère dynamiquement le virus de la manche actuelle
+		int indexManche = this.plateau.getNumManche() - 1;
+		Virus v = this.getVirus(indexManche);
+		
+		Sommet s = caseAVerif.getSommet();
+		Carte carteActive = this.pioche.getCarteTire();
+
+		// Deuxième clic : tentative de propagation depuis l'extrémité sélectionnée
 		if (this.estClique)
 		{
-			if (this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire()))
+			// On s'assure d'abord que le coup respecte les règles générales ET qu'il est bien voisin de notre sélection
+			if (this.plateau.estCoupValide(caseAVerif, carteActive) && this.estVoisinAtteignable(caseAVerif))
 			{
-				// Clic valide : on valide le déplacement
-				this.frame.reinitierPanelPioche();
-				this.estClique        = false;
-				this.caseSelectionnee = null;
+				int choixForce = 0;
+
+				// Détection de boucle fermée : pop-up IHM uniquement si le coup est légal
+				if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s))
+				{
+					choixForce = this.frame.demanderChoixBoucle();
+				}
+
+				// Validation finale et ajout au chemin
+				if (this.plateau.verifSommet(caseAVerif, carteActive, choixForce))
+				{
+					this.frame.reinitierPanelPioche();
+				}
 			}
-			else
-			{
-				// Clic invalide : on désélectionne
-				this.estClique        = false;
-				this.caseSelectionnee = null;
-			}
+			
+			// Qu'il y ait eu contamination ou erreur, on libère la sélection après le 2e clic
+			this.estClique = false;
+			this.caseSelectionnee = null;
+			this.frame.SommetClique(this.estClique, null);
 		}
+		// Premier clic : sélection d'une extrémité libre du virus
 		else
 		{
-			Virus virusActu = this.plateau.getVirusActif();
-
-			if (virusActu.estExtremite(caseAVerif.getSommet()))
+			if (s != null && s.getContamine() && v.estExtremite(s))
 			{
-				this.estClique        = true;
+				this.estClique = true;
 				this.caseSelectionnee = caseAVerif;
-				this.frame.SommetClique(this.estClique, caseAVerif);
+				this.frame.SommetClique(this.estClique, caseAVerif); // Met en valeur visuellement
 			}
 		}
 
@@ -185,7 +201,7 @@ public class Controleur
 		if (this.caseSelectionnee == null || caseAVerif.getSommet() == null)
 			return false;
 
-		// Le sommet est déjà dans le chemin du virus : interdit (inclut le sommet de départ)
+		// Le sommet est déjà dans le chemin du virus : interdit
 		if (this.plateau.getVirusActif().getConquis().contains(caseAVerif.getSommet()))
 			return false;
 

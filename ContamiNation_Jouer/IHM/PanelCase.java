@@ -13,24 +13,26 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-
 public class PanelCase extends JPanel implements ComponentListener, ActionListener
 {
+	// Attributs d'instance
 	private Controleur ctrl;
 	private Case       casePlateau;
+	
 	private JButton    btnCase;
 	private Image      imgSymbole;
 	private Image      imgFond;
+	private Image      imgBase;
 	private Graphics2D g2;
 
-
 	/*----------------------------*/
-	/*  Constructeur              */
+	/* Constructeur              */
 	/*----------------------------*/
 
 	public PanelCase(Case casePlateau, Controleur ctrl)
@@ -42,6 +44,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.setBorder(null);
 
 		this.imgFond = getToolkit().getImage("../images/fond/fond_case.png");
+		this.imgBase = getToolkit().getImage("../images/fond/base.png");
 
 		if (this.casePlateau.getSommet() != null)
 		{
@@ -51,7 +54,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 			this.imgSymbole = getToolkit().getImage("../images/symboles/symbole_" + symbole + ".png");
 
 			Image img = imgSymbole.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-			btnCase.setIcon(new ImageIcon(img));
+			this.btnCase.setIcon(new ImageIcon(img));
 		}
 		else
 		{
@@ -68,9 +71,8 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.btnCase.addActionListener(this);
 	}
 
-
 	/*----------------------------*/
-	/*  Méthodes                  */
+	/* Getters                   */
 	/*----------------------------*/
 
 	public int getTailleCase()
@@ -78,16 +80,20 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		return Math.max(this.getWidth(), this.getHeight());
 	}
 
+	/*----------------------------*/
+	/* Méthodes graphiques       */
+	/*----------------------------*/
+
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
 		this.g2 = (Graphics2D) g.create();
 
-		// Couleur de zone de base
-		this.g2.setColor(ctrl.getCouleurZone(this.casePlateau.getZone()));
+		// 1. Couleur de zone de base
+		this.g2.setColor(this.ctrl.getCouleurZone(this.casePlateau.getZone()));
 		this.g2.fillRect(0, 0, getWidth(), getHeight());
 
-		// Image de fond semi-transparente
+		// 2. Image de fond semi-transparente
 		if (this.imgFond != null)
 		{
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
@@ -95,8 +101,8 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		}
 
-		// Surbrillance — la vue interroge le contrôleur, sans logique métier
-		Case caseSelectionnee = ctrl.getCaseSelectionnee();
+		// 3. Surbrillance (Sélection / Voisins)
+		Case caseSelectionnee = this.ctrl.getCaseSelectionnee();
 
 		if (caseSelectionnee != null && this.casePlateau.getSommet() != null)
 		{
@@ -106,7 +112,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 				this.g2.setColor(new Color(255, 200, 0, 180));
 				this.g2.fillRect(0, 0, getWidth(), getHeight());
 			}
-			else if (ctrl.estVoisinAtteignable(this.casePlateau))
+			else if (this.ctrl.estVoisinAtteignable(this.casePlateau))
 			{
 				// Voisin atteignable : surbrillance verte
 				this.g2.setColor(new Color(0, 220, 80, 150));
@@ -114,15 +120,35 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 			}
 		}
 
+		// 4. Dessine un symbole si c'est une base de départ
+		if (this.casePlateau.getSommet() != null)
+		{
+			if (this.casePlateau.getSommet().getEstBase() > 0)
+			{
+				this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+				
+				// Change la couleur de imgBase en fonction de la couleur du virus
+				Image baseTeintee = this.teinteImage(this.imgBase, getWidth(), getHeight(),
+									this.casePlateau.getSommet().getVirus().getCouleur());
+				
+				// Dessine la nouvelle imgBase avec sa couleur
+				this.g2.drawImage(baseTeintee, 0, 0, getWidth(), getHeight(), this);
+			}
+		}
+
 		this.g2.dispose();
 	}
 
+	//----------------------------//
+	// Méthodes d'implémentations //
+	//----------------------------//
+	
 	public void componentResized(ComponentEvent e)
 	{
 		if (this.imgSymbole != null)
 		{
 			int   taille = (int)(this.getTailleCase() * 0.3);
-			Image img    = imgSymbole.getScaledInstance(taille, taille, Image.SCALE_SMOOTH);
+			Image img    = this.imgSymbole.getScaledInstance(taille, taille, Image.SCALE_SMOOTH);
 			this.btnCase.setIcon(new ImageIcon(img));
 			this.revalidate();
 			this.repaint();
@@ -136,6 +162,22 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == this.btnCase)
+		{
 			this.ctrl.verifSommet(this.casePlateau);
+		}
+	}
+
+	private Image teinteImage(Image img, int w, int h, Color couleur)
+	{
+		BufferedImage imgRet = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D    g2     = imgRet.createGraphics();
+
+		g2.drawImage(img, 0, 0, w, h, null);
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1f));
+		g2.setColor(couleur);
+		g2.fillRect(0, 0, w, h);
+
+		g2.dispose();
+		return imgRet;
 	}
 }
