@@ -89,5 +89,20 @@ public class FrameJeu extends JFrame
 	{
 		return this.panelPlateau.getTabPanel();
 	}
+	
+	public int demanderChoixBoucle()
+	{
+		Object[] options = {"Côté Tête", "Côté Queue"};
+		int reponse = javax.swing.JOptionPane.showOptionDialog(this, 
+				"Votre virus forme une boucle ! De quel côté voulez-vous vous brancher ?", 
+				"Choix de connexion", 
+				javax.swing.JOptionPane.YES_NO_OPTION, 
+				javax.swing.JOptionPane.QUESTION_MESSAGE, 
+				null, options, options[1]);
+				
+		if (reponse == 0) return 1; // 1 = Tête
+		if (reponse == 1) return 2; // 2 = Queue
+		return 0; // Au cas où on ferme la fenêtre sans répondre
+	}
 
 }

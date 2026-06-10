@@ -175,14 +175,32 @@ public class Controleur
 	}
 	
 	public void verifSommet(Case caseAVerif)
+{
+	// 1. CORRECTION DU VIRUS : On récupère dynamiquement le virus de la manche actuelle !
+	int indexManche = this.plateau.getNumManche() - 1;
+	Virus v = this.getVirus(indexManche);
+	
+	Sommet s = caseAVerif.getSommet();
+	Carte carteActive = this.pioche.getCarteTire();
+
+	// 2. CORRECTION DE LA POP-UP : On demande au Plateau si le coup est légal AVANT
+	if (!this.plateau.estCoupValide(caseAVerif, carteActive))
 	{
-		this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire());
-		//croise pas un autre chemin
-		//commence par une extremité
-		//pas déjà relié a un sommet contaminé
-		//avoir la bonne carte
-		this.frame.repaint();
+		return; // Le coup est interdit (mauvais symbole, déjà pris, etc.), on annule tout !
 	}
+
+	int choixForce = 0;
+
+	// 3. Si on arrive ici, le coup est 100% valide. On vérifie juste si c'est une boucle
+	if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s))
+	{
+		choixForce = this.frame.demanderChoixBoucle();
+	}
+
+	// 4. On transmet l'ordre final au plateau
+	this.plateau.verifSommet(caseAVerif, carteActive, choixForce);
+	this.frame.repaint();
+}
 
 
 	public void setModeDebiche()
