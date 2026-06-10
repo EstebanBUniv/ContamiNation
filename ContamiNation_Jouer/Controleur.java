@@ -64,6 +64,7 @@ public class Controleur
 			this.plateau.preparerNouvelleManche();
 			initierPioche();
 			melangerPioche();
+			this.frame.nouvelleManche();
 			this.frame.reinitierPanelPioche();
 			if (this.frame != null) this.frame.repaint();
 		} else {
@@ -95,13 +96,26 @@ public class Controleur
 		Sommet s = caseAVerif.getSommet();
 		Carte carteActive = this.pioche.getCarteTire();
 
-		if (!this.estClique)
-		{
-			if (s != null && v.getConquis().contains(s) && v.estExtremite(s))
-			{
+		if (this.estClique) {
+			// DEUXIÈME CLIC : Tentative de propagation
+			if (this.plateau.estCoupValide(caseAVerif, carteActive) && this.estVoisinAtteignable(caseAVerif)) {
+				int choixForce = 0;
+				if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s)) {
+					choixForce = this.frame.demanderChoixBoucle();
+				}
+				if (this.plateau.verifSommet(caseAVerif, carteActive, choixForce)) {
+					this.frame.reinitierPanelPioche();
+				}
+			}
+			this.estClique = false;
+			this.caseSelectionnee = null;
+			this.frame.SommetClique();
+		} else {
+			// PREMIER CLIC : Sélection
+			if (s != null && v.getConquis().contains(s) && v.estExtremite(s)) {
 				this.estClique = true;
 				this.caseSelectionnee = caseAVerif;
-				this.frame.SommetClique(true, caseAVerif);
+				this.frame.SommetClique();
 			}
 			this.frame.repaint();
 			return;
