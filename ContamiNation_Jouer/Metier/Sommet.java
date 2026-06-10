@@ -39,13 +39,14 @@ public class Sommet
 	/*  Getters                   */
 	/*----------------------------*/
 	
-	public String   getSymbole  () { return this.symbole            ; }
-	public Sommet[] getLstVoisin() { return this.lstVoisins         ; }
-	public int      getLigSommet() { return this.caseSommet.getLig(); }
-	public int      getColSommet() { return this.caseSommet.getCol(); }
-	public int      getEstBase  () { return this.estBase            ; }
-	public int      getNbChemin () { return this.nbChemin           ; }
-	public boolean  getContamine() { return this.contamine          ; }
+	public String   getSymbole  ()      { return this.symbole            ; }
+	public Sommet[] getLstVoisin()      { return this.lstVoisins         ; }
+	public Sommet   getVoisin   (int i) { return this.lstVoisins[i]      ; }
+	public int      getLigSommet()      { return this.caseSommet.getLig(); }
+	public int      getColSommet()      { return this.caseSommet.getCol(); }
+	public int      getEstBase  ()      { return this.estBase            ; }
+	public int      getNbChemin ()      { return this.nbChemin           ; }
+	public boolean  getContamine()      { return this.contamine          ; }
 	
 	/*----------------------------*/
 	/*  Méthodes                  */

@@ -245,6 +245,7 @@ public class Plateau
 		return true;
 	}
 
+
 	public boolean estCroisementInterdit(Sommet s1, Sommet s2)
 	{
 		int lig1 = s1.getLigSommet();

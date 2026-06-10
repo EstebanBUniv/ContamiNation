@@ -1,8 +1,6 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
-import ContamiNation_Jouer.Metier.Sommet;
-import ContamiNation_Jouer.Metier.Virus;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -60,16 +58,16 @@ public class PanelArrete extends JPanel
 		{
 			for (int col = 0; col < ctrl.getCol(); col++)
 			{
-				Sommet s = ctrl.getCase(lig, col).getSommet();
-				if (s != null)
+				if (ctrl.getCase(lig, col).getSommet() != null)
 				{
 					g2d.setColor(Color.BLACK);
-					for (Sommet voisin : s.getLstVoisin())
+					for (int cptVoisin = 0 ; cptVoisin < ctrl.getCase(lig, col).getSommet().getLstVoisin().length ; cptVoisin++)
 					{
-						if (voisin != null)
+						if (ctrl.getCase(lig, col).getSommet().getVoisin(cptVoisin) != null)
 						{
 							JPanel panel1 = ctrl.getPanel(lig, col);
-							JPanel panel2 = ctrl.getPanel(voisin.getLigSommet(), voisin.getColSommet());
+							JPanel panel2 = ctrl.getPanel(ctrl.getCase(lig, col).getSommet().getVoisin(cptVoisin).getLigSommet(), 
+														  ctrl.getCase(lig, col).getSommet().getVoisin(cptVoisin).getColSommet());
 
 							Point p1 = SwingUtilities.convertPoint(panel1.getParent(), panel1.getX() + panel1.getWidth() / 2, panel1.getY() + panel1.getHeight() / 2, this);
 							Point p2 = SwingUtilities.convertPoint(panel2.getParent(), panel2.getX() + panel2.getWidth() / 2, panel2.getY() + panel2.getHeight() / 2, this);
@@ -87,21 +85,17 @@ public class PanelArrete extends JPanel
 
 		for (int i = 0; i < ctrl.getPlateau().getNbVirus(); i++)
 		{
-			Virus v = ctrl.getVirus(i);
-			if (v != null && v.getConquis().size() > 1)
+			if (ctrl.getVirus(i) != null && ctrl.getVirus(i).getConquis().size() > 1)
 			{
-				LinkedList<Sommet> chemin = v.getConquis();
 				
-				for (int c = 0; c < chemin.size() - 1; c++)
+				for (int c = 0; c < ctrl.getVirus(i).getConquis().size() - 1; c++)
 				{
-					Sommet s1 = chemin.get(c);
-					Sommet s2 = chemin.get(c + 1);
 
 		
-					g2d.setColor(v.getCouleur());
+					g2d.setColor(ctrl.getVirus(i).getCouleur());
 						
-					JPanel panel1 = ctrl.getPanel(s1.getLigSommet(), s1.getColSommet());
-					JPanel panel2 = ctrl.getPanel(s2.getLigSommet(), s2.getColSommet());
+					JPanel panel1 = ctrl.getPanel(ctrl.getVirus(i).getConquis().get(c).getLigSommet(), ctrl.getVirus(i).getConquis().get(c).getColSommet());
+					JPanel panel2 = ctrl.getPanel(ctrl.getVirus(i).getConquis().get(c + 1).getLigSommet(), ctrl.getVirus(i).getConquis().get(c + 1).getColSommet());
 						
 					Point p1 = SwingUtilities.convertPoint(panel1.getParent(), panel1.getX() + panel1.getWidth() / 2, panel1.getY() + panel1.getHeight() / 2, this);
 					Point p2 = SwingUtilities.convertPoint(panel2.getParent(), panel2.getX() + panel2.getWidth() / 2, panel2.getY() + panel2.getHeight() / 2, this);
@@ -112,20 +106,5 @@ public class PanelArrete extends JPanel
 				}
 			}
 		}
-	}
-
-	public String creerCle(Sommet s1, Sommet s2)
-	{
-		int ligS1 = s1.getLigSommet();
-    	int colS1 = s1.getColSommet();
-    	int ligS2 = s2.getLigSommet();
-    	int colS2 = s2.getColSommet();
-
-		if(ligS1 < ligS2 || (ligS1 == ligS2) && colS1 < colS2)
-			return Integer.toString(ligS1) + "," +  Integer.toString(colS1) + "-" +
-				   Integer.toString(ligS2) + "," +  Integer.toString(colS2);
-		else
-			return Integer.toString(ligS2) + "," +  Integer.toString(colS2) + "-" +
-				   Integer.toString(ligS1) + "," +  Integer.toString(colS1);
 	}
 }

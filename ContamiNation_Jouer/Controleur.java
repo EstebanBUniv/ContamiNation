@@ -37,6 +37,15 @@ public class Controleur
 	public JPanel getPanel(int lig, int col) { return this.frame.getTabPanel()[lig][col]; }
 	public Virus getVirus(int index) { return this.plateau.getVirus(index); }
 	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
+	
+	public Sommet getVoisin(int indice) 
+	{
+    if (this.caseSelectionnee != null && this.caseSelectionnee.getSommet() != null) 
+		{
+        return this.caseSelectionnee.getSommet().getVoisin(indice);
+    	}
+    return null;
+	}
 
 	public void chargerNiveau(File fichier) {
 		this.plateau = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
