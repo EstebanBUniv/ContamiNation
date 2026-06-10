@@ -47,7 +47,7 @@ public class PanelArrete extends JPanel implements ComponentListener
 	{
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D)g;
-		g2d.setStroke(new BasicStroke(3.0f));
+		g2d.setStroke(new BasicStroke(5.0f));
 		int marge = 30;
 		// 1. ON DESSINE LE RÉSEAU DE BASE (TOUT EN NOIR)
 		this.marge = (int)(this.ctrl.getTailleCase() * 0.1);
@@ -79,9 +79,6 @@ public class PanelArrete extends JPanel implements ComponentListener
 				}
 			}
 		}
-
-		// 2. ON DESSINE PAR-DESSUS LES CHEMINS DES VIRUS CONQUIS (EN COULEUR)
-		// On parcourt tous les virus présents sur le plateau
 		for (int i = 0; i < ctrl.getPlateau().getNbVirus(); i++)
 		{
 			Virus v = ctrl.getVirus(i);
@@ -90,7 +87,6 @@ public class PanelArrete extends JPanel implements ComponentListener
 				g2d.setColor(v.getCouleur());
 				LinkedList<Sommet> chemin = v.getConquis();
 				
-				// On relie chaque sommet du chemin au suivant
 				for (int c = 0; c < chemin.size() - 1; c++)
 				{
 					Sommet s1 = chemin.get(c);

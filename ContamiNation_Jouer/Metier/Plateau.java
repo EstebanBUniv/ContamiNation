@@ -63,6 +63,7 @@ public class Plateau
 	public File   getFichierSource()         { return this.fichierSource      ; }
 	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col] ; }
 	public Virus  getVirus(int index)        { return this.lstVirus.get(index); }
+	public int    getPointTotal()            { return this.pointTotal         ; }
 
 	public int getNumero() 
 	{
@@ -214,11 +215,11 @@ public class Plateau
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		
 		if ( carteTire != null &&
-		     caseAVerif .getAUnSommet()                                          && // Vérification sommet présent (Correction : getAUnSommet())
-			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())           && // a un voisin à une extrémité du virus
-			 !caseAVerif.getSommet().getContamine()                              && // Le sommet n'est pas encore contaminé
+		     caseAVerif .getAUnSommet()                                            && // Vérification sommet présent (Correction : getAUnSommet())
+			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())             && // a un voisin à une extrémité du virus
+			 !caseAVerif.getSommet().getContamine()                                && // Le sommet n'est pas encore contaminé
 			 (carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ||
-			  carteTire.getSymbole().equals("epidemie"))) // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
+			  carteTire.getSymbole().equals("Epidemie")))                          // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
 		{
 			virusActuel.ajouterSommetContamine(caseAVerif.getSommet());
 			caseAVerif.getSommet().setContamine(true);

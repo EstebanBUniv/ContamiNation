@@ -171,7 +171,7 @@ public class Controleur
 		}
 		
 		else
-			System.out.println("Fin de tout le jeu");
+			System.out.println("Fin de tout le jeu" + this.plateau.getPointTotal());
 	}
 	
 	public void verifSommet(Case caseAVerif)
