@@ -1,7 +1,6 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
-import ContamiNation_Jouer.Metier.Case;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -22,29 +21,31 @@ import javax.swing.JPanel;
 public class PanelCase extends JPanel implements ComponentListener, ActionListener
 {
 	private Controleur ctrl;
-	private Case       casePlateau;
 	
 	private JButton    btnCase;
 	private Image      imgSymbole;
 	private Image      imgFond;
 	private Image      imgBase;
 	private Graphics2D g2;
+	private int        lig;
+	private int        col;
 
-	public PanelCase(Case casePlateau, Controleur ctrl)
+	public PanelCase(int lig, int col, Controleur ctrl)
 	{
 		this.ctrl        = ctrl;
-		this.casePlateau = casePlateau;
+		this.lig         = lig;
+		this.col         = col;
 
 		this.setLayout(new BorderLayout());
 		this.setBorder(null);
 
-		this.imgFond = getToolkit().getImage("../images/fond/fond_case.png");
-		this.imgBase = getToolkit().getImage("../images/fond/base.png");
+		this.imgFond = getToolkit().getImage("../images/fond/fond_case_0.png");
+		this.imgBase = getToolkit().getImage("../images/fond/case/base.png");
 
-		if (this.casePlateau.getSommet() != null)
+		if (this.ctrl.getCase(lig, col).getSommet() != null)
 		{
 			this.btnCase = new JButton();
-			String symbole  = this.casePlateau.getSommet().getSymbole();
+			String symbole  = this.ctrl.getCase(lig, col).getSommet().getSymbole();
 			this.imgSymbole = getToolkit().getImage("../images/symboles/symbole_" + symbole + ".png");
 
 			Image img = imgSymbole.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -76,7 +77,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.g2 = (Graphics2D) g.create();
 
 		// 1. Dessin de la couleur de zone
-		this.g2.setColor(this.ctrl.getCouleurZone(this.casePlateau.getZone()));
+		this.g2.setColor(this.ctrl.getCouleurZone(this.ctrl.getCase(this.lig, this.col).getZone()));
 		this.g2.fillRect(0, 0, getWidth(), getHeight());
 
 		// 2. Image de fond texturée
@@ -87,17 +88,17 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		}
 
-		Case caseSelectionnee = ctrl.getCaseSelectionnee();
+		// 3. RESTAURATION DES SURBRILLANCES 
 
-		if (caseSelectionnee != null && this.casePlateau.getSommet() != null)
+		if (ctrl.getCaseSelectionnee() != null && this.ctrl.getCase(this.lig, this.col).getSommet() != null)
 		{
-			if (this.casePlateau == caseSelectionnee)
+			if (this.ctrl.getCase(this.lig, this.col) == ctrl.getCaseSelectionnee())
 			{
 				// Premier clic : la case sélectionnée s'allume en Jaune
 				this.g2.setColor(new Color(255, 200, 0, 150));
 				this.g2.fillRect(0, 0, getWidth(), getHeight());
 			}
-			else if (ctrl.estVoisinAtteignable(this.casePlateau))
+			else if (ctrl.estVoisinAtteignable(this.ctrl.getCase(this.lig, this.col)))
 			{
 				// Les chemins cibles légaux s'allument en Vert
 				this.g2.setColor(new Color(0, 220, 80, 120));
@@ -106,11 +107,11 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		}
 
 		// 4. Dessin de la base du virus colorée
-		if (this.casePlateau.getSommet() != null && this.casePlateau.getSommet().getEstBase() > 0)
+		if (this.ctrl.getCase(this.lig, this.col).getSommet() != null && this.ctrl.getCase(this.lig, this.col).getSommet().getEstBase() > 0)
 		{
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 			Image baseTeintee = this.teinteImage(this.imgBase, getWidth(), getHeight(),
-								this.casePlateau.getSommet().getVirus().getCouleur());
+								this.ctrl.getCase(this.lig, this.col).getSommet().getVirus().getCouleur());
 			this.g2.drawImage(baseTeintee, 0, 0, getWidth(), getHeight(), this);
 		}
 
@@ -137,7 +138,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	{
 		if (e.getSource() == this.btnCase)
 		{
-			this.ctrl.verifSommet(this.casePlateau);
+			this.ctrl.verifSommet(this.ctrl.getCase(this.lig, this.col));
 		}
 	}
 

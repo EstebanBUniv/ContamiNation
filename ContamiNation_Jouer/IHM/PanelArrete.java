@@ -54,7 +54,6 @@ public class PanelArrete extends JPanel
 		this.arretesColorees.clear();
 
 		Graphics2D g2d = (Graphics2D)g;
-		int marge = 30;
 		g2d.setStroke(new BasicStroke(3.0f)); // choix de la taille des traits
 		// 1. ON DESSINE LE RÉSEAU DE BASE (TOUT EN NOIR)
 		this.marge = (int)(this.ctrl.getTailleCase() * 0.2);
