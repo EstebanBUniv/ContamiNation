@@ -19,6 +19,7 @@ public class Sommet
 
 	private int      nbChemin;
 	private boolean  contamine;
+	private Virus    virus;
 	
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -53,6 +54,16 @@ public class Sommet
 	public void setContamine (boolean b)
 	{
 		this.contamine = b;
+	}
+
+	public void setProprietaire(Virus v)
+	{
+		this.virus = v;
+	}
+
+	public Virus getVirus()
+	{
+		return this.virus;
 	}
 
 	// Ajoute un voisin selon une direction spécifique (0-7)
