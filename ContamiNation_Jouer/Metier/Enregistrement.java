@@ -42,7 +42,6 @@ public class Enregistrement
 				if (!sommetCase.equals("null"))
 				{
 					int estBase = sc.nextInt();
-					System.out.println("test");
 					plateau.ajouterSommet(ligCase, colCase, sommetCase);
 					
 					if (estBase != 0) 

@@ -196,7 +196,7 @@ public class Controleur
 	if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s))
 	{
 		choixForce = this.frame.demanderChoixBoucle();
-		if (this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire()))
+		if (this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire(), choixForce))
 			this.frame.reinitierPanelPioche();
 		//croise pas un autre chemin
 		//commence par une extremité
