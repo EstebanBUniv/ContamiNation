@@ -30,13 +30,13 @@ public class Controleur
 	public Controleur() { this.frame = new FrameJeu(this); }
 
 	public Plateau getPlateau() { return this.plateau; }
+
 	public int getTailleCase() { return this.frame.getPanelPlateau().getTailleCase(); }
 	public int getLig() { return plateau.getLig(); }
 	public int getCol() { return plateau.getCol(); }
 	public Case getCase(int lig, int col) { return this.plateau.getCase(lig, col); }
 	public JPanel getPanel(int lig, int col) { return this.frame.getTabPanel()[lig][col]; }
 	public Virus getVirus(int index) { return this.plateau.getVirus(index); }
-	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
 	
 	public Sommet getVoisin(int indice) 
 	{
@@ -60,6 +60,9 @@ public class Controleur
 		}
 		return this.couleursZones.get(numZone);
 	}
+
+	public Map<Integer, Color> getCouleurZone() { return this.couleursZones; }
+
 
 	public void resetCouleurs() { this.couleursZones.clear(); this.r = 0; this.g = 0; this.b = 0; }
 	public void initierPioche () { this.pioche = new Pioche(); }
@@ -98,6 +101,9 @@ public class Controleur
 	public void verifSommet(Case caseAVerif)
 	{
 		if (caseAVerif == null) return;
+
+	// --- LE SYSTÈME DE JEU À 2 CLICS ---
+	public void verifSommet(Case caseAVerif) {
 
 		int indexManche = this.plateau.getNumManche() - 1;
 		Virus v = this.getVirus(indexManche);
