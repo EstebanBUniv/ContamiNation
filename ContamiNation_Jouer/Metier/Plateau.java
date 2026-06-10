@@ -192,40 +192,52 @@ public class Plateau
 		return nbSommetParZone * zonesVisitees.size();
 	}
 
-	public boolean verifSommet(Case caseAVerif, Carte carteTire, int choixForce) {
+	public boolean verifSommet(Case caseAVerif, Carte carteTire, int choixForce)
+	{
 		if (!this.estCoupValide(caseAVerif, carteTire)) return false;
 
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		Sommet nouveauSommet = caseAVerif.getSommet();
 
-		boolean diagonaleInterdite = false;
-		if (!virusActuel.getConquis().isEmpty() && nouveauSommet != null) {
-			for (Sommet voisin : nouveauSommet.getLstVoisin()) {
-				if (voisin != null && virusActuel.getConquis().contains(voisin)) {
-					if (this.estDiagonaleCroisee(voisin, nouveauSommet)) {
-						diagonaleInterdite = true;
-						break;
-					}
-				}
+		if (virusActuel == null || nouveauSommet == null) return false;
+		if (virusActuel.getConquis().isEmpty()) return false;
+
+		LinkedList<Sommet> chemin = virusActuel.getConquis();
+		Sommet tete = chemin.getFirst();
+		Sommet queue = chemin.getLast();
+
+		boolean peutTete = virusActuel.toucheTete(nouveauSommet);
+		boolean peutQueue = virusActuel.toucheQueue(nouveauSommet);
+
+		if (!peutTete && !peutQueue) return false;
+
+		Sommet extremiteChoisie = null;
+
+		if (peutTete && !peutQueue) extremiteChoisie = tete;
+		if (!peutTete && peutQueue) extremiteChoisie = queue;
+
+		if (peutTete && peutQueue)
+		{
+			if (choixForce == 1) extremiteChoisie = tete;
+			else if (choixForce == 2) extremiteChoisie = queue;
+			else
+			{
+				boolean tetePossible = !this.arreteDejaColoree(tete, nouveauSommet)
+									&& !this.estCroisementInterdit(tete, nouveauSommet);
+
+				boolean queuePossible = !this.arreteDejaColoree(queue, nouveauSommet)
+									 && !this.estCroisementInterdit(queue, nouveauSommet);
+
+				if (tetePossible && !queuePossible) extremiteChoisie = tete;
+				else if (!tetePossible && queuePossible) extremiteChoisie = queue;
+				else if (tetePossible) extremiteChoisie = tete;
+				else return false;
 			}
 		}
 
-		boolean arreteOccupee = false;
-		if (!virusActuel.getConquis().isEmpty() && nouveauSommet != null) {
-			Sommet tete = virusActuel.getConquis().getFirst();
-			Sommet queue = virusActuel.getConquis().getLast();
-
-			for (Sommet voisin : nouveauSommet.getLstVoisin()) {
-				if (voisin == tete || voisin == queue) {
-					if (this.arreteDejaColoree(nouveauSommet, voisin)) {
-						arreteOccupee = true;
-						break;
-					}
-				}
-			}
-		}
-
-		if (diagonaleInterdite || arreteOccupee) return false;
+		if (extremiteChoisie == null) return false;
+		if (this.arreteDejaColoree(extremiteChoisie, nouveauSommet)) return false;
+		if (this.estCroisementInterdit(extremiteChoisie, nouveauSommet)) return false;
 
 		virusActuel.ajouterSommetContamine(nouveauSommet, choixForce);
 		nouveauSommet.setContamine(true);
@@ -233,42 +245,75 @@ public class Plateau
 		return true;
 	}
 
-	public boolean estDiagonaleCroisee(Sommet s1, Sommet s2) {
-		if (s1 == null || s2 == null) return false;
 
-		int dx = s2.getColSommet() - s1.getColSommet();
-		int dy = s2.getLigSommet() - s1.getLigSommet();
+	public boolean estCroisementInterdit(Sommet s1, Sommet s2)
+	{
+		int lig1 = s1.getLigSommet();
+		int col1 = s1.getColSommet();
+		int lig2 = s2.getLigSommet();
+		int col2 = s2.getColSommet();
 
-		if (Math.abs(dx) != 1 || Math.abs(dy) != 1) return false;
+		// 1. Vérifier si c'est bien un déplacement diagonal (écart en ligne == écart en colonne)
+		if (Math.abs(lig1 - lig2) != Math.abs(col1 - col2) || Math.abs(lig1 - lig2) == 0) {
+			return false; // Ce n'est pas une diagonale ou c'est le même point, aucun risque !
+		}
 
-		int ligA = s1.getLigSommet();
-		int colA = s2.getColSommet();
-		int ligB = s2.getLigSommet();
-		int colB = s1.getColSommet();
+		// 2. Identifier le point le plus haut (ligA) et le point le plus bas (ligB)
+		int ligA = Math.min(lig1, lig2);
+		int ligB = Math.max(lig1, lig2);
+		
+		// Associer les bonnes colonnes
+		int colA = (lig1 < lig2) ? col1 : col2;
+		int colB = (lig1 < lig2) ? col2 : col1;
 
-		if (ligA < 0 || ligA >= this.lig || colA < 0 || colA >= this.col) return false;
-		if (ligB < 0 || ligB >= this.lig || colB < 0 || colB >= this.col) return false;
+		// 3. Parcourir tous les virus pour voir si l'un d'eux occupe la diagonale adverse
+		for (int i = 0; i < this.lstVirus.size(); i++)
+		{
+			Virus v = this.lstVirus.get(i);
+			if (v != null && v.getConquis().size() > 1)
+			{
+				LinkedList<Sommet> chemin = v.getConquis();
+				
+				// On regarde chaque segment du chemin du virus
+				for (int c = 0; c < chemin.size() - 1; c++)
+				{
+					Sommet v1 = chemin.get(c);
+					Sommet v2 = chemin.get(c + 1);
 
-		Case caseA = this.tabCases[ligA][colA];
-		Case caseB = this.tabCases[ligB][colB];
+					// Est-ce que ce segment relie (ligA, colB) et (ligB, colA) ?
+					boolean conditionDirecte = (v1.getLigSommet() == ligA && v1.getColSommet() == colB && 
+												v2.getLigSommet() == ligB && v2.getColSommet() == colA);
+												
+					boolean conditionInverse = (v2.getLigSommet() == ligA && v2.getColSommet() == colB && 
+												v1.getLigSommet() == ligB && v1.getColSommet() == colA);
 
-		if (!caseA.getAUnSommet() || !caseB.getAUnSommet()) return false;
-
-		Sommet a = caseA.getSommet();
-		Sommet b = caseB.getSommet();
-
-		return this.arreteDejaColoree(a, b);
+					if (conditionDirecte || conditionInverse)
+					{
+						return true; // La diagonale adverse est déjà prise ! Croisement interdit.
+					}
+				}
+			}
+		}
+		return false;
 	}
 
-	private boolean arreteDejaColoree(Sommet s1, Sommet s2) {
-		for (Virus v : this.lstVirus) {
-			LinkedList<Sommet> chemin = v.getConquis();
 
-			for (int i = 0; i < chemin.size() - 1; i++) {
+	private boolean arreteDejaColoree(Sommet s1, Sommet s2)
+	{
+		if (s1 == null || s2 == null) return false;
+
+		for (Virus v : this.lstVirus)
+		{
+			if (v == null || v.getConquis() == null) continue;
+
+			LinkedList<Sommet> chemin = v.getConquis();
+			for (int i = 0; i < chemin.size() - 1; i++)
+			{
 				Sommet a = chemin.get(i);
 				Sommet b = chemin.get(i + 1);
 
-				if ((a == s1 && b == s2) || (a == s2 && b == s1)) {
+				if ((a == s1 && b == s2) || (a == s2 && b == s1))
+				{
 					return true;
 				}
 			}
