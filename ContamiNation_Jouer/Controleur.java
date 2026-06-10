@@ -161,9 +161,15 @@ public class Controleur
 	{
 		if (this.plateau.mancheSuivante())
 		{
+			this.plateau.preparerNouvelleManche();
 			initierPioche();
 			melangerPioche();
+			if (this.frame != null) 
+			{
+				this.frame.repaint();
+			}
 		}
+		
 		else
 			System.out.println("Fin de tout le jeu");
 	}
@@ -175,6 +181,7 @@ public class Controleur
 		//commence par une extremité
 		//pas déjà relié a un sommet contaminé
 		//avoir la bonne carte
+		this.frame.repaint();
 	}
 
 

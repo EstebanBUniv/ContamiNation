@@ -93,7 +93,7 @@ public class Plateau
 	{
 		this.numManche++;
 		this.pointTotal += this.calculManche();
-		return this.numManche < this.lstVirus.size();
+		return this.numManche <= this.lstVirus.size();
 	}
 
 	public void ajouterZoneDirecte(int lig, int col, int zone) 
@@ -213,10 +213,12 @@ public class Plateau
 	{
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		
-		if ( caseAVerif .getAUnSommet()                                          && // Vérification sommet présent (Correction : getAUnSommet())
+		if ( carteTire != null &&
+		     caseAVerif .getAUnSommet()                                          && // Vérification sommet présent (Correction : getAUnSommet())
 			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())           && // a un voisin à une extrémité du virus
 			 !caseAVerif.getSommet().getContamine()                              && // Le sommet n'est pas encore contaminé
-			 carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ) // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
+			 (carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ||
+			  carteTire.getSymbole().equals("epidemie"))) // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
 		{
 			virusActuel.ajouterSommetContamine(caseAVerif.getSommet());
 			caseAVerif.getSommet().setContamine(true);
@@ -224,6 +226,20 @@ public class Plateau
 		}
 		
 		return false;
+	}
+	
+	public void preparerNouvelleManche()
+	{
+		for (int l = 0; l < this.lig; l++)
+		{
+			for (int c = 0; c < this.col; c++)
+			{
+				if (this.tabCases[l][c].getAUnSommet())
+				{
+					this.tabCases[l][c].getSommet().setContamine(false);
+				}
+			}
+		}
 	}
 
 }
