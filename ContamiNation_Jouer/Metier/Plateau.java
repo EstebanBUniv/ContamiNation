@@ -1,7 +1,9 @@
 package ContamiNation_Jouer.Metier;
 
 import ContamiNation_Jouer.Controleur;
+
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,12 +23,14 @@ public class Plateau
 
 	private boolean     modeDebiche = false;
 
-	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl) {
+	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl) 
+	{
 		if (col <= 0 || lig <= 0 || nbVirus <= 0) return null;
 		return new Plateau(lig, col, nbVirus, nom, ctrl);
 	}
 
-	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl) {
+	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl) 
+	{
 		this.ctrl = ctrl;
 		this.col = col;
 		this.lig = lig;
@@ -37,36 +41,39 @@ public class Plateau
 		this.numManche = 1;
 		this.pointTotal = 0;
 
-		for (int i = 0; i < lig; i++) {
-			for (int j = 0; j < col; j++) {
+		for (int i = 0; i < lig; i++) 
+			for (int j = 0; j < col; j++)
 				this.tabCases[i][j] = new Case(i, j);
-			}
-		}
 
-		if (this.modeDebiche) this.ctrl.appelerChoixCarte();
+		if (this.modeDebiche) 
+			this.ctrl.appelerChoixCarte();
 	}
 
-	public int getLig()                   { return this.lig; }
-	public int getCol()                   { return this.col; }
-	public int getNbVirus()               { return this.nbVirus; }
-	public String getNom()                { return this.nom; }
-	public File getFichierSource()        { return this.fichierSource; }
-	public Case getCase(int lig, int col) { return this.tabCases[lig][col]; }
-	public Virus getVirus(int index)      { return this.lstVirus.get(index); }
-	public Virus getVirusActif()          { return this.lstVirus.get(this.numManche - 1); }
-	public int getPointTotal()            { return this.pointTotal; }
-	public int getNumManche()             { return this.numManche; }
+	public int    getLig           ()       { return this.lig                              ; }
+	public int    getCol           ()       { return this.col                              ; }
+	public int    getNbVirus       ()       { return this.nbVirus                          ; }
+	public String getNom           ()       { return this.nom                              ; }
+	public File   getFichierSource ()       { return this.fichierSource                    ; }
+	public Case   getCase(int lig, int col) { return this.tabCases[lig][col]               ; }
+	public Virus  getVirus(int index)       { return this.lstVirus.get(index)              ; }
+	public Virus  getVirusActif    ()       { return this.lstVirus.get(this.numManche - 1) ; }
+	public int    getPointTotal    ()       { return this.pointTotal                       ; }
+	public int    getNumManche     ()       { return this.numManche                        ; }
 
-	public int getNumero() {
-		if (this.fichierSource != null) {
+	public int getNumero() 
+	{
+		if (this.fichierSource != null) 
+		{
 			String name = this.fichierSource.getName();
 			name = name.replaceAll("[^0-9]", "");
-			if (!name.isEmpty()) return Integer.parseInt(name);
+			if (!name.isEmpty()) 
+				return Integer.parseInt(name);
 		}
 		return 0;
 	}
 
-	public String getNomVirus(int index) {
+	public String getNomVirus(int index) 
+	{
 		if (index >= 0 && index < this.lstVirus.size())
 			return this.lstVirus.get(index).getNom();
 		return "";
@@ -74,62 +81,68 @@ public class Plateau
 
 	public void setFichierSource(File fichier) { this.fichierSource = fichier; }
 
-	public void creerVirus(String nom) {
+	public void creerVirus(String nom) 
+	{
 		this.lstVirus.add(new Virus(nom));
 	}
 
-	public boolean mancheSuivante() {
+	public boolean mancheSuivante() 
+	{
 		this.pointTotal += this.calculManche();
-		if (this.numManche < this.lstVirus.size()) {
+		if (this.numManche < this.lstVirus.size()) 
+		{
 			this.numManche++;
 			return true;
 		}
 		return false;
 	}
 
-	public void ajouterZoneDirecte(int lig, int col, int zone) {
+	public void ajouterZoneDirecte(int lig, int col, int zone) 
+	{
 		this.tabCases[lig][col].ajouterZone(zone);
 	}
 
-	public void ajouterSommet(int lig, int col, String symbole) {
+	public void ajouterSommet(int lig, int col, String symbole) 
+	{
 		this.tabCases[lig][col].ajouterSommet(symbole);
 	}
 
-	public void relierTousLesSommets() {
-		for (int i = 0; i < this.lig; i++) {
-			for (int j = 0; j < this.col; j++) {
-				if (this.tabCases[i][j].getSommet() != null) {
+	public void relierTousLesSommets() 
+	{
+		for (int i = 0; i < this.lig; i++) 
+			for (int j = 0; j < this.col; j++) 
+				if (this.tabCases[i][j].getSommet() != null) 
 					this.tabCases[i][j].getSommet().resetVoisins();
-				}
-			}
-		}
 
-		for (int i = 0; i < this.lig; i++) {
-			for (int j = 0; j < this.col; j++) {
+		for (int i = 0; i < this.lig; i++) 
+			for (int j = 0; j < this.col; j++) 
+			{
 				Sommet sommetCourant = this.tabCases[i][j].getSommet();
-				if (sommetCourant != null) chercherVoisins(i, j, sommetCourant);
+				if (sommetCourant != null) 
+					chercherVoisins(i, j, sommetCourant);
 			}
-		}
 	}
 
-	private void chercherVoisins(int lig, int col, Sommet sommetCourant) {
-		int[][] directions = {
-			{-1, 0}, {1, 0}, {0, -1}, {0, 1},
-			{-1, -1}, {-1, 1}, {1, -1}, {1, 1}
-		};
+	private void chercherVoisins(int lig, int col, Sommet sommetCourant) 
+	{
+		int[][] directions = { {-1, 0 }, {1, 0 }, {0, -1}, {0, 1},
+			                   {-1, -1}, {-1, 1}, {1, -1}, {1, 1} };
 
-		for (int i = 0; i < directions.length; i++) {
-			int dLig = directions[i][0];
-			int dCol = directions[i][1];
-			int ligCherche = lig + dLig;
-			int colCherche = col + dCol;
+		for (int i = 0; i < directions.length; i++) 
+		{
+			int     dLig = directions[i][0];
+			int     dCol = directions[i][1];
+			int     ligCherche = lig + dLig;
+			int     colCherche = col + dCol;
 			boolean continuer = true;
 
 			while (ligCherche >= 0 && ligCherche < this.lig &&
 				   colCherche >= 0 && colCherche < this.col &&
-				   continuer) {
+				   continuer) 
+			{
 				Sommet sommetTrouve = this.tabCases[ligCherche][colCherche].getSommet();
-				if (sommetTrouve != null) {
+				if (sommetTrouve != null) 
+				{
 					sommetCourant.ajouterVoisin(i, sommetTrouve);
 					continuer = false;
 				}
@@ -139,56 +152,66 @@ public class Plateau
 		}
 	}
 
-	public void initialiserBaseVirus(Sommet base, int numeroManche) {
-		if (numeroManche > 0 && numeroManche <= this.lstVirus.size()) {
+	public void initialiserBaseVirus(Sommet base, int numeroManche) 
+	{
+		if (numeroManche > 0 && numeroManche <= this.lstVirus.size()) 
+		{
 			Virus v = this.lstVirus.get(numeroManche - 1);
 			v.setBaseDepart(base);
 		}
 	}
 
-	public int calculManche() {
+	public int calculManche()
+	{
 		int nbSommetParZone = 0;
 		ArrayList<Integer> zonesVisitees = new ArrayList<>();
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 
-		for (int lig = 0; lig < this.lig; lig++) {
-			for (int col = 0; col < this.col; col++) {
+		for (int lig = 0; lig < this.lig; lig++) 
+		{
+			for (int col = 0; col < this.col; col++) 
+			{
 				Case caseActuelle = this.tabCases[lig][col];
 
-				if (caseActuelle.getAUnSommet()) {
+				if (caseActuelle.getAUnSommet()) 
+				{
 					Sommet sommet = caseActuelle.getSommet();
 
-					if (sommet.getContamine() && sommet.getVirus() == virusActuel) {
+					if (sommet.getContamine() && sommet.getVirus() == virusActuel) 
+					{
 						int zoneDeLaCase = caseActuelle.getZone();
 
-						if (zoneDeLaCase != 0 && !zonesVisitees.contains(zoneDeLaCase)) {
+						if (zoneDeLaCase != 0 && !zonesVisitees.contains(zoneDeLaCase)) 
+						{
 							zonesVisitees.add(zoneDeLaCase);
 							int tmpNbSommet = 1;
 
-							for (int tmpLig = 0; tmpLig < this.lig; tmpLig++) {
-								for (int tmpCol = 0; tmpCol < this.col; tmpCol++) {
+							for (int tmpLig = 0; tmpLig < this.lig; tmpLig++) 
+							{
+								for (int tmpCol = 0; tmpCol < this.col; tmpCol++) 
+								{
 									Case autreCase = this.tabCases[tmpLig][tmpCol];
 
 									if (autreCase != caseActuelle &&
 										autreCase.getZone() == zoneDeLaCase &&
-										autreCase.getAUnSommet()) {
+										autreCase.getAUnSommet()) 
+									{
 
 										Sommet autreSommet = autreCase.getSommet();
 
-										if (autreSommet.getContamine() && autreSommet.getVirus() == virusActuel) {
+										if (autreSommet.getContamine() && autreSommet.getVirus() == virusActuel) 
 											tmpNbSommet++;
-										}
 									}
 								}
 							}
 
-							if (tmpNbSommet > nbSommetParZone) nbSommetParZone = tmpNbSommet;
+							if (tmpNbSommet > nbSommetParZone) 
+								nbSommetParZone = tmpNbSommet;
 						}
 					}
 				}
 			}
 		}
-
 		return nbSommetParZone * zonesVisitees.size();
 	}
 
@@ -196,36 +219,36 @@ public class Plateau
 	{
 		if (!this.estCoupValide(caseAVerif, carteTire)) return false;
 
-		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		Virus  virusActuel   = this.lstVirus.get(this.numManche - 1);
 		Sommet nouveauSommet = caseAVerif.getSommet();
 
 		if (virusActuel == null || nouveauSommet == null) return false;
 		if (virusActuel.getConquis().isEmpty()) return false;
 
 		LinkedList<Sommet> chemin = virusActuel.getConquis();
-		Sommet tete = chemin.getFirst();
-		Sommet queue = chemin.getLast();
+		Sommet tete  = chemin.getFirst();
+		Sommet queue = chemin.getLast ();
 
-		boolean peutTete = virusActuel.toucheTete(nouveauSommet);
+		boolean peutTete  = virusActuel.toucheTete (nouveauSommet);
 		boolean peutQueue = virusActuel.toucheQueue(nouveauSommet);
 
 		if (!peutTete && !peutQueue) return false;
 
 		Sommet extremiteChoisie = null;
 
-		if (peutTete && !peutQueue) extremiteChoisie = tete;
-		if (!peutTete && peutQueue) extremiteChoisie = queue;
+		if ( peutTete && !peutQueue) extremiteChoisie = tete;
+		if (!peutTete &&  peutQueue) extremiteChoisie = queue;
 
 		if (peutTete && peutQueue)
 		{
-			if (choixForce == 1) extremiteChoisie = tete;
+			if      (choixForce == 1) extremiteChoisie = tete;
 			else if (choixForce == 2) extremiteChoisie = queue;
 			else
 			{
-				boolean tetePossible = !this.arreteDejaColoree(tete, nouveauSommet)
+				boolean tetePossible = !this.arreteDejaColoree    (tete, nouveauSommet)
 									&& !this.estCroisementInterdit(tete, nouveauSommet);
 
-				boolean queuePossible = !this.arreteDejaColoree(queue, nouveauSommet)
+				boolean queuePossible = !this.arreteDejaColoree    (queue, nouveauSommet)
 									 && !this.estCroisementInterdit(queue, nouveauSommet);
 
 				if (tetePossible && !queuePossible) extremiteChoisie = tete;
@@ -254,9 +277,8 @@ public class Plateau
 		int col2 = s2.getColSommet();
 
 		// 1. Vérifier si c'est bien un déplacement diagonal (écart en ligne == écart en colonne)
-		if (Math.abs(lig1 - lig2) != Math.abs(col1 - col2) || Math.abs(lig1 - lig2) == 0) {
-			return false; // Ce n'est pas une diagonale ou c'est le même point, aucun risque !
-		}
+		if (Math.abs(lig1 - lig2) != Math.abs(col1 - col2) || Math.abs(lig1 - lig2) == 0) 
+			return false;
 
 		// 2. Identifier le point le plus haut (ligA) et le point le plus bas (ligB)
 		int ligA = Math.min(lig1, lig2);
@@ -280,7 +302,6 @@ public class Plateau
 					Sommet v1 = chemin.get(c);
 					Sommet v2 = chemin.get(c + 1);
 
-					// Est-ce que ce segment relie (ligA, colB) et (ligB, colA) ?
 					boolean conditionDirecte = (v1.getLigSommet() == ligA && v1.getColSommet() == colB && 
 												v2.getLigSommet() == ligB && v2.getColSommet() == colA);
 												
@@ -288,9 +309,7 @@ public class Plateau
 												v1.getLigSommet() == ligB && v1.getColSommet() == colA);
 
 					if (conditionDirecte || conditionInverse)
-					{
-						return true; // La diagonale adverse est déjà prise ! Croisement interdit.
-					}
+						return true;
 				}
 			}
 		}
@@ -313,39 +332,36 @@ public class Plateau
 				Sommet b = chemin.get(i + 1);
 
 				if ((a == s1 && b == s2) || (a == s2 && b == s1))
-				{
 					return true;
-				}
 			}
 		}
 		return false;
 	}
 
-	public void preparerNouvelleManche() {
+	public void preparerNouvelleManche() 
+	{
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 
-		for (int l = 0; l < this.lig; l++) {
-			for (int c = 0; c < this.col; c++) {
-				if (this.tabCases[l][c].getAUnSommet()) {
+		for (int l = 0; l < this.lig; l++) 
+			for (int c = 0; c < this.col; c++) 
+				if (this.tabCases[l][c].getAUnSommet()) 
+				{
 					Sommet s = this.tabCases[l][c].getSommet();
 					s.setContamine(false);
 
-					if (s.getVirus() == virusActuel) {
+					if (s.getVirus() == virusActuel) 
 						s.setContamine(true);
-					}
 				}
-			}
-		}
-
-		for (Virus v : this.lstVirus) {
-			if (v != virusActuel && v.getBaseDepart() != null) {
+		
+		for (Virus v : this.lstVirus) 
+			if (v != virusActuel && v.getBaseDepart() != null)
 				v.getBaseDepart().setContamine(true);
-			}
-		}
 	}
 
-	public boolean estCoupValide(Case caseAVerif, Carte carteTire) {
-		if (caseAVerif == null || carteTire == null || !caseAVerif.getAUnSommet()) return false;
+	public boolean estCoupValide(Case caseAVerif, Carte carteTire) 
+	{
+		if (caseAVerif == null || carteTire == null || !caseAVerif.getAUnSommet()) 
+			return false;
 
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		Sommet s = caseAVerif.getSommet();

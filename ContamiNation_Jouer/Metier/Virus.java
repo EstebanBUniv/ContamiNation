@@ -1,11 +1,11 @@
 package ContamiNation_Jouer.Metier;
 
 import java.awt.Color;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import java.util.LinkedList;
-import ContamiNation_Jouer.Metier.Sommet;
 
 /* SAE 2.01 | Développement d'une application 
 @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban
@@ -43,9 +43,21 @@ public class Virus
 	public int                getId()  { return this.idVirus;                        }
 	public String             getNom() { return this.nom;                            }
 
-	public Color              getCouleur() { return couleursVirus.get(this.idVirus); }
-	public LinkedList<Sommet> getConquis() { return this.cheminContamine;            }
-	public Sommet getBaseDepart() { return this.baseDepart; }
+	public Color              getCouleur()    { return couleursVirus.get(this.idVirus); }
+	public LinkedList<Sommet> getConquis()    { return this.cheminContamine           ; }
+	public Sommet             getBaseDepart() { return this.baseDepart                ; }
+	
+	public static Color getCouleur(int id)
+	{
+		if (couleursVirus.containsKey(id))
+			return couleursVirus.get(id);
+		return Color.BLACK;
+	}
+	
+	public int getTailleChemin() 
+	{ 
+		return this.cheminContamine.size(); 
+	}
 
 	/*----------------------------*/
 	/* Méthodes Utilitaires       */
@@ -67,13 +79,6 @@ public class Virus
 		r = 0;
 		g = 0;
 		b = 0;
-	}
-
-	public static Color getCouleur(int id)
-	{
-		if (couleursVirus.containsKey(id))
-			return couleursVirus.get(id);
-		return Color.BLACK;
 	}
 	
 	public void setBaseDepart(Sommet base)
@@ -123,7 +128,8 @@ public class Virus
 			this.cheminContamine.addLast(s);
 			return;
 		}
-		if (toucheTete(s)) {
+		if (toucheTete(s)) 
+		{
 			this.cheminContamine.addFirst(s);
 			return;
 		}
@@ -176,11 +182,6 @@ public class Virus
 			}
 		}
 		return false;
-	}
-	
-	public int getTailleChemin() 
-	{ 
-		return this.cheminContamine.size(); 
 	}
 
 	public String toString()

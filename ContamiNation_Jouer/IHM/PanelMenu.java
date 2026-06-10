@@ -1,12 +1,15 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
+
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
+
 import java.awt.event.*;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -86,10 +89,10 @@ public class PanelMenu extends JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if ( e.getSource() == this.btnSolo )
-			this.frameMere.changerPanel(new PanelNiveau(this.frameMere, this.ctrl));
+			this.frameMere.changerPanel(new PanelNiveau(this.frameMere, this.ctrl, false));
 
 		if ( e.getSource() == this.btnMulti )
-			System.out.println("coming soon!");
+			this.frameMere.changerPanel(new PanelNiveau(this.frameMere, this.ctrl, true));
 
 		if ( e.getSource() == this.btnQuitter )
 			this.frameMere.dispose();

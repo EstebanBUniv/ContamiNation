@@ -32,7 +32,23 @@ public class Pioche
 		}
 	}
 	
-	public Carte getCarteTire() { return this.carteTire; }
+	/*----------------------------*/
+	/*  Getters                   */
+	/*----------------------------*/
+	
+	public Carte getCarteTire()       { return this.carteTire          ; }
+	public Carte premiereCarte()      { return this.pioche.get(0)      ; }
+	public Carte getCarte(int indice) { return this.pioche.get(indice) ; }
+	public int   getTaillePioche()    { return this.pioche.size()      ; }
+	
+	/*----------------------------*/
+	/*  Méthodes                  */
+	/*----------------------------*/
+	
+	public void melanger()
+	{
+		Collections.shuffle(this.pioche);
+	}
 	
 	public Carte tirerCarte(int indiceCarte)
 	{
@@ -46,26 +62,6 @@ public class Pioche
 		this.pioche.remove(indiceCarte);
 		
 		return this.carteTire;
-	}
-	
-	public Carte premiereCarte()
-	{
-		return this.pioche.get(0);
-	}
-
-	public Carte getCarte(int indice)
-	{
-		return this.pioche.get(indice);
-	}
-
-	public int getTaillePioche()
-	{
-		return this.pioche.size();
-	}
-	
-	public void melanger()
-	{
-		Collections.shuffle(this.pioche);
 	}
 	
 	public boolean verifFinManche ()

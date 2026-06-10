@@ -1,11 +1,14 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
+
 import java.awt.event.*;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;

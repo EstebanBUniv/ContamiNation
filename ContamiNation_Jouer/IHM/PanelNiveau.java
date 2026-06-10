@@ -1,6 +1,7 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -10,16 +11,19 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.Scanner;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+
+import java.io.File;
+import java.io.FileInputStream;
+
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class PanelNiveau extends JPanel implements ActionListener
 {
@@ -38,11 +42,14 @@ public class PanelNiveau extends JPanel implements ActionListener
 	private Controleur ctrl;
 	
 	private Image      imgFond;
+	
+	private boolean    estMulti;
 
-	public PanelNiveau(FrameJeu frameMere, Controleur ctrl)
+	public PanelNiveau(FrameJeu frameMere, Controleur ctrl, boolean estMulti)
 	{
 		this.frameMere = frameMere;
 		this.ctrl      = ctrl;
+		this.estMulti  = estMulti;
 
 		this.setLayout(new BorderLayout());
 		this.setBorder(BorderFactory.createEmptyBorder(5, 100, 5, 100));
@@ -128,11 +135,37 @@ public class PanelNiveau extends JPanel implements ActionListener
 		{
 			if (lignes.length == 1)
 			{
-				this.ctrl.chargerNiveau(this.fichiersDossier.get(lignes[0]));
-				this.frameMere.afficherPlateau();
+				File fichierLvl = this.fichiersDossier.get(lignes[0]);
 				
+				if (!this.estMulti) 
+				{
+					this.ctrl.chargerNiveau(fichierLvl);
+					this.frameMere.afficherPlateauMulti(1); 
+				} 
+				else 
+				{
+					Object[] options = {"2 Joueurs", "3 Joueurs", "4 Joueurs"};
+					int choix = javax.swing.JOptionPane.showOptionDialog(this, 
+							"Combien de joueurs vont s'affronter ?", 
+							"Configuration Multijoueur", 
+							javax.swing.JOptionPane.DEFAULT_OPTION, 
+							javax.swing.JOptionPane.QUESTION_MESSAGE, 
+							null, options, options[0]);
+							
+					if (choix != javax.swing.JOptionPane.CLOSED_OPTION) 
+					{
+						int nbJoueurs = choix + 2;
+						this.ctrl.chargerNiveauMulti(fichierLvl, nbJoueurs);
+						this.frameMere.afficherPlateauMulti(nbJoueurs);
+					}
+				}
 			}
-				
+		}
+
+		if ( e.getSource() == this.btnRetour )
+		{
+			// Attention ici, il faut renvoyer sur PanelMenu proprement 
+			this.frameMere.changerPanel(new PanelMenu(this.ctrl, this.frameMere));
 		}
 
 		if ( e.getSource() == this.btnRetour )

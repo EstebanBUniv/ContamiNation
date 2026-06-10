@@ -30,22 +30,24 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	private Graphics2D g2;
 	private int        lig;
 	private int        col;
+	private int        idJoueur;
 
-	public PanelCase(int lig, int col, Controleur ctrl)
+	public PanelCase(int lig, int col, Controleur ctrl, int idJoueur)
 	{
 		this.ctrl        = ctrl;
 		this.lig         = lig;
 		this.col         = col;
+		this.idJoueur    = idJoueur;
 
 		this.setLayout(new BorderLayout());
 		this.setBorder(null);
 
 		this.initImgFond();
 
-		if (this.ctrl.getCase(lig, col).getSommet() != null)
+		if (this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null)
 		{
 			this.btnCase = new JButton();
-			String symbole  = this.ctrl.getCase(lig, col).getSommet().getSymbole();
+			String symbole  = this.ctrl.getCase(lig, col, this.idJoueur).getSommet().getSymbole();
 			this.imgSymbole = getToolkit().getImage("../images/symboles/symbole_" + symbole + ".png");
 
 			Image img = imgSymbole.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -82,7 +84,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		int[][] dependances = { {0, 2}, {0, 3}, {1, 2}, {1, 3} };
 
 		boolean[] memeZone = new boolean[8];
-		int        zoneCourante = this.ctrl.getCase(this.lig, this.col).getZone();
+		int        zoneCourante = this.ctrl.getCase(this.lig, this.col, this.idJoueur).getZone();
 
 		// teste les 8 directions
 		for (int cptDir = 0; cptDir < 8; cptDir++)
@@ -92,7 +94,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 
 			memeZone[cptDir] = ligVoisin >= 0 && ligVoisin < this.ctrl.getLig() &&
 							colVoisin >= 0 && colVoisin < this.ctrl.getCol() &&
-							this.ctrl.getCase(ligVoisin, colVoisin).getZone() == zoneCourante;
+							this.ctrl.getCase(ligVoisin, colVoisin, this.idJoueur).getZone() == zoneCourante;
 		}
 
 		// annuler les coins si leurs côtés adjacents ne sont pas tous dans la même zone
@@ -122,7 +124,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.g2 = (Graphics2D) g.create();
 
 		// 1. Dessin de la couleur de zone
-		this.g2.setColor(this.ctrl.getCouleurZone(this.ctrl.getCase(this.lig, this.col).getZone()));
+		this.g2.setColor(this.ctrl.getCouleurZone(this.ctrl.getCase(this.lig, this.col, this.idJoueur).getZone()));
 		this.g2.fillRect(0, 0, getWidth(), getHeight());
 
 		// 2. Image de fond texturée
@@ -135,15 +137,15 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 
 		// 3. RESTAURATION DES SURBRILLANCES 
 
-		if (ctrl.getCaseSelectionnee() != null && this.ctrl.getCase(this.lig, this.col).getSommet() != null)
+		if (ctrl.getCaseSelectionnee() != null && this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null)
 		{
-			if (this.ctrl.getCase(this.lig, this.col) == ctrl.getCaseSelectionnee())
+			if (this.ctrl.getCase(this.lig, this.col, this.idJoueur) == ctrl.getCaseSelectionnee())
 			{
 				// Premier clic : la case sélectionnée s'allume en Jaune
 				this.g2.setColor(new Color(255, 200, 0, 150));
 				this.g2.fillRect(0, 0, getWidth(), getHeight());
 			}
-			else if (ctrl.estVoisinAtteignable(this.ctrl.getCase(this.lig, this.col)))
+			else if (ctrl.estVoisinAtteignableMulti(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur))
 			{
 				// Les chemins cibles légaux s'allument en Vert
 				this.g2.setColor(new Color(0, 220, 80, 120));
@@ -152,11 +154,11 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		}
 
 		// 4. Dessin de la base du virus colorée
-		if (this.ctrl.getCase(this.lig, this.col).getSommet() != null && this.ctrl.getCase(this.lig, this.col).getSommet().getEstBase() > 0)
+		if (this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null && this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getEstBase() > 0)
 		{
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
 			Image baseTeintee = this.teinteImage(this.imgBase, getWidth(), getHeight(),
-								this.ctrl.getCase(this.lig, this.col).getSommet().getVirus().getCouleur());
+								this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getVirus().getCouleur());
 			this.g2.drawImage(baseTeintee, 0, 0, getWidth(), getHeight(), this);
 		}
 
@@ -183,7 +185,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	{
 		if (e.getSource() == this.btnCase)
 		{
-			this.ctrl.verifSommet(this.ctrl.getCase(this.lig, this.col));
+			this.ctrl.verifSommet(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur);
 		}
 	}
 

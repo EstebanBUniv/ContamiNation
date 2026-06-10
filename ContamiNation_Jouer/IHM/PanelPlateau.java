@@ -1,7 +1,9 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
+
 import java.awt.GridLayout;
+
 import javax.swing.JPanel;
 
 public class PanelPlateau extends JPanel
@@ -14,14 +16,16 @@ public class PanelPlateau extends JPanel
 
 	private int lig;
 	private int col;
+	private int idJoueur;
 
-	public PanelPlateau(FrameJeu frame, Controleur ctrl)
+	public PanelPlateau(FrameJeu frame, Controleur ctrl, int idJoueur)
 	{
 		this.frameMere = frame;
 		this.ctrl      = ctrl;
+		this.idJoueur  = idJoueur;
 
-		this.lig = this.ctrl.getPlateau().getLig();
-		this.col = this.ctrl.getPlateau().getCol();
+		this.lig = this.ctrl.getLig();
+		this.col = this.ctrl.getCol();
 
 		this.tabPanel = new PanelCase[this.lig][this.col];
 
@@ -31,7 +35,7 @@ public class PanelPlateau extends JPanel
 		{
 			for ( int cptCol = 0; cptCol < this.col; cptCol++ )
 			{
-				this.tabPanel[cptLig][cptCol] = new PanelCase(cptLig, cptCol, this.ctrl);
+				this.tabPanel[cptLig][cptCol] = new PanelCase(cptLig, cptCol, this.ctrl, this.idJoueur);
 				this.add(this.tabPanel[cptLig][cptCol]);
 			}
 		}
@@ -48,4 +52,5 @@ public class PanelPlateau extends JPanel
 	}
 
 	public PanelCase[][] getTabPanel() { return this.tabPanel; }
+	public PanelCase getPanel(int lig, int col) { return this.tabPanel[lig][col]; }
 }
