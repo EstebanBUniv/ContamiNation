@@ -64,6 +64,7 @@ public class Controleur
 			this.plateau.preparerNouvelleManche();
 			initierPioche();
 			melangerPioche();
+			this.frame.nouvelleManche();
 			this.frame.reinitierPanelPioche();
 			if (this.frame != null) this.frame.repaint();
 		} else {
@@ -110,13 +111,13 @@ public class Controleur
 			}
 			this.estClique = false;
 			this.caseSelectionnee = null;
-			this.frame.SommetClique(false, null);
+			this.frame.SommetClique();
 		} else {
 			// PREMIER CLIC : Sélection
 			if (s != null && v.getConquis().contains(s) && v.estExtremite(s)) {
 				this.estClique = true;
 				this.caseSelectionnee = caseAVerif;
-				this.frame.SommetClique(true, caseAVerif);
+				this.frame.SommetClique();
 			}
 		}
 		this.frame.repaint();

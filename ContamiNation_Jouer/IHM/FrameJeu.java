@@ -144,8 +144,19 @@ public class FrameJeu extends JFrame
 	 * Le repaint() global suffit : chaque PanelCase interroge
 	 * ctrl.getCaseSelectionnee() dans son paintComponent.
 	 */
-	public void SommetClique(boolean estClique, Case caseCliquee)
+	public void SommetClique()
 	{
 		this.repaint();
 	}
+
+	public void nouvelleManche()
+	{
+		javax.swing.JOptionPane.showOptionDialog(this, 
+				"Une nouvelle manche vient de se lancer !", 
+				"Nouvelle Manche", 
+				javax.swing.JOptionPane.DEFAULT_OPTION, 
+				javax.swing.JOptionPane.PLAIN_MESSAGE, 
+				null, null, null);
+	}
+
 }
