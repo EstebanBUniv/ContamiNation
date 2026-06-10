@@ -3,6 +3,7 @@ package ContamiNation_Jouer.Metier;
 import ContamiNation_Jouer.Controleur;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Plateau
@@ -216,6 +217,26 @@ public class Plateau
 	{
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 
+  Sommet nouveauSommet = caseAVerif.getSommet();
+
+		boolean diagonaleInterdite = false;
+		if (virusActuel != null && !virusActuel.getConquis().isEmpty() && nouveauSommet != null) 
+		{
+			// On parcourt TOUS les voisins du nouveau sommet cliqué
+			for (Sommet v : nouveauSommet.getLstVoisin()) 
+			{
+				// Si ce voisin fait déjà partie du chemin conquis par le virus actuel
+				if (v != null && virusActuel.getConquis().contains(v)) 
+				{
+					// On vérifie si ce lien spécifique croise une diagonale adverse
+					if (this.estDiagonaleCroisee(v, nouveauSommet)) 
+					{
+						diagonaleInterdite = true;
+					}
+					else{diagonaleInterdite = false;}
+				}
+			}
+		}
 		// Sécurité de base
 		if (carteTire == null || !caseAVerif.getAUnSommet())
 			return false;
@@ -233,12 +254,67 @@ public class Plateau
 		// Le sommet doit être voisin direct de l'extrémité sélectionnée
 		if (!virusActuel.estVoisinDeLExtremite(s))
 			return false;
+    
+    if ( !diagonaleInterdite)
+      return false;
 
 		// Validation finale : ajout au chemin avec gestion de la boucle (choixForce)
 		virusActuel.ajouterSommetContamine(s, choixForce);
 		s.setContamine(true);
 		
 		return true;
+	}
+
+	public boolean estDiagonaleCroisee(Sommet s1, Sommet s2)
+	{
+		int lig1 = s1.getLigSommet();
+		int col1 = s1.getColSommet();
+		int lig2 = s2.getLigSommet();
+		int col2 = s2.getColSommet();
+
+		// 1. Vérifier si c'est bien un déplacement diagonal (écart en ligne == écart en colonne)
+		if (Math.abs(lig1 - lig2) != Math.abs(col1 - col2) || Math.abs(lig1 - lig2) == 0) {
+			return false; // Ce n'est pas une diagonale ou c'est le même point, aucun risque !
+		}
+
+		// 2. Identifier le point le plus haut (ligA) et le point le plus bas (ligB)
+		int ligA = Math.min(lig1, lig2);
+		int ligB = Math.max(lig1, lig2);
+		
+		// Associer les bonnes colonnes
+		int colA = (lig1 < lig2) ? col1 : col2;
+		int colB = (lig1 < lig2) ? col2 : col1;
+
+		// 3. Parcourir tous les virus pour voir si l'un d'eux occupe la diagonale adverse
+		for (int i = 0; i < this.lstVirus.size(); i++)
+		{
+			Virus v = this.lstVirus.get(i);
+			if (v != null && v.getConquis().size() > 1)
+			{
+				LinkedList<Sommet> chemin = v.getConquis();
+				
+				// On regarde chaque segment du chemin du virus
+				for (int c = 0; c < chemin.size() - 1; c++)
+				{
+					Sommet v1 = chemin.get(c);
+					Sommet v2 = chemin.get(c + 1);
+
+					// Est-ce que ce segment relie (ligA, colB) et (ligB, colA) ?
+					boolean conditionDirecte = (v1.getLigSommet() == ligA && v1.getColSommet() == colB && 
+												v2.getLigSommet() == ligB && v2.getColSommet() == colA);
+												
+					boolean conditionInverse = (v2.getLigSommet() == ligA && v2.getColSommet() == colB && 
+												v1.getLigSommet() == ligB && v1.getColSommet() == colA);
+
+					if (conditionDirecte || conditionInverse)
+					{
+						return true; // La diagonale adverse est déjà prise ! Croisement interdit.
+					}
+				}
+			}
+		}
+
+		return false; // Aucune diagonale adverse trouvée, le chemin est libre
 	}
 	
 	public void preparerNouvelleManche()

@@ -22,9 +22,10 @@ public class Controleur
 	private JPanel[][]          tabPanel;
 	private FrameJeu            frame;
 	private Plateau             plateau;
-	private Pioche              pioche;
-	private FrameChoixCarte     frameChoixCarte;
-	private Map<Integer, Color> couleursZones    = new HashMap<>();
+	private Pioche              pioche;   
+  private FrameChoixCarte     frameChoixCarte;
+  private Map<Integer, Color> couleursZones = new HashMap<>();
+
 	private int                 r;
 	private int                 g;
 	private int                 b;
@@ -156,46 +157,9 @@ public class Controleur
 		
 		Sommet s = caseAVerif.getSommet();
 		Carte carteActive = this.pioche.getCarteTire();
-
-		// DEUXIÈME CLIC : Tentative de propagation depuis l'extrémité sélectionnée
-		if (this.estClique)
-		{
-			// On s'assure que le coup respecte les règles ET est un voisin direct de notre sélection
-			if (this.plateau.estCoupValide(caseAVerif, carteActive) && this.estVoisinAtteignable(caseAVerif))
-			{
-				int choixForce = 0;
-
-				// Détection de boucle fermée
-				if (s != null && v.getConquis().size() > 1 && v.toucheTete(s) && v.toucheQueue(s))
-				{
-					choixForce = this.frame.demanderChoixBoucle();
-				}
-
-				// Envoi de l'ordre final au Plateau
-				if (this.plateau.verifSommet(caseAVerif, carteActive, choixForce))
-				{
-					this.frame.reinitierPanelPioche();
-				}
-			}
-			
-			// Qu'il y ait eu réussite ou erreur, on libère la sélection après le second clic
-			this.estClique = false;
-			this.caseSelectionnee = null;
-		}
-		// PREMIER CLIC : Sélection d'une extrémité du virus
-		else
-		{
-			// CORRECTION DU BUG : On vérifie si le sommet appartient au virus (contains) plutôt que s.getContamine()
-			if (s != null && v.getConquis().contains(s) && v.estExtremite(s))
-			{
-				this.estClique = true;
-				this.caseSelectionnee = caseAVerif;
-			}
-		}
-
 		this.frame.repaint();
 	}
-
+  
 	// Méthode de Grégory pour calculer la surbrillance des cases cibles
 	public boolean estVoisinAtteignable(Case caseAVerif)
 	{
