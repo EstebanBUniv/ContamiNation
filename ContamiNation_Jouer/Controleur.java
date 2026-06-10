@@ -171,7 +171,7 @@ public class Controleur
 		}
 		
 		else
-			System.out.println("Fin de tout le jeu");
+			System.out.println("Fin de tout le jeu" + this.plateau.getPointTotal());
 	}
 	
 	public void verifSommet(Case caseAVerif)
@@ -183,9 +183,6 @@ public class Controleur
 		//avoir la bonne carte
 		this.frame.repaint();
 	}
-
-	public boolean estDiagonaleCroisee(Sommet s1, Sommet s2){return this.plateau.estDiagonaleCroisee(s1, s2);}
-
 
 	public void setModeDebiche()
 	{

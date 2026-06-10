@@ -70,7 +70,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 
 
 		this.addComponentListener(this);
-    this.btnCase.addActionListener(this);
+    	this.btnCase.addActionListener(this);
 	}
 
 	public int getTailleCase()

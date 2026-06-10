@@ -18,6 +18,7 @@ public class Plateau
 	private Case[][]    tabCases; 
 	private File        fichierSource = null;
 	private List<Virus> lstVirus;
+	private Virus       virus;
 
 	private boolean     modeDebiche = false;
 
@@ -40,6 +41,7 @@ public class Plateau
 		this.tabCases = new Case[lig][col];
 		this.numManche  = 1;
 		this.pointTotal = 0;
+		this.virus      = new Virus(nom);
 
 		// CRUCIAL : Initialisation de la grille de jeu
 		for (int i = 0; i < lig; i++) {
@@ -213,43 +215,61 @@ public class Plateau
 	public boolean verifSommet(Case caseAVerif, Carte carteTire)
 	{
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
-
 		Sommet nouveauSommet = caseAVerif.getSommet();
 
+		// --- Vérification diagonale croisée (existante) ---
 		boolean diagonaleInterdite = false;
-		if (virusActuel != null && !virusActuel.getConquis().isEmpty() && nouveauSommet != null) 
+		if (virusActuel != null && !virusActuel.getConquis().isEmpty() && nouveauSommet != null)
 		{
-			// On parcourt TOUS les voisins du nouveau sommet cliqué
-			for (Sommet v : nouveauSommet.getLstVoisin()) 
+			for (Sommet v : nouveauSommet.getLstVoisin())
 			{
-				// Si ce voisin fait déjà partie du chemin conquis par le virus actuel
-				if (v != null && virusActuel.getConquis().contains(v)) 
+				if (v != null && virusActuel.getConquis().contains(v))
 				{
-					// On vérifie si ce lien spécifique croise une diagonale adverse
-					if (this.estDiagonaleCroisee(v, nouveauSommet)) 
+					if (this.estDiagonaleCroisee(v, nouveauSommet))
 					{
 						diagonaleInterdite = true;
 					}
-					else{diagonaleInterdite = false;}
 				}
 			}
 		}
-		
+
+		boolean arreteOccupee = false;
+		if (virusActuel != null && nouveauSommet != null && !virusActuel.getConquis().isEmpty())
+		{
+			Sommet tete  = virusActuel.getConquis().getFirst();
+			Sommet queue = virusActuel.getConquis().getLast();
+
+			// Trouver quelle extrémité est voisine du sommet cliqué
+			for (Sommet voisin : nouveauSommet.getLstVoisin())
+			{
+				if (voisin == tete || voisin == queue)
+				{
+					if (this.arreteDejaColoree(nouveauSommet, voisin))
+					{
+						arreteOccupee = true;
+						break;
+					}
+				}
+			}
+		}
+
 		if ( carteTire != null &&
-		     caseAVerif .getAUnSommet()                                          && // Vérification sommet présent (Correction : getAUnSommet())
-			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())           && // a un voisin à une extrémité du virus
-			 !caseAVerif.getSommet().getContamine()                              && // Le sommet n'est pas encore contaminé
-			 (carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ||
-			  carteTire.getSymbole().equals("epidemie"))                && // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
-			  !diagonaleInterdite)
+			caseAVerif.getAUnSommet()                                                      &&
+			virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())                      &&
+			!caseAVerif.getSommet().getContamine()                                         &&
+			(carteTire.getSymbole().equals(caseAVerif.getSommet().getSymbole()) ||
+			carteTire.getSymbole().equals("epidemie"))                           &&
+			!diagonaleInterdite                                                            &&
+			!arreteOccupee)  
 		{
 			virusActuel.ajouterSommetContamine(caseAVerif.getSommet());
 			caseAVerif.getSommet().setContamine(true);
 			return true;
 		}
-		
+
 		return false;
 	}
+
 
 	public boolean estDiagonaleCroisee(Sommet s1, Sommet s2)
 	{
@@ -302,6 +322,31 @@ public class Plateau
 
 		return false; // Aucune diagonale adverse trouvée, le chemin est libre
 	}
+
+	private boolean arreteDejaColoree(Sommet s1, Sommet s2)
+	{
+		for (int i = 0; i < this.lstVirus.size(); i++)
+		{
+			Virus v = this.lstVirus.get(i);
+			if (v == null) continue;
+
+			LinkedList<Sommet> chemin = v.getConquis();
+			for (int c = 0; c < chemin.size() - 1; c++)
+			{
+				Sommet a = chemin.get(c);
+				Sommet b = chemin.get(c + 1);
+
+				if ((a == s1 && b == s2) || (a == s2 && b == s1))
+					return true;
+			}
+		}
+		return false;
+	}
+
+	public int getPointTotal(){return this.pointTotal;}
+
+
+	public void enleverSommetContamine(Sommet s){ this.virus.enleverSommetContamine(s);}
 	
 	public void preparerNouvelleManche()
 	{

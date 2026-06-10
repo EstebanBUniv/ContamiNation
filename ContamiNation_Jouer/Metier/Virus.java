@@ -102,6 +102,31 @@ public class Virus
 		if (extremite == 2)
 			this.cheminContamine.addLast(s);
 	}
+
+	public void enleverSommetContamine (Sommet s)
+	{
+		if (this.cheminContamine == null || this.cheminContamine.isEmpty()) 
+   		{
+     		return;
+    	}
+		
+		int extremite = 0;
+		for (Sommet voisin : s.getLstVoisin())
+		{
+			if (voisin != null)
+			{
+				if (voisin == this.cheminContamine.getFirst()) 
+					extremite = 1;
+				if (voisin == this.cheminContamine.getLast ()) 
+					extremite = 2;
+			}
+		}
+		
+		if (extremite == 1)
+			this.cheminContamine.removeFirst();
+		if (extremite == 2)
+			this.cheminContamine.removeLast ();
+	}
 	
 	public boolean estVoisinDeLExtremite(Sommet sommetClique)
 	{
