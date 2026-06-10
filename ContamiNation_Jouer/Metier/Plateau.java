@@ -115,11 +115,12 @@ public class Plateau
 		}
 	}
 	
-	public void initialiserBaseVirus(Sommet base, int numeroManche) {
-		if (numeroManche > 0 && numeroManche <= this.lstVirus.size()) {
+	public void initialiserBaseVirus(Sommet base, int numeroManche) 
+	{
+		if (numeroManche > 0 && numeroManche <= this.lstVirus.size()) 
+		{
 			Virus v = this.lstVirus.get(numeroManche - 1);
 			v.setBaseDepart(base);
-			base.setProprietaire(v); // LA LIGNE QUI CORRIGE LE CRASH
 		}
 	}
 
@@ -172,20 +173,14 @@ public class Plateau
 	
 	public boolean verifSommet(Case caseAVerif, Carte carteTire, int choixForce) 
 	{
+		if (!this.estCoupValide(caseAVerif, carteTire)) return false;
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		
-		if ( carteTire != null &&
-		     caseAVerif .getAUnSommet() &&
-			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet()) &&
-			 !caseAVerif.getSommet().getContamine() &&
-			 (carteTire.getSymbole().equals(caseAVerif.getSommet().getSymbole()) || carteTire.getSymbole().equals("Epidemie")))
-		{
-			virusActuel.ajouterSommetContamine(caseAVerif.getSommet(), choixForce);
-			caseAVerif.getSommet().setContamine(true);
-			caseAVerif.getSommet().setProprietaire(virusActuel);
-			return true;
-		}
-		return false;
+		Sommet sommet = caseAVerif.getSommet();
+		virusActuel.ajouterSommetContamine(sommet, choixForce);
+		sommet.setContamine(true);
+		sommet.setProprietaire(virusActuel);
+		return true;
 	}
 	
 	public void preparerNouvelleManche() 
@@ -212,12 +207,15 @@ public class Plateau
 		}
 	}
 	
-	public boolean estCoupValide(Case caseAVerif, Carte carteTire) {
+	public boolean estCoupValide(Case caseAVerif, Carte carteTire) 
+	{
+		if (caseAVerif == null || carteTire == null || !caseAVerif.getAUnSommet()) return false;
+
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
-		if (carteTire == null || !caseAVerif.getAUnSommet()) return false;
 		Sommet s = caseAVerif.getSommet();
-		return virusActuel.estVoisinDeLExtremite(s) && 
-			   !s.getContamine() && 
+
+		return virusActuel.estVoisinDeLExtremite(s) &&
+			   !s.getContamine() &&
 			   (carteTire.getSymbole().equals(s.getSymbole()) || carteTire.getSymbole().equals("Epidemie"));
 	}
 }
