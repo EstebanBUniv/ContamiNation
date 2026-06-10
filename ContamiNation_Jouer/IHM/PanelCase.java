@@ -34,6 +34,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	private int        taille;
 	private int        lig;
 	private int        col;
+	private 
 	
 	public PanelCase(int lig, int col, Controleur ctrl)
 	{
@@ -43,8 +44,8 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.setLayout(new BorderLayout());
 		this.setBorder(null);
 		
-		this.imgFond     = getToolkit().getImage("../images/fond/fond_case.png");
-		this.imgBase     = getToolkit().getImage("../images/fond/base.png");
+		this.imgFond     = getToolkit().getImage("../images/fond/case/fond_case_0.png");
+		this.imgBase     = getToolkit().getImage("../images/fond/case/base.png");
 
 
 		if (this.ctrl.getCase(this.lig, this.col).getSommet() != null)
