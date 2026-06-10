@@ -69,8 +69,10 @@ public class Sommet
 	// Ajoute un voisin selon une direction spécifique (0-7)
 	public void ajouterVoisin(int direction, Sommet voisin)
 	{
+		if (this.lstVoisins[direction] == null && voisin != null)
+			this.nbChemin++;
+
 		this.lstVoisins[direction] = voisin;
-		this.nbChemin++;
 	}
 	
 	// Supprime un voisin spécifique de la liste
@@ -81,9 +83,14 @@ public class Sommet
 			if (this.lstVoisins[i] == s)
 			{
 				this.lstVoisins[i] = null;
-				this.nbChemin--;
 			}
-    	}
+		}
+
+		this.nbChemin = 0;
+		for (Sommet voisin : this.lstVoisins)
+		{
+			if (voisin != null) this.nbChemin++;
+		}
 	}
 	
 	// Réinitialise toutes les connexions du sommet

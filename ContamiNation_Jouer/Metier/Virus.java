@@ -25,6 +25,7 @@ public class Virus
 
 	private int    idVirus;
 	private String nom;
+	private Sommet baseDepart;
 
 	public Virus(String nom)
 	{
@@ -44,7 +45,7 @@ public class Virus
 
 	public Color              getCouleur() { return couleursVirus.get(this.idVirus); }
 	public LinkedList<Sommet> getConquis() { return this.cheminContamine;            }
-
+	public Sommet getBaseDepart() { return this.baseDepart; }
 
 	/*----------------------------*/
 	/* Méthodes Utilitaires       */
@@ -63,6 +64,9 @@ public class Virus
 	{
 		compteurId = 1;
 		couleursVirus.clear();
+		r = 0;
+		g = 0;
+		b = 0;
 	}
 
 	public static Color getCouleur(int id)
@@ -74,8 +78,10 @@ public class Virus
 	
 	public void setBaseDepart(Sommet base)
 	{
+		if (this.baseDepart != null) return;
+		this.baseDepart = base;
 		this.cheminContamine.add(base);
-		base.setProprietaire(this); // (À décommenter plus tard quand on fera la logique des sommets)
+		base.setProprietaire(this);
 	}
 
 	public boolean estExtremite(Sommet s)
