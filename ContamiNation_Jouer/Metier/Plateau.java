@@ -67,6 +67,8 @@ public class Plateau
 	public File   getFichierSource()         { return this.fichierSource      ; }
 	public Case   getCase(int lig, int col)  { return this.tabCases[lig][col] ; }
 	public Virus  getVirus(int index)        { return this.lstVirus.get(index); }
+	public int    getPointTotal()            { return this.pointTotal         ; }
+	public int    getNumManche ()            { return this.numManche          ; }
 
 	public int getNumero() 
 	{
@@ -213,18 +215,18 @@ public class Plateau
 		return scoreFinal;
 	}
 	
-	public boolean verifSommet(Case caseAVerif, Carte carteTire)
+	public boolean verifSommet(Case caseAVerif, Carte carteTire, int choixForce)
 	{
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		
 		if ( carteTire != null &&
-		     caseAVerif .getAUnSommet()                                          && // Vérification sommet présent (Correction : getAUnSommet())
-			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())           && // a un voisin à une extrémité du virus
-			 !caseAVerif.getSommet().getContamine()                              && // Le sommet n'est pas encore contaminé
+		     caseAVerif .getAUnSommet()                                            && // Vérification sommet présent (Correction : getAUnSommet())
+			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())             && // a un voisin à une extrémité du virus
+			 !caseAVerif.getSommet().getContamine()                                && // Le sommet n'est pas encore contaminé
 			 (carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ||
-			  carteTire.getSymbole().equals("epidemie"))) // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
+			  carteTire.getSymbole().equals("Epidemie")))                          // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
 		{
-			virusActuel.ajouterSommetContamine(caseAVerif.getSommet());
+			virusActuel.ajouterSommetContamine(caseAVerif.getSommet(), choixForce);
 			caseAVerif.getSommet().setContamine(true);
 			return true;
 		}
@@ -244,6 +246,20 @@ public class Plateau
 				}
 			}
 		}
+	}
+	
+	public boolean estCoupValide(Case caseAVerif, Carte carteTire)
+	{
+		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		
+		if (carteTire == null || !caseAVerif.getAUnSommet()) return false;
+		
+		Sommet s = caseAVerif.getSommet();
+		
+		return virusActuel.estVoisinDeLExtremite(s) && 
+			   !s.getContamine()                    && 
+			   (carteTire.getSymbole().equals(s.getSymbole()) ||
+			  carteTire.getSymbole().equals("Epidemie"));
 	}
 
 }
