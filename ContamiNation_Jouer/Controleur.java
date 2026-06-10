@@ -28,9 +28,11 @@ public class Controleur
 	private int                 r;
 	private int                 g;
 	private int                 b;
+	
+	// Restauration des attributs de sélection de Grégory
 	private boolean             estClique        = false;
-	private boolean             modeDebiche      = false;
 	private Case                caseSelectionnee = null;
+	private boolean             modeDebiche      = false;
 
 
 	/*----------------------------*/
@@ -50,6 +52,7 @@ public class Controleur
 	public Plateau getPlateau()          { return this.plateau;          }
 	public boolean getModeDebiche()      { return this.modeDebiche;      }
 	public Case    getCaseSelectionnee() { return this.caseSelectionnee; }
+	public boolean getEstClique()        { return this.estClique;        }
 
 	public int getTailleCase()
 	{
@@ -148,64 +151,61 @@ public class Controleur
 
 	public void verifSommet(Case caseAVerif)
 	{
-		// 1. On récupère dynamiquement le virus de la manche actuelle
 		int indexManche = this.plateau.getNumManche() - 1;
 		Virus v = this.getVirus(indexManche);
 		
 		Sommet s = caseAVerif.getSommet();
 		Carte carteActive = this.pioche.getCarteTire();
 
-		// Deuxième clic : tentative de propagation depuis l'extrémité sélectionnée
+		// DEUXIÈME CLIC : Tentative de propagation depuis l'extrémité sélectionnée
 		if (this.estClique)
 		{
-			// On s'assure d'abord que le coup respecte les règles générales ET qu'il est bien voisin de notre sélection
+			// On s'assure que le coup respecte les règles ET est un voisin direct de notre sélection
 			if (this.plateau.estCoupValide(caseAVerif, carteActive) && this.estVoisinAtteignable(caseAVerif))
 			{
 				int choixForce = 0;
 
-				// Détection de boucle fermée : pop-up IHM uniquement si le coup est légal
-				if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s))
+				// Détection de boucle fermée
+				if (s != null && v.getConquis().size() > 1 && v.toucheTete(s) && v.toucheQueue(s))
 				{
 					choixForce = this.frame.demanderChoixBoucle();
 				}
 
-				// Validation finale et ajout au chemin
+				// Envoi de l'ordre final au Plateau
 				if (this.plateau.verifSommet(caseAVerif, carteActive, choixForce))
 				{
 					this.frame.reinitierPanelPioche();
 				}
 			}
 			
-			// Qu'il y ait eu contamination ou erreur, on libère la sélection après le 2e clic
+			// Qu'il y ait eu réussite ou erreur, on libère la sélection après le second clic
 			this.estClique = false;
 			this.caseSelectionnee = null;
-			this.frame.SommetClique(this.estClique, null);
 		}
-		// Premier clic : sélection d'une extrémité libre du virus
+		// PREMIER CLIC : Sélection d'une extrémité du virus
 		else
 		{
-			if (s != null && s.getContamine() && v.estExtremite(s))
+			// CORRECTION DU BUG : On vérifie si le sommet appartient au virus (contains) plutôt que s.getContamine()
+			if (s != null && v.getConquis().contains(s) && v.estExtremite(s))
 			{
 				this.estClique = true;
 				this.caseSelectionnee = caseAVerif;
-				this.frame.SommetClique(this.estClique, caseAVerif); // Met en valeur visuellement
 			}
 		}
 
 		this.frame.repaint();
 	}
 
-	// Vérifie si une case est un voisin atteignable selon les règles métier
+	// Méthode de Grégory pour calculer la surbrillance des cases cibles
 	public boolean estVoisinAtteignable(Case caseAVerif)
 	{
 		if (this.caseSelectionnee == null || caseAVerif.getSommet() == null)
 			return false;
 
-		// Le sommet est déjà dans le chemin du virus : interdit
+		// Le sommet cible fait déjà partie du virus : interdit
 		if (this.plateau.getVirusActif().getConquis().contains(caseAVerif.getSommet()))
 			return false;
 
-		// La carte tirée ne correspond pas au symbole : interdit
 		Carte carteTiree = this.pioche.getCarteTire();
 		if (carteTiree == null)
 			return false;
@@ -214,7 +214,7 @@ public class Controleur
 			!carteTiree.getSymbole().equals("Epidemie"))
 			return false;
 
-		// On vérifie uniquement les voisins du sommet sélectionné
+		// On s'assure que la case pointée est bien un voisin géométrique direct de notre sélection
 		Sommet sommetSelectionne = this.caseSelectionnee.getSommet();
 		for (Sommet voisin : sommetSelectionne.getLstVoisin())
 		{

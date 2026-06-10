@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 
 public class PanelCase extends JPanel implements ComponentListener, ActionListener
 {
-	// Attributs d'instance
 	private Controleur ctrl;
 	private Case       casePlateau;
 	
@@ -30,10 +29,6 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	private Image      imgFond;
 	private Image      imgBase;
 	private Graphics2D g2;
-
-	/*----------------------------*/
-	/* Constructeur              */
-	/*----------------------------*/
 
 	public PanelCase(Case casePlateau, Controleur ctrl)
 	{
@@ -49,7 +44,6 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		if (this.casePlateau.getSommet() != null)
 		{
 			this.btnCase = new JButton();
-
 			String symbole  = this.casePlateau.getSommet().getSymbole();
 			this.imgSymbole = getToolkit().getImage("../images/symboles/symbole_" + symbole + ".png");
 
@@ -71,29 +65,21 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.btnCase.addActionListener(this);
 	}
 
-	/*----------------------------*/
-	/* Getters                   */
-	/*----------------------------*/
-
 	public int getTailleCase()
 	{
 		return Math.max(this.getWidth(), this.getHeight());
 	}
-
-	/*----------------------------*/
-	/* Méthodes graphiques       */
-	/*----------------------------*/
 
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
 		this.g2 = (Graphics2D) g.create();
 
-		// 1. Couleur de zone de base
+		// 1. Dessin de la couleur de zone
 		this.g2.setColor(this.ctrl.getCouleurZone(this.casePlateau.getZone()));
 		this.g2.fillRect(0, 0, getWidth(), getHeight());
 
-		// 2. Image de fond semi-transparente
+		// 2. Image de fond texturée
 		if (this.imgFond != null)
 		{
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.4f));
@@ -101,48 +87,37 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
 		}
 
-		// 3. Surbrillance (Sélection / Voisins)
-		Case caseSelectionnee = this.ctrl.getCaseSelectionnee();
+		// 3. RESTAURATION DES SURBRILLANCES DE GRÉGORY
+		Case caseSelectionnee = ctrl.getCaseSelectionnee();
 
 		if (caseSelectionnee != null && this.casePlateau.getSommet() != null)
 		{
 			if (this.casePlateau == caseSelectionnee)
 			{
-				// Case sélectionnée : surbrillance jaune
-				this.g2.setColor(new Color(255, 200, 0, 180));
+				// Premier clic : la case sélectionnée s'allume en Jaune
+				this.g2.setColor(new Color(255, 200, 0, 150));
 				this.g2.fillRect(0, 0, getWidth(), getHeight());
 			}
-			else if (this.ctrl.estVoisinAtteignable(this.casePlateau))
+			else if (ctrl.estVoisinAtteignable(this.casePlateau))
 			{
-				// Voisin atteignable : surbrillance verte
-				this.g2.setColor(new Color(0, 220, 80, 150));
+				// Les chemins cibles légaux s'allument en Vert
+				this.g2.setColor(new Color(0, 220, 80, 120));
 				this.g2.fillRect(0, 0, getWidth(), getHeight());
 			}
 		}
 
-		// 4. Dessine un symbole si c'est une base de départ
-		if (this.casePlateau.getSommet() != null)
+		// 4. Dessin de la base du virus colorée
+		if (this.casePlateau.getSommet() != null && this.casePlateau.getSommet().getEstBase() > 0)
 		{
-			if (this.casePlateau.getSommet().getEstBase() > 0)
-			{
-				this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-				
-				// Change la couleur de imgBase en fonction de la couleur du virus
-				Image baseTeintee = this.teinteImage(this.imgBase, getWidth(), getHeight(),
-									this.casePlateau.getSommet().getVirus().getCouleur());
-				
-				// Dessine la nouvelle imgBase avec sa couleur
-				this.g2.drawImage(baseTeintee, 0, 0, getWidth(), getHeight(), this);
-			}
+			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+			Image baseTeintee = this.teinteImage(this.imgBase, getWidth(), getHeight(),
+								this.casePlateau.getSommet().getVirus().getCouleur());
+			this.g2.drawImage(baseTeintee, 0, 0, getWidth(), getHeight(), this);
 		}
 
 		this.g2.dispose();
 	}
 
-	//----------------------------//
-	// Méthodes d'implémentations //
-	//----------------------------//
-	
 	public void componentResized(ComponentEvent e)
 	{
 		if (this.imgSymbole != null)
