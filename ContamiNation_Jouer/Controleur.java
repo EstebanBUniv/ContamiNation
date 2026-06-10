@@ -171,11 +171,30 @@ public class Controleur
 		}
 		
 		else
-			System.out.println("Fin de tout le jeu");
+			System.out.println("Fin de tout le jeu" + this.plateau.getPointTotal());
 	}
 	
 	public void verifSommet(Case caseAVerif)
+{
+	// 1. CORRECTION DU VIRUS : On récupère dynamiquement le virus de la manche actuelle !
+	int indexManche = this.plateau.getNumManche() - 1;
+	Virus v = this.getVirus(indexManche);
+	
+	Sommet s = caseAVerif.getSommet();
+	Carte carteActive = this.pioche.getCarteTire();
+
+	// 2. CORRECTION DE LA POP-UP : On demande au Plateau si le coup est légal AVANT
+	if (!this.plateau.estCoupValide(caseAVerif, carteActive))
 	{
+		return; // Le coup est interdit (mauvais symbole, déjà pris, etc.), on annule tout !
+	}
+
+	int choixForce = 0;
+
+	// 3. Si on arrive ici, le coup est 100% valide. On vérifie juste si c'est une boucle
+	if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s))
+	{
+		choixForce = this.frame.demanderChoixBoucle();
 		if (this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire()))
 			this.frame.reinitierPanelPioche();
 		//croise pas un autre chemin
@@ -183,7 +202,13 @@ public class Controleur
 		//pas déjà relié a un sommet contaminé
 		//avoir la bonne carte
 		this.frame.repaint();
+
 	}
+
+	// 4. On transmet l'ordre final au plateau
+	this.plateau.verifSommet(caseAVerif, carteActive, choixForce);
+	this.frame.repaint();
+}
 
 
 	public void setModeDebiche()

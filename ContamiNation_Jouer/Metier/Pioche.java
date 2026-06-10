@@ -1,11 +1,15 @@
 package ContamiNation_Jouer.Metier;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 public class Pioche
 {
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private List<Carte> pioche;
 	private Carte       carteTire;
 	private String[]    nomSymboles = {"Aeroport", "Entrepot", "Hopital", "Laboratoire", "Ville", "Epidemie"};

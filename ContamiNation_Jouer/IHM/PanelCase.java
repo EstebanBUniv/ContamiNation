@@ -6,6 +6,7 @@ import ContamiNation_Jouer.IHM.FrameJeu;
 import java.awt.Image;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.event.*;
 import java.awt.BorderLayout;
 import java.awt.AlphaComposite;
@@ -21,6 +22,7 @@ import javax.swing.JPanel;
 
 public class PanelCase extends JPanel implements ComponentListener, ActionListener
 {
+	// Attribut d'instance
 	private Controleur ctrl;
 	
 	private JButton    btnCase;
@@ -72,6 +74,9 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
     	this.btnCase.addActionListener(this);
 	}
 
+	//---------------//
+	//   getters     //
+	//---------------//
 	public int getTailleCase()
 	{
 		return Math.max(this.getWidth(), this.getHeight());
@@ -110,6 +115,9 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.g2.dispose();
 	}
 
+	//----------------------------//
+	// Méthodes d'implémentations //
+	//----------------------------//
 	public void componentResized(ComponentEvent e)
 	{
 		if ( this.imgSymbole != null )

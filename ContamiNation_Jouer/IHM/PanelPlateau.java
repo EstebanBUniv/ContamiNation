@@ -1,12 +1,12 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
-
 import java.awt.GridLayout;
 import javax.swing.JPanel;
 
 public class PanelPlateau extends JPanel
 {
+	// Attribut d'instance
 	private FrameJeu frameMere;
 	private Controleur ctrl;
 
@@ -37,6 +37,9 @@ public class PanelPlateau extends JPanel
 		}
 	}
 
+	//--------------//
+	//    getters   //
+	//--------------//
 	public int getTailleCase()
 	{
 		if ( this.tabPanel != null )
