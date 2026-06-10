@@ -30,13 +30,23 @@ public class Controleur
 	public Controleur() { this.frame = new FrameJeu(this); }
 
 	public Plateau getPlateau() { return this.plateau; }
-	public int     getTailleCase() { return this.frame.getPanelPlateau().getTailleCase(); }
-	public int     getLig() { return plateau.getLig(); }
-	public int     getCol() { return plateau.getCol(); }
-	public Case    getCase(int lig, int col) { return this.plateau.getCase(lig, col); }
-	public JPanel  getPanel(int lig, int col) { return this.frame.getTabPanel()[lig][col]; }
-	public Virus   getVirus(int index) { return this.plateau.getVirus(index); }
+
+	public int getTailleCase() { return this.frame.getPanelPlateau().getTailleCase(); }
+	public int getLig() { return plateau.getLig(); }
+	public int getCol() { return plateau.getCol(); }
+	public Case getCase(int lig, int col) { return this.plateau.getCase(lig, col); }
+	public JPanel getPanel(int lig, int col) { return this.frame.getTabPanel()[lig][col]; }
+	public Virus getVirus(int index) { return this.plateau.getVirus(index); }
 	
+	public Sommet getVoisin(int indice) 
+	{
+    if (this.caseSelectionnee != null && this.caseSelectionnee.getSommet() != null) 
+		{
+        return this.caseSelectionnee.getSommet().getVoisin(indice);
+    	}
+    return null;
+	}
+
 	public void chargerNiveau(File fichier) {
 		this.plateau = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
 		if (this.getModeDebiche()) this.appelerChoixCarte();
@@ -66,6 +76,7 @@ public class Controleur
 			this.plateau.preparerNouvelleManche();
 			initierPioche();
 			melangerPioche();
+			this.frame.nouvelleManche();
 			this.frame.reinitierPanelPioche();
 			if (this.frame != null) this.frame.repaint();
 		} else {
@@ -76,60 +87,66 @@ public class Controleur
 	// --- MÉTHODES POUR L'AFFICHAGE DES COULEURS DE SÉLECTION ---
 	public Case getCaseSelectionnee() { return this.caseSelectionnee; }
 
-	public boolean estVoisinAtteignable(Case caseAVerif) {
-		if (this.caseSelectionnee == null || caseAVerif.getSommet() == null) return false;
-		Virus v = this.plateau.getVirusActif();
-		if (v.getConquis().contains(caseAVerif.getSommet())) return false;
-		
-		Carte carteTiree = this.pioche.getCarteTire();
-		if (carteTiree == null) return false;
-		if (!carteTiree.getSymbole().equals(caseAVerif.getSommet().getSymbole()) &&
-			!carteTiree.getSymbole().equals("Epidemie")) return false;
+	public boolean estVoisinAtteignable(Case caseAVerif) 
+	{
+		if (this.caseSelectionnee == null || caseAVerif == null || caseAVerif.getSommet() == null) return false;
+		if (!this.plateau.estCoupValide(caseAVerif, this.pioche.getCarteTire())) return false;
 
 		for (Sommet voisin : this.caseSelectionnee.getSommet().getLstVoisin()) {
 			if (voisin == caseAVerif.getSommet()) return true;
 		}
 		return false;
 	}
-
+	
+	public void verifSommet(Case caseAVerif)
+	{
+		if (caseAVerif == null) return;
 
 	// --- LE SYSTÈME DE JEU À 2 CLICS ---
 	public void verifSommet(Case caseAVerif) {
+
 		int indexManche = this.plateau.getNumManche() - 1;
 		Virus v = this.getVirus(indexManche);
 		Sommet s = caseAVerif.getSommet();
 		Carte carteActive = this.pioche.getCarteTire();
 
-		if (this.estClique) {
-			// DEUXIÈME CLIC : Tentative de propagation
-			if (this.plateau.estCoupValide(caseAVerif, carteActive) && this.estVoisinAtteignable(caseAVerif)) {
-				int choixForce = 0;
-				if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s)) {
-					choixForce = this.frame.demanderChoixBoucle();
-				}
-				if (this.plateau.verifSommet(caseAVerif, carteActive, choixForce)) {
-					this.frame.reinitierPanelPioche();
-				}
-			}
-			this.estClique = false;
-			this.caseSelectionnee = null;
-			this.frame.SommetClique(false, null);
-		} else {
-			// PREMIER CLIC : Sélection
-			if (s != null && v.getConquis().contains(s) && v.estExtremite(s)) {
+		if (!this.estClique)
+		{
+			if (s != null && v.getConquis().contains(s) && v.estExtremite(s))
+			{
 				this.estClique = true;
 				this.caseSelectionnee = caseAVerif;
-				this.frame.SommetClique(true, caseAVerif);
+				this.frame.SommetClique();
+			}
+			this.frame.repaint();
+			return;
+		}
+
+		if (this.plateau.estCoupValide(caseAVerif, carteActive) && this.estVoisinAtteignable(caseAVerif))
+		{
+			int choixForce = 0;
+			if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s))
+			{
+				choixForce = this.frame.demanderChoixBoucle();
+			}
+
+			if (this.plateau.verifSommet(caseAVerif, carteActive, choixForce))
+			{
+				this.frame.reinitierPanelPioche();
 			}
 		}
+
+		this.estClique = false;
+		this.caseSelectionnee = null;
+		this.frame.SommetClique();
 		this.frame.repaint();
 	}
 
-	public void setModeDebiche() { this.modeDebiche = true; }
-	public void appelerChoixCarte() { this.frameChoixCarte = new FrameChoixCarte(this); }
+	public void setModeDebiche()      { this.modeDebiche = true; }
+	public void appelerChoixCarte()   { this.frameChoixCarte = new FrameChoixCarte(this); }
 	public Carte getCarte(int indice) { return this.pioche.getCarte(indice); }
-	public int getTaillePioche() { return this.pioche.getTaillePioche(); }
-	public boolean getModeDebiche() { return this.modeDebiche; }
+	public int getTaillePioche()      { return this.pioche.getTaillePioche(); }
+	public boolean getModeDebiche()   { return this.modeDebiche; }
 
 	public static void main (String[] args) { new Controleur(); }
 }

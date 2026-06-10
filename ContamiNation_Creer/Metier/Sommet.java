@@ -33,11 +33,12 @@ public class Sommet
 	/*  Getters                   */
 	/*----------------------------*/
 	
-	public String   getSymbole  () { return this.symbole            ; }
-	public Sommet[] getLstVoisin() { return this.lstVoisins         ; }
-	public int      getLigSommet() { return this.caseSommet.getLig(); }
-	public int      getColSommet() { return this.caseSommet.getCol(); }
-	public int      getEstBase()   { return this.estBase            ; }
+	public String   getSymbole  ()      { return this.symbole            ; }
+	public Sommet[] getLstVoisin()      { return this.lstVoisins         ; }
+	public Sommet   getVoisin   (int i) { return this.lstVoisins[i]      ; }
+	public int      getLigSommet()      { return this.caseSommet.getLig(); }
+	public int      getColSommet()      { return this.caseSommet.getCol(); }
+	public int      getEstBase()        { return this.estBase            ; }
 	
 	/*----------------------------*/
 	/*  Méthodes                  */

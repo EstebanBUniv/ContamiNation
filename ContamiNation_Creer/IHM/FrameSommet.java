@@ -1,7 +1,6 @@
 package ContamiNation_Creer.IHM;
 
 import ContamiNation_Creer.Controleur;
-import ContamiNation_Creer.Metier.Case;
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import javax.swing.*;
@@ -79,7 +78,6 @@ public class FrameSommet extends JFrame
 	// Getters                       //
 	//-------------------------------//
 	
-	public Case        getCase       (int lig, int col) { return this.ctrl.getCase(lig, col) ; }
 	public boolean     getmodeBase   ()                 { return this.modeBase               ; }
 	public PanelGrille getPanelGrille()                 { return this.panelGrille            ; }
 	public Controleur  getCtrl       ()                 { return this.ctrl                   ; }

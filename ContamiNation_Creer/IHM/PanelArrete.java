@@ -1,7 +1,6 @@
 package ContamiNation_Creer.IHM;
 
 import ContamiNation_Creer.Controleur;
-import ContamiNation_Creer.Metier.*;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -39,9 +38,8 @@ public class PanelArrete extends JPanel
 		{
 			for (int col = 0; col < ctrl.getCol(); col++)
 			{
-				Sommet s = ctrl.getCase(lig, col).getSommet();
 
-				if (s != null)
+				if (ctrl.getCase(lig, col).getSommet() != null)
 				{
 					JButton btn = ctrl.getButton(lig, col);
 					Point centre = SwingUtilities.convertPoint(
@@ -50,21 +48,21 @@ public class PanelArrete extends JPanel
 						btn.getY() + btn.getHeight() / 2,
 						this
 					);
-					if (s.getEstBase() != 0)
-						g2d.setColor(Virus.getCouleur(s.getEstBase()));
+					if (ctrl.getCase(lig, col).getSommet().getEstBase() != 0)
+						g2d.setColor(this.ctrl.getVirus(ctrl.getCase(lig, col).getSommet().getEstBase()));
 
 					g2d.drawOval(centre.x - rayon, centre.y - rayon, rayon * 2, rayon * 2);
 
 					g2d.setColor(Color.BLACK);
 
 					// Dessin des arêtes
-					Sommet[] lstVoisins = s.getLstVoisin();
-					for (int i = 0; i < lstVoisins.length; i++)
+					for (int i = 0; i < ctrl.getCase(lig, col).getSommet().getLstVoisin().length; i++)
 					{
-						if (lstVoisins[i] != null)
+						if (ctrl.getCase(lig, col).getSommet().getVoisin(i) != null)
 						{
 							JButton btn1 = ctrl.getButton(lig, col);
-							JButton btn2 = ctrl.getButton(lstVoisins[i].getLigSommet(), lstVoisins[i].getColSommet());
+							JButton btn2 = ctrl.getButton(ctrl.getCase(lig, col).getSommet().getVoisin(i).getLigSommet(), 
+														  ctrl.getCase(lig, col).getSommet().getVoisin(i).getColSommet());
 
 							Point p1 = SwingUtilities.convertPoint(btn1.getParent(), btn1.getX() + btn1.getWidth() / 2, btn1.getY() + btn1.getHeight() / 2, this);
 							Point p2 = SwingUtilities.convertPoint(btn2.getParent(), btn2.getX() + btn2.getWidth() / 2, btn2.getY() + btn2.getHeight() / 2, this);
