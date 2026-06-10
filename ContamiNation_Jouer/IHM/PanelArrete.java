@@ -9,6 +9,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+
 import java.awt.event.ComponentListener;
 import java.util.LinkedList;
 import javax.swing.JPanel;
@@ -17,13 +19,16 @@ import javax.swing.SwingUtilities;
 
 public class PanelArrete extends JPanel
 {
+	private ArrayList<String> arretesColorees;
+	private String            cleArrete;
 	// Attribut d'instance
 	private Controleur ctrl;
 	private int        marge;
 
 	public PanelArrete(Controleur ctrl)
 	{
-		this.ctrl     = ctrl;
+		this.ctrl            = ctrl;
+		this.arretesColorees = new ArrayList<>();
 		this.setOpaque(false);
 
 	}
@@ -45,6 +50,9 @@ public class PanelArrete extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
+
+		this.arretesColorees.clear();
+
 		Graphics2D g2d = (Graphics2D)g;
 		g2d.setStroke(new BasicStroke(3.0f)); // choix de la taille des traits
 		// 1. ON DESSINE LE RÉSEAU DE BASE (TOUT EN NOIR)
@@ -82,13 +90,23 @@ public class PanelArrete extends JPanel
 			Virus v = ctrl.getVirus(i);
 			if (v != null && v.getConquis().size() > 1)
 			{
-				g2d.setColor(v.getCouleur());
 				LinkedList<Sommet> chemin = v.getConquis();
 				
 				for (int c = 0; c < chemin.size() - 1; c++)
 				{
 					Sommet s1 = chemin.get(c);
 					Sommet s2 = chemin.get(c + 1);
+
+					this.cleArrete = creerCle(s1, s2);
+
+					if (arretesColorees.contains(cleArrete)) 
+           			{
+                		continue; // Oui ! On passe au sommet suivant sans dessiner
+            		}
+            
+            		// Si elle est libre, on la note comme "colorée" pour les prochains
+            		arretesColorees.add(cleArrete);
+					g2d.setColor(v.getCouleur());
 					
 					JPanel panel1 = ctrl.getPanel(s1.getLigSommet(), s1.getColSommet());
 					JPanel panel2 = ctrl.getPanel(s2.getLigSommet(), s2.getColSommet());
@@ -102,5 +120,20 @@ public class PanelArrete extends JPanel
 				}
 			}
 		}
+	}
+
+	public String creerCle(Sommet s1, Sommet s2)
+	{
+		int ligS1 = s1.getLigSommet();
+    	int colS1 = s1.getColSommet();
+    	int ligS2 = s2.getLigSommet();
+    	int colS2 = s2.getColSommet();
+
+		if(ligS1 < ligS2 || (ligS1 == ligS2) && colS1 < colS2)
+			return Integer.toString(ligS1) + "," +  Integer.toString(colS1) + "-" +
+				   Integer.toString(ligS2) + "," +  Integer.toString(colS2);
+		else
+			return Integer.toString(ligS2) + "," +  Integer.toString(colS2) + "-" +
+				   Integer.toString(ligS1) + "," +  Integer.toString(colS1);
 	}
 }

@@ -1,12 +1,16 @@
 package ContamiNation_Jouer.IHM;
 
-import ContamiNation_Jouer.Controleur;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import ContamiNation_Jouer.Controleur;
+import ContamiNation_Jouer.Metier.Case;
+import ContamiNation_Jouer.Controleur;
 
 public class FrameJeu extends JFrame
 {
@@ -17,7 +21,12 @@ public class FrameJeu extends JFrame
 	private PanelPlateau panelPlateau;
 	private PanelArrete  panelArrete;
 	private PanelPioche  panelPioche;
-	
+
+
+	/*----------------------------*/
+	/*  Constructeur              */
+	/*----------------------------*/
+
 	public FrameJeu(Controleur ctrl)
 	{
 		this.ctrl = ctrl;
@@ -29,7 +38,6 @@ public class FrameJeu extends JFrame
 		this.panelPioche = new PanelPioche(this.ctrl);
 		this.panel       = new PanelMenu(this.ctrl, this);
 
-		
 		this.add(this.panel);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,6 +45,12 @@ public class FrameJeu extends JFrame
 		this.ctrl.melangerPioche();
 		this.panelPioche.passerTour();
 	}
+
+
+	/*----------------------------*/
+	/*  Getters                   */
+	/*----------------------------*/
+
 
 	//----------------//
 	//    Getters     //
@@ -51,6 +65,11 @@ public class FrameJeu extends JFrame
 		return this.panelPlateau.getTabPanel();
 	}
 
+
+	/*----------------------------*/
+	/*  Méthodes                  */
+	/*----------------------------*/
+
 	//---------------//
 	//    Méthodes   //
 	//---------------//
@@ -61,7 +80,6 @@ public class FrameJeu extends JFrame
 		this.remove(this.panel);
 		this.panel = panel;
 		this.add(this.panel);
-
 		this.revalidate();
 		this.repaint();
 	}
@@ -70,15 +88,18 @@ public class FrameJeu extends JFrame
 	public void afficherPlateau()
 	{
 		this.setLayout(new BorderLayout());
-		this.panelPlateau  = new PanelPlateau(this, this.ctrl);
-		this.panelArrete   = new PanelArrete(this.ctrl);
-		JPanel centerPanel = new JPanel(null) { public boolean isOptimizedDrawingEnabled() { return false; } }; // Surcharge d'une méthode
-		
+		this.panelPlateau = new PanelPlateau(this, this.ctrl);
+		this.panelArrete  = new PanelArrete(this.ctrl);
+
+		JPanel centerPanel = new JPanel(null)
+		{
+			public boolean isOptimizedDrawingEnabled() { return false; }
+		};
 
 		centerPanel.addComponentListener(new ComponentAdapter()
 		{
-			public void componentResized(ComponentEvent e)	// Listener de changement de taille de la frame
-			{ 
+			public void componentResized(ComponentEvent e)
+			{
 				int w = centerPanel.getWidth();
 				int h = centerPanel.getHeight();
 				panelPlateau.setBounds(0, 0, w, h);
@@ -116,4 +137,15 @@ public class FrameJeu extends JFrame
 		return 0; // Au cas où on ferme la fenêtre sans répondre
 	}
 
+	/*
+	 * Appelée par le Controleur quand un sommet-extrémité est cliqué.
+	 * estClique   : true = on entre en mode sélection, false = on en sort
+	 * caseCliquee : la case dont le sommet vient d'être sélectionné
+	 * Le repaint() global suffit : chaque PanelCase interroge
+	 * ctrl.getCaseSelectionnee() dans son paintComponent.
+	 */
+	public void SommetClique(boolean estClique, Case caseCliquee)
+	{
+		this.repaint();
+	}
 }
