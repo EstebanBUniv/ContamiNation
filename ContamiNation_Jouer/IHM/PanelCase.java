@@ -39,8 +39,8 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.setLayout(new BorderLayout());
 		this.setBorder(null);
 
-		this.imgFond = getToolkit().getImage("../images/fond/fond_case.png");
-		this.imgBase = getToolkit().getImage("../images/fond/base.png");
+		this.imgFond = getToolkit().getImage("../images/fond/fond_case_0.png");
+		this.imgBase = getToolkit().getImage("../images/fond/case/base.png");
 
 		if (this.ctrl.getCase(lig, col).getSommet() != null)
 		{

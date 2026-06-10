@@ -75,15 +75,10 @@ public class Controleur
 	// --- MÉTHODES POUR L'AFFICHAGE DES COULEURS DE SÉLECTION ---
 	public Case getCaseSelectionnee() { return this.caseSelectionnee; }
 
-	public boolean estVoisinAtteignable(Case caseAVerif) {
-		if (this.caseSelectionnee == null || caseAVerif.getSommet() == null) return false;
-		Virus v = this.plateau.getVirusActif();
-		if (v.getConquis().contains(caseAVerif.getSommet())) return false;
-		
-		Carte carteTiree = this.pioche.getCarteTire();
-		if (carteTiree == null) return false;
-		if (!carteTiree.getSymbole().equals(caseAVerif.getSommet().getSymbole()) &&
-			!carteTiree.getSymbole().equals("Epidemie")) return false;
+	public boolean estVoisinAtteignable(Case caseAVerif) 
+	{
+		if (this.caseSelectionnee == null || caseAVerif == null || caseAVerif.getSommet() == null) return false;
+		if (!this.plateau.estCoupValide(caseAVerif, this.pioche.getCarteTire())) return false;
 
 		for (Sommet voisin : this.caseSelectionnee.getSommet().getLstVoisin()) {
 			if (voisin == caseAVerif.getSommet()) return true;
@@ -92,7 +87,10 @@ public class Controleur
 	}
 
 	// --- LE SYSTÈME DE JEU À 2 CLICS ---
-	public void verifSommet(Case caseAVerif) {
+	public void verifSommet(Case caseAVerif)
+	{
+		if (caseAVerif == null) return;
+
 		int indexManche = this.plateau.getNumManche() - 1;
 		Virus v = this.getVirus(indexManche);
 		Sommet s = caseAVerif.getSommet();
@@ -119,15 +117,35 @@ public class Controleur
 				this.caseSelectionnee = caseAVerif;
 				this.frame.SommetClique();
 			}
+			this.frame.repaint();
+			return;
 		}
+		if (!this.estVoisinAtteignable(caseAVerif))
+		{
+			this.estClique = false;
+			this.caseSelectionnee = null;
+			this.frame.SommetClique(false, null);
+			this.frame.repaint();
+			return;
+		}
+		int choixForce = 0;
+		if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s))
+			choixForce = this.frame.demanderChoixBoucle();
+
+		if (this.plateau.verifSommet(caseAVerif, carteActive, choixForce))
+			this.frame.reinitierPanelPioche();
+
+		this.estClique        = false;
+		this.caseSelectionnee = null;
+		this.frame.SommetClique(false, null);
 		this.frame.repaint();
 	}
 
-	public void setModeDebiche() { this.modeDebiche = true; }
-	public void appelerChoixCarte() { this.frameChoixCarte = new FrameChoixCarte(this); }
+	public void setModeDebiche()      { this.modeDebiche = true; }
+	public void appelerChoixCarte()   { this.frameChoixCarte = new FrameChoixCarte(this); }
 	public Carte getCarte(int indice) { return this.pioche.getCarte(indice); }
-	public int getTaillePioche() { return this.pioche.getTaillePioche(); }
-	public boolean getModeDebiche() { return this.modeDebiche; }
+	public int getTaillePioche()      { return this.pioche.getTaillePioche(); }
+	public boolean getModeDebiche()   { return this.modeDebiche; }
 
 	public static void main (String[] args) { new Controleur(); }
 }
