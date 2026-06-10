@@ -224,7 +224,7 @@ public class Plateau
 			 virusActuel.estVoisinDeLExtremite(caseAVerif.getSommet())             && // a un voisin à une extrémité du virus
 			 !caseAVerif.getSommet().getContamine()                                && // Le sommet n'est pas encore contaminé
 			 (carteTire  .getSymbole().equals(caseAVerif.getSommet().getSymbole()) ||
-			  carteTire.getSymbole().equals("Epidemie")))                          // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
+			  carteTire.getSymbole().equals("Epidemie"))) // La carte est correcte (Correction : ajout des parenthèses à getSymbole())
 		{
 			virusActuel.ajouterSommetContamine(caseAVerif.getSommet(), choixForce);
 			caseAVerif.getSommet().setContamine(true);

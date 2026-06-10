@@ -34,6 +34,8 @@ public class FrameJeu extends JFrame
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
+		this.ctrl.melangerPioche();
+		this.panelPioche.passerTour();
 	}
 
 	//----------------//
