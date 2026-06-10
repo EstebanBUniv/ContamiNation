@@ -195,6 +195,14 @@ public class Controleur
 	if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s))
 	{
 		choixForce = this.frame.demanderChoixBoucle();
+		if (this.plateau.verifSommet(caseAVerif, this.pioche.getCarteTire()))
+			this.frame.reinitierPanelPioche();
+		//croise pas un autre chemin
+		//commence par une extremité
+		//pas déjà relié a un sommet contaminé
+		//avoir la bonne carte
+		this.frame.repaint();
+
 	}
 
 	// 4. On transmet l'ordre final au plateau
