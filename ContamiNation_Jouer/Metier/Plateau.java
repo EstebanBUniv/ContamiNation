@@ -7,6 +7,10 @@ import java.util.List;
 
 public class Plateau
 {
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private Controleur  ctrl;
 	private int         col;
 	private int         lig;

@@ -1,22 +1,16 @@
 package ContamiNation_Jouer.IHM;
 
-import java.awt.Dimension;
-import java.awt.BorderLayout;
-
-import javax.swing.JFrame;
-import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
-import ContamiNation_Jouer.IHM.PanelArrete;
 import ContamiNation_Jouer.Controleur;
-
-import javax.swing.JLayeredPane;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 public class FrameJeu extends JFrame
 {
+	// Attribut d'instance
 	private Controleur   ctrl;
 	private JPanel       panel;
 
@@ -42,11 +36,24 @@ public class FrameJeu extends JFrame
 		this.setVisible(true);
 	}
 
+	//----------------//
+	//    Getters     //
+	//----------------//
 	public PanelPlateau getPanelPlateau()
 	{
 		return this.panelPlateau;
 	}
 
+	public JPanel[][] getTabPanel()
+	{
+		return this.panelPlateau.getTabPanel();
+	}
+
+	//---------------//
+	//    Méthodes   //
+	//---------------//
+
+	// Méthode permettant de changer le panel de la frame avec celui rentré en paramètre
 	public void changerPanel(JPanel panel)
 	{
 		this.remove(this.panel);
@@ -57,6 +64,7 @@ public class FrameJeu extends JFrame
 		this.repaint();
 	}
 
+	// Méthode qui permet l'affichage correcte du plateau de jeu
 	public void afficherPlateau()
 	{
 		this.setLayout(new BorderLayout());
@@ -85,12 +93,7 @@ public class FrameJeu extends JFrame
 		this.add(this.panelPioche, BorderLayout.WEST);
 	}
 
-	public JPanel[][] getTabPanel()
-	{
-		return this.panelPlateau.getTabPanel();
-	}
-
-
+	// Permet de mettre a jour l'affichage de la pioche
 	public void reinitierPanelPioche()
 	{
 		this.panelPioche.passerTour();
