@@ -363,6 +363,11 @@ public class Plateau
 		if (caseAVerif == null || carteTire == null || !caseAVerif.getAUnSommet()) 
 			return false;
 
+		if (this.arreteDejaColoree    (this.ctrl.getCaseSelectionnee().getSommet(), caseAVerif.getSommet())
+									|| this.estCroisementInterdit(this.ctrl.getCaseSelectionnee().getSommet(), caseAVerif.getSommet()))
+								return false;
+		
+
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		Sommet s = caseAVerif.getSommet();
 
