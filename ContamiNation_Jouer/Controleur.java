@@ -162,7 +162,8 @@ public class Controleur
 		} 
 		else 
 		{
-			System.out.println("Fin de tout le jeu. Score J1 : " + this.plateau[0].getPointTotal());
+			for(int lig = 0; lig < this.plateau.length; lig++)
+				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
 		}
 	}
 	
