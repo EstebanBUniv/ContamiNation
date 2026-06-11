@@ -50,11 +50,11 @@ public class Controleur
 	/*------------*/
 	
 	public Plateau getPlateau    (int idJoueur)                   { return this.plateau[idJoueur]                       ; }
-	public int     getTailleCase ()                               { return this.frame.getPanelPlateau().getTailleCase() ; }
+	public int     getTailleCase ()                               { return this.frame.getPanelPlateau(0).getTailleCase() ; }
 	public int     getLig        ()                               { return this.plateau[0].getLig()                     ; }
 	public int     getCol        ()                               { return this.plateau[0].getCol()                     ; }
 	public Case    getCase       (int lig, int col, int idJoueur) { return this.plateau[idJoueur].getCase(lig, col)     ; }
-	public JPanel  getPanel      (int lig, int col)               { return this.frame.getTabPanel()[lig][col]           ; }
+	public JPanel  getPanel      (int lig, int col, int idJoueur)               { return this.frame.getTabPanel(idJoueur)[lig][col]           ; }
 	public Virus   getVirus      (int idJoueur)                   { return this.plateau[idJoueur].getVirusActif()       ; }
 	public Map<Integer, Color>   getCouleurZone  ()               { return this.couleursZones                           ; }
 	public Case    getCaseSelectionnee()                          { return this.caseSelectionnee                        ; }

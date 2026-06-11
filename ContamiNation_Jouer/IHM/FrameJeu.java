@@ -135,7 +135,7 @@ public class FrameJeu extends JFrame
 			});
 
 			splitPanel.add(panelArrete);
-			splitPanel.add(panelPlateau);
+			splitPanel.add(panelPlateau[i]);
 			
 			conteneurPlateaux.add(splitPanel, "joueur" + i);
 		}
