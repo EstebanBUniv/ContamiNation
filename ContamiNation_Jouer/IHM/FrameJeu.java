@@ -158,6 +158,11 @@ public class FrameJeu extends JFrame
 		this.repaint();
 	}
 
+	public void carteChoisie()
+	{
+		this.panelPioche.carteChoisie();
+	}
+
 	public void nouvelleManche()
 	{
 		javax.swing.JOptionPane.showOptionDialog(this, 
