@@ -69,7 +69,6 @@ public class FrameJeu extends JFrame
 	/*  Méthodes                  */
 	/*----------------------------*/
 
-
 	// Méthode permettant de changer le panel de la frame avec celui rentré en paramètre
 	public void changerPanel(JPanel panel)
 	{
