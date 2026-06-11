@@ -44,18 +44,18 @@ public class Controleur
 	/*   getters  */
 	/*------------*/
 	
-	public Plateau getPlateau    (int idJoueur)                   { return this.plateau[idJoueur]                       ; }
-	public int     getTailleCase ()                               { return this.frame.getPanelPlateau().getTailleCase() ; }
-	public int     getLig        ()                               { return this.plateau[0].getLig()                     ; }
-	public int     getCol        ()                               { return this.plateau[0].getCol()                     ; }
-	public Case    getCase       (int lig, int col, int idJoueur) { return this.plateau[idJoueur].getCase(lig, col)     ; }
-	public JPanel  getPanel      (int lig, int col)               { return this.frame.getTabPanel()[lig][col]           ; }
-	public Virus   getVirus      (int idJoueur)                   { return this.plateau[idJoueur].getVirusActif()       ; }
-	public Map<Integer, Color>   getCouleurZone  ()               { return this.couleursZones                           ; }
-	public Case    getCaseSelectionnee()                          { return this.caseSelectionnee                        ; }
-	public Carte   getCarte(int indice)                           { return this.pioche.getCarte(indice)                 ; }
-	public int     getTaillePioche ()                             { return this.pioche.getTaillePioche()                ; }
-	public boolean getModeDebiche  ()                             { return this.modeDebiche                             ; }
+	public Plateau getPlateau    (int idJoueur)                   { return this.plateau[idJoueur]                        ; }
+	public int     getTailleCase ()                               { return this.frame.getPanelPlateau(0).getTailleCase() ; }
+	public int     getLig        ()                               { return this.plateau[0].getLig()                      ; }
+	public int     getCol        ()                               { return this.plateau[0].getCol()                      ; }
+	public Case    getCase       (int lig, int col, int idJoueur) { return this.plateau[idJoueur].getCase(lig, col)      ; }
+	public JPanel  getPanel      (int lig, int col, int idJoueur) { return this.frame.getTabPanel(idJoueur)[lig][col]    ; }
+	public Virus   getVirus      (int idJoueur)                   { return this.plateau[idJoueur].getVirusActif()        ; }
+	public Map<Integer, Color>   getCouleurZone  ()               { return this.couleursZones                            ; }
+	public Case    getCaseSelectionnee()                          { return this.caseSelectionnee                         ; }
+	public Carte   getCarte(int indice)                           { return this.pioche.getCarte(indice)                  ; }
+	public int     getTaillePioche ()                             { return this.pioche.getTaillePioche()                 ; }
+	public boolean getModeDebiche  ()                             { return this.modeDebiche                              ; }
 	
 	public boolean possedeSommet(int lig, int col, int idJoueur) 
 	{
@@ -128,13 +128,19 @@ public class Controleur
 		this.nbJoueurs   = 1;
 		this.plateau     = new Plateau[1];
 		this.aJoueCeTour = new boolean[1];
-		this.plateau[0] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
+		this.plateau[0]  = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, 0, this);
 		
 		this.initierPioche();
 		this.melangerPioche();
 		
 		this.attribuerVirusDepart();
 		
+		for (int i = 0; i < nbJoueurs; i++)
+		{
+			int indexVirusActif = (this.plateau[i].getOffsetVirus()) % this.plateau[i].getNbVirus();
+			this.frame.getPanelPlateau(i).changerCouleurManche(indexVirusActif);
+		}
+
 		this.frame.reinitierPanelPioche();
 		if (this.getModeDebiche()) this.appelerChoixCarte();
 	}
@@ -146,7 +152,7 @@ public class Controleur
 		this.aJoueCeTour = new boolean[nbJoueurs];
 		
 		for (int i = 0; i < nbJoueurs; i++) 
-			this.plateau[i] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
+			this.plateau[i] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, i, this);
 		
 		this.initierPioche();
 		this.melangerPioche();
@@ -193,14 +199,14 @@ public class Controleur
 		}
 	}
 
-	public void changerCouleurManche(int num)
+	public void changerCouleurManche(int num, int idJoueur)
 	{
-		this.frame.getPanelPlateau().changerCouleurManche(num);
+		this.frame.getPanelPlateau(idJoueur).changerCouleurManche(num);
 	}
 
-	public void changerImageBase()
+	public void changerImageBase(int idJoueur)
 	{
-		this.frame.getPanelPlateau().changerImageBase();
+		this.frame.getPanelPlateau(idJoueur).changerImageBase();
 	}
 	
 	public void verifSommet(Case caseAVerif, int idJoueur)

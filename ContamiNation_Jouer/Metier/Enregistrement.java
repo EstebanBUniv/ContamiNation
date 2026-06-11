@@ -9,8 +9,10 @@ import java.util.Scanner;
 public class Enregistrement
 {
 
-	public static Plateau Recuperer(File fichier, Controleur ctrl)
+	public static Plateau Recuperer(File fichier, int idJoueur, Controleur ctrl)
 	{
+		Virus.resetData();
+
 		Plateau plateau = null;
 		String nomVirus;
 		try (Scanner sc = new Scanner(new FileInputStream(fichier), "UTF-8"))
@@ -21,7 +23,7 @@ public class Enregistrement
 			sc.nextLine(); 
 			String nom   = sc.nextLine();
 			
-			plateau = Plateau.creerPlateau(lig, col, nbVirus, nom, ctrl);
+			plateau = Plateau.creerPlateau(lig, col, nbVirus, nom, ctrl, idJoueur);
 			
 			for (int i = 0; i < nbVirus; i++)
 			{
