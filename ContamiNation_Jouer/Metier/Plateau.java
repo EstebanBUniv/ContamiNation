@@ -14,28 +14,31 @@ public class Plateau
 	private int         col;
 	private int         lig;
 	private int         nbVirus;
+	private int         idJoueur;
 	private int         numManche;
 	private int         pointTotal;
 	private String      nom;
 	private Case[][]    tabCases; 
 	private File        fichierSource = null;
 	private List<Virus> lstVirus;
+	private int         offsetVirus = 0;
 
 	private boolean     modeDebiche = false;
 
-	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl) 
+	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl, int idJoueur) 
 	{
 		if (col <= 0 || lig <= 0 || nbVirus <= 0) return null;
-		return new Plateau(lig, col, nbVirus, nom, ctrl);
+		return new Plateau(lig, col, nbVirus, nom, ctrl, idJoueur);
 	}
 
-	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl) 
+	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl, int idJoueur) 
 	{
-		this.ctrl = ctrl;
-		this.col = col;
-		this.lig = lig;
-		this.nom = nom;
-		this.nbVirus = nbVirus;
+		this.ctrl     = ctrl;
+		this.col      = col;
+		this.lig      = lig;
+		this.nom      = nom;
+		this.nbVirus  = nbVirus;
+		this.idJoueur = idJoueur;
 		this.lstVirus = new ArrayList<>();
 		this.tabCases = new Case[lig][col];
 		this.numManche = 1;
@@ -56,9 +59,16 @@ public class Plateau
 	public File   getFichierSource ()       { return this.fichierSource                    ; }
 	public Case   getCase(int lig, int col) { return this.tabCases[lig][col]               ; }
 	public Virus  getVirus(int index)       { return this.lstVirus.get(index)              ; }
-	public Virus  getVirusActif    ()       { return this.lstVirus.get(this.numManche - 1) ; }
 	public int    getPointTotal    ()       { return this.pointTotal                       ; }
 	public int    getNumManche     ()       { return this.numManche                        ; }
+	public int    getIdJouer       ()       { return this.idJoueur                         ; }
+	public int    getOffsetVirus   ()       { return this.offsetVirus                      ; }
+
+	public Virus getVirusActif() 
+	{ 
+		int index = (this.offsetVirus + this.numManche - 1) % this.lstVirus.size();
+		return this.lstVirus.get(index); 
+	}
 
 	public int getNumero() 
 	{
@@ -343,8 +353,9 @@ public class Plateau
 			if (v != virusActuel && v.getBaseDepart() != null)
 				v.getBaseDepart().setContamine(true);
 
-		this.ctrl.changerCouleurManche(this.numManche-1);
-		this.ctrl.changerImageBase();
+		int indexVirusActif = (this.offsetVirus + this.numManche - 1) % this.lstVirus.size();
+		this.ctrl.changerCouleurManche(indexVirusActif, this.idJoueur);
+		this.ctrl.changerImageBase(this.idJoueur);
 	}
 
 	public boolean estCoupValide(Case caseAVerif, Carte carteTire) 
@@ -363,16 +374,19 @@ public class Plateau
 		return virusActuel.estVoisinDeLExtremite(s) &&
 			   !s.getContamine() &&
 			   (carteTire.getSymbole().equals(s.getSymbole()) || carteTire.getSymbole().equals("Epidemie"));
-	}	
-	public void setIndexVirusActif(int indexChoisi) 
+	}
+
+	public void setIndexVirusActif(int index)
 	{
-		if (this.lstVirus != null && indexChoisi > 0 && indexChoisi < this.lstVirus.size()) 
+		/*if (this.lstVirus != null && indexChoisi > 0 && indexChoisi < this.lstVirus.size()) 
 		{
 			Virus temp = this.lstVirus.get(0);
 			this.lstVirus.set(0, this.lstVirus.get(indexChoisi));
 			this.lstVirus.set(indexChoisi, temp);
-		}
-}
+		}*/
+
+		this.offsetVirus = index; 
+	}
 
 	/**
 	 * Vérifie si le segment [AB] et le segment [CD] se croisent strictement.

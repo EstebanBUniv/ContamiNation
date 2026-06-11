@@ -168,9 +168,22 @@ public class PanelNiveau extends JPanel implements ActionListener
 							
 					if (choix != javax.swing.JOptionPane.CLOSED_OPTION) 
 					{
+						int choixheberger = javax.swing.JOptionPane.showOptionDialog(this, 
+								"Voulez-vous héberger ?", 
+								"Héberger", 
+								javax.swing.JOptionPane.YES_NO_OPTION, 
+								javax.swing.JOptionPane.QUESTION_MESSAGE, 
+								null, null, null);
+
+						boolean estHebergeur = (choixheberger == javax.swing.JOptionPane.YES_OPTION);
+						
 						int nbJoueurs = choix + 2;
 						this.ctrl.chargerNiveauMulti(fichierLvl, nbJoueurs);
 						this.frameMere.afficherPlateauMulti(nbJoueurs);
+						if (estHebergeur)
+							this.ctrl.lancerServeur();
+						else
+							this.ctrl.lancerClient();
 					}
 				}
 			}

@@ -33,7 +33,8 @@ public class PanelPlateau extends JPanel
 		this.setLayout(new GridLayout(lig, col, 0, 0));
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
-		this.changerCouleurManche(0);
+		int indexVirusActif = ctrl.getPlateau(idJoueur).getOffsetVirus() % ctrl.getPlateau(idJoueur).getNbVirus();
+   		this.changerCouleurManche(indexVirusActif);
 
 		for ( int cptLig = 0; cptLig < this.lig; cptLig++ )
 		{

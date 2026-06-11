@@ -32,6 +32,9 @@ public class Controleur
 	private boolean             modeDebiche = false;
 	private boolean[]           aJoueCeTour;
 	private boolean             modeMulti;
+	private boolean             fin         = false;
+	private ServeurJeu          serveurJeu;
+	private ClientJoueur        clientJoueur; 
 
 	// Variables pour le système de sélection
 	private boolean estClique        = false;
@@ -60,6 +63,7 @@ public class Controleur
 	public boolean getModeDebiche  ()                             { return this.modeDebiche                             ; }
 	public boolean getModeMulti    ()                             {return  this.modeMulti                               ; }
 	public int     getNbJoueur     ()                             {return  this.nbJoueurs                               ; }
+
 	
 	public boolean possedeSommet(int lig, int col, int idJoueur) 
 	{
@@ -132,13 +136,19 @@ public class Controleur
 		this.nbJoueurs   = 1;
 		this.plateau     = new Plateau[1];
 		this.aJoueCeTour = new boolean[1];
-		this.plateau[0] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
+		this.plateau[0]  = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, 0, this);
 		
 		this.initierPioche();
 		this.melangerPioche();
 		
 		this.attribuerVirusDepart();
 		
+		for (int i = 0; i < nbJoueurs; i++)
+		{
+			int indexVirusActif = (this.plateau[i].getOffsetVirus()) % this.plateau[i].getNbVirus();
+			this.frame.getPanelPlateau(i).changerCouleurManche(indexVirusActif);
+		}
+
 		this.frame.reinitierPanelPioche();
 		if (this.getModeDebiche()) this.appelerChoixCarte();
 	}
@@ -151,7 +161,7 @@ public class Controleur
 		this.modeMulti   = true;
 		
 		for (int i = 0; i < nbJoueurs; i++) 
-			this.plateau[i] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
+			this.plateau[i] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, i, this);
 		
 		this.initierPioche();
 		this.melangerPioche();
@@ -198,17 +208,18 @@ public class Controleur
 		{
 			for(int lig = 0; lig < this.plateau.length; lig++)
 				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
+			this.partieTerminee(true);
 		}
 	}
 
-	public void changerCouleurManche(int num)
+	public void changerCouleurManche(int num, int idJoueur)
 	{
-		this.frame.getPanelPlateau().changerCouleurManche(num);
+		this.frame.getPanelPlateau(idJoueur).changerCouleurManche(num);
 	}
 
-	public void changerImageBase()
+	public void changerImageBase(int idJoueur)
 	{
-		this.frame.getPanelPlateau().changerImageBase();
+		this.frame.getPanelPlateau(idJoueur).changerImageBase();
 	}
 	
 	public void verifSommet(Case caseAVerif, int idJoueur)
@@ -413,4 +424,25 @@ public class Controleur
 			this.plateau[i].setIndexVirusActif(numeroTire);
 		}
 	}
+
+	public void partieTerminee(boolean fin)
+	{
+		this.fin = true;
+	}
+
+	public boolean getFin()
+	{
+		return this.fin;
+	}
+
+	public void lancerServeur()
+	{
+		this.serveurJeu = new ServeurJeu(this);
+	}
+
+	public void lancerClient()
+	{
+		this.clientJoueur = new ClientJoueur(this);
+	}
+
 }

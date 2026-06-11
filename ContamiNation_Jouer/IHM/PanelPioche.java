@@ -99,7 +99,6 @@ public class PanelPioche extends JPanel implements ActionListener
 			if (!this.ctrl.getModeDebiche() && !this.ctrl.getModeMulti())
 			{
 				this.ctrl.tirerCarte(0);
-				this.afficherCarteActive();
 			}
 			else
 			{

@@ -22,6 +22,7 @@ public class Pioche
 		int nbCarte = this.nomSymboles.length * 2;
 		this.pioche = new ArrayList<>();
 		this.carteTire = null;
+		
 		for (int cpt = 0 ; cpt < nbCarte ; cpt++)
 		{
 			int indexSymbole = (cpt / 2) % this.nomSymboles.length;
