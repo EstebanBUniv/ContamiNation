@@ -105,42 +105,63 @@ public class PanelPioche extends JPanel implements ActionListener
 	{
 		if (!this.ctrl.verifFinManche())
 		{
-			ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.tirerCarte(0) + ".png");
-			Image img50 = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
-			ImageIcon icon50 = new ImageIcon(img50);
-			
-			this.defausse[this.numTour] = new JLabel(icon50);
-			this.panelDefausse.add(this.defausse[this.numTour++]);
-			this.lblCarteActive.setIcon(icon50);
-			
-			if (!this.ctrl.verifFinManche()) 
+			if (!this.ctrl.getModeDebiche())
 			{
-				ImageIcon iconOriginalPremiere = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
-				Image img60 = iconOriginalPremiere.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
-				this.lblPioche.setIcon(new ImageIcon(img60));
+				this.ctrl.tirerCarte(0);
+				this.afficherCarteActive();
 			}
 			else
 			{
-				this.lblPioche.setIcon(null); 
+				// La carte a déjà été choisie via FrameChoixCarte
+				// On prépare le tour suivant
+				this.ctrl.appelerChoixCarte();
 			}
-
-			this.panelDefausse.revalidate();
-			this.panelDefausse.repaint();
 		}
 		else
 		{
 			System.out.println("Fin de Manche");
 			this.cptManche++;
 			this.lblManche.setText("Manche n°" + this.cptManche);
-			
 			this.panelDefausse.removeAll();
 			this.panelDefausse.revalidate();
 			this.panelDefausse.repaint();
-			this.numTour = 0; 
-			
+			this.numTour = 0;
 			this.ctrl.nouvelleManche();
 		}
 	}
+
+	public void carteChoisie()
+	{
+		this.afficherCarteActive();
+	}
+
+	private void afficherCarteActive()
+	{
+		if (this.ctrl.getCarteTiree() == null) return;
+
+		ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.getCarteTiree() + ".png");
+		Image img50 = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
+		ImageIcon icon50 = new ImageIcon(img50);
+
+		this.defausse[this.numTour] = new JLabel(icon50);
+		this.panelDefausse.add(this.defausse[this.numTour++]);
+		this.lblCarteActive.setIcon(icon50);
+
+		if (!this.ctrl.verifFinManche())
+		{
+			ImageIcon iconPremiere = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
+			Image img60 = iconPremiere.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
+			this.lblPioche.setIcon(new ImageIcon(img60));
+		}
+		else
+		{
+			this.lblPioche.setIcon(null);
+		}
+
+		this.panelDefausse.revalidate();
+		this.panelDefausse.repaint();
+	}
+
 
 	public void actionPerformed(ActionEvent e)
 	{

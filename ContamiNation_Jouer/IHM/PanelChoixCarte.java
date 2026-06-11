@@ -61,7 +61,7 @@ public class PanelChoixCarte extends JPanel implements ActionListener
 		{
 			if (e.getSource() == this.cartes[cpt])
 			{
-				this.ctrl.tirerCarte(cpt);
+				this.ctrl.tirerCarte(cpt); // plus besoin de stocker le retour
 			}
 		}
 	}

@@ -27,7 +27,7 @@ public class Enregistrement
 			{
 				nomVirus = sc.nextLine();
 				plateau.creerVirus(nomVirus);
-				if (nomVirus.equals("debiche"))
+				if (nomVirus.toLowerCase().equals("debiche"))
 					ctrl.setModeDebiche();
 			}
 			
