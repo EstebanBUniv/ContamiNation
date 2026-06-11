@@ -23,9 +23,8 @@ public class FrameJeu extends JFrame
 	private Controleur   ctrl;
 	private JPanel       panel;
 
-	private PanelPlateau panelPlateau;
-	private PanelArrete  panelArrete;
-	private PanelPioche  panelPioche;
+	private PanelPlateau[] panelPlateau;
+	private PanelPioche    panelPioche;
 
 
 	/*----------------------------*/
@@ -54,14 +53,14 @@ public class FrameJeu extends JFrame
 	/*  Getters                   */
 	/*----------------------------*/
 
-	public PanelPlateau getPanelPlateau()
+	public PanelPlateau getPanelPlateau(int idJoueur)
 	{
-		return this.panelPlateau;
+		return this.panelPlateau[idJoueur];
 	}
 
-	public JPanel[][] getTabPanel()
+	public JPanel[][] getTabPanel(int idJoueur)
 	{
-		return this.panelPlateau.getTabPanel();
+		return this.panelPlateau[idJoueur].getTabPanel();
 	}
 
 
@@ -100,14 +99,16 @@ public class FrameJeu extends JFrame
 		this.setLayout(new BorderLayout());
 
 		// Layout adaptatif : 1 ligne si 2 joueurs, 2 lignes si 3 ou 4 joueurs
-		int lignesIHM = (nbJoueurs <= 2) ? 1 : 2;
+		int lignesIHM   = (nbJoueurs <= 2) ? 1 : 2;
 		int colonnesIHM = 2;
 		JPanel conteneurPlateaux = new JPanel(new GridLayout(lignesIHM, colonnesIHM, 10, 10));
 
+		this.panelPlateau = new PanelPlateau[nbJoueurs];
+		
 		for (int i = 0; i < nbJoueurs; i++) 
 		{
-			PanelPlateau panelPlateau = new PanelPlateau(this, this.ctrl, i);
-			PanelArrete panelArrete   = new PanelArrete(this.ctrl, i, panelPlateau);
+			this.panelPlateau[i] = new PanelPlateau(this, this.ctrl, i);
+			PanelArrete  panelArrete   = new PanelArrete(this.ctrl, i, panelPlateau[i]);
 
 			// Superposition du plateau et des arrêtes pour CHAQUE joueur
 			JPanel splitPanel = new JPanel(null) 
@@ -116,25 +117,22 @@ public class FrameJeu extends JFrame
 			};
 
 			// Gestion des redimensionnements par plateau individuel
+			int index = i;
 			splitPanel.addComponentListener(new ComponentAdapter() 
 			{
 				public void componentResized(ComponentEvent e) 
 				{
 					int w = splitPanel.getWidth();
 					int h = splitPanel.getHeight();
-					panelPlateau.setBounds(0, 0, w, h);
+					panelPlateau[index].setBounds(0, 0, w, h);
 					panelArrete.setBounds(0, 0, w, h);
-					panelPlateau.revalidate();
+					panelPlateau[index].revalidate();
 					panelArrete.repaint();
 				}
 			});
 
-			this.panelPlateau = panelPlateau;
-			this.panelArrete  = panelArrete;
-			
 			splitPanel.add(panelArrete);
-			splitPanel.add(panelPlateau);
-			
+			splitPanel.add(this.panelPlateau[i]);
 			conteneurPlateaux.add(splitPanel);
 		}
 
