@@ -36,7 +36,7 @@ public class PanelMenu extends JPanel implements ActionListener
 	public PanelMenu(Controleur ctrl, FrameJeu frame)
 	{
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
+		this.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		this.imgFond = getToolkit().getImage("../images/fond/fond2.png");
 		
 		this.frameMere = frame;
@@ -72,7 +72,7 @@ public class PanelMenu extends JPanel implements ActionListener
 		for ( JButton btn : tabBtn )
 			this.panelBouton.add(btn);
 
-		this.add(this.creerTitre(), BorderLayout.NORTH);
+		this.add(this.frameMere.creerTitre(1), BorderLayout.NORTH);
 
 		this.add(Box.createVerticalGlue());
 		this.add(this.panelBouton);
@@ -107,19 +107,5 @@ public class PanelMenu extends JPanel implements ActionListener
 		// Ajout de l'image du fond
 		if ( imgFond != null )
 			this.g2.drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
-	}
-
-	// Méthode qui renvoi un JLabel contenant le titre sous forme d'image
-	private JLabel creerTitre()
-	{
-		ImageIcon icon    = new ImageIcon("../images/Titre.png");
-		int       largeur = (int)(this.frameMere.getWidth() * 0.60);
-		int       hauteur = icon.getIconHeight() * largeur / icon.getIconWidth();
-		Image     img     = icon.getImage().getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
-
-		JLabel label = new JLabel(new ImageIcon(img));
-   		label.setAlignmentX(CENTER_ALIGNMENT);
-
-		return label;
 	}
 }

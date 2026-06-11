@@ -60,11 +60,11 @@ public class PanelPioche extends JPanel implements ActionListener
 		panelGauche.setLayout(new GridLayout(3,1));
 		
 		ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
-		Image img50            = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
-		ImageIcon icon50       = new ImageIcon(img50);
+		Image img              = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
+		ImageIcon icon         = new ImageIcon(img);
 		
 
-		this.lblPioche      = new JLabel(icon50);
+		this.lblPioche      = new JLabel(icon);
 		this.btnPasser        = new JButton( "Passer");
 
 		/*

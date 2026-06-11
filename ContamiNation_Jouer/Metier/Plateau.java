@@ -356,6 +356,9 @@ public class Plateau
 		for (Virus v : this.lstVirus) 
 			if (v != virusActuel && v.getBaseDepart() != null)
 				v.getBaseDepart().setContamine(true);
+
+		this.ctrl.changerCouleurManche(this.numManche-1);
+		this.ctrl.changerImageBase();
 	}
 
 	public boolean estCoupValide(Case caseAVerif, Carte carteTire) 
