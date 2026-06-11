@@ -136,7 +136,7 @@ public class Plateau
 	private void chercherVoisins(int lig, int col, Sommet sommetCourant) 
 	{
 		int[][] directions = { {-1, 0 }, {1, 0 }, {0, -1}, {0, 1},
-			                   {-1, -1}, {-1, 1}, {1, -1}, {1, 1} };
+							   {-1, -1}, {-1, 1}, {1, -1}, {1, 1} };
 
 		for (int i = 0; i < directions.length; i++) 
 		{
@@ -175,7 +175,7 @@ public class Plateau
 	{
 		int nbSommetParZone = 0;
 		ArrayList<Integer> zonesVisitees = new ArrayList<>();
-		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		Virus virusActuel = this.getVirusActif();
 
 		for (int lig = 0; lig < this.lig; lig++) 
 		{
@@ -229,7 +229,7 @@ public class Plateau
 	{
 		if (!this.estCoupValide(caseAVerif, carteTire)) return false;
 
-		Virus  virusActuel   = this.lstVirus.get(this.numManche - 1);
+		Virus virusActuel = this.getVirusActif();
 		Sommet nouveauSommet = caseAVerif.getSommet();
 
 		if (virusActuel == null || nouveauSommet == null) return false;
@@ -281,36 +281,38 @@ public class Plateau
 
 	public boolean estCroisementInterdit(Sommet s1, Sommet s2)
 	{
+		if (s1 == null || s2 == null) return false;
+		
 		int lig1 = s1.getLigSommet();
 		int col1 = s1.getColSommet();
 		int lig2 = s2.getLigSommet();
 		int col2 = s2.getColSommet();
 
-    // Parcourir tous les virus pour voir si l'un d'eux occupe un segment qui croise le nôtre
-    for (int i = 0; i < this.lstVirus.size(); i++)
-    {
-        Virus v = this.lstVirus.get(i);
-        if (v != null && v.getConquis().size() > 1)
-        {
-            LinkedList<Sommet> chemin = v.getConquis();
-            
-            // On regarde chaque segment déjà tracé par ce virus
-            for (int c = 0; c < chemin.size() - 1; c++)
-            {
-                Sommet v1 = chemin.get(c);
-                Sommet v2 = chemin.get(c + 1);
+	// Parcourir tous les virus pour voir si l'un d'eux occupe un segment qui croise le nôtre
+	for (int i = 0; i < this.lstVirus.size(); i++)
+	{
+		Virus v = this.lstVirus.get(i);
+		if (v != null && v.getConquis().size() > 1)
+		{
+			LinkedList<Sommet> chemin = v.getConquis();
+			
+			// On regarde chaque segment déjà tracé par ce virus
+			for (int c = 0; c < chemin.size() - 1; c++)
+			{
+				Sommet v1 = chemin.get(c);
+				Sommet v2 = chemin.get(c + 1);
 
-                // est-ce que le nouveau coup [(lig1,col1) -> (lig2,col2)] croise le segment existant [v1 -> v2] ?
-                if (seCroisentStrictement(lig1, col1, lig2, col2, 
-                                          v1.getLigSommet(), v1.getColSommet(), 
-                                          v2.getLigSommet(), v2.getColSommet()))
-                {
-                    return true; // Croisement interdit détecté !
-                }
-            }
-        }
-    }
-    return false;
+				// est-ce que le nouveau coup [(lig1,col1) -> (lig2,col2)] croise le segment existant [v1 -> v2] ?
+				if (seCroisentStrictement(lig1, col1, lig2, col2, 
+										  v1.getLigSommet(), v1.getColSommet(), 
+										  v2.getLigSommet(), v2.getColSommet()))
+				{
+					return true; // Croisement interdit détecté !
+				}
+			}
+		}
+	}
+	return false;
 }
 
 	private boolean arreteDejaColoree(Sommet s1, Sommet s2)
@@ -336,7 +338,7 @@ public class Plateau
 
 	public void preparerNouvelleManche() 
 	{
-		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		Virus virusActuel = this.getVirusActif();
 
 		for (int l = 0; l < this.lig; l++) 
 			for (int c = 0; c < this.col; c++) 
@@ -368,7 +370,7 @@ public class Plateau
 								return false;
 		
 
-		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		Virus virusActuel = this.getVirusActif();
 		Sommet s = caseAVerif.getSommet();
 
 		return virusActuel.estVoisinDeLExtremite(s) &&

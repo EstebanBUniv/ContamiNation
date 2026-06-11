@@ -7,6 +7,7 @@
 ./IHM/PanelPioche.java
 ./IHM/FrameChoixCarte.java
 ./IHM/PanelChoixCarte.java
+./IHM/PanelMulti.java
 
 ./Metier/Virus.java
 ./Metier/Sommet.java
