@@ -255,7 +255,7 @@ public class PanelSauvegarde extends JPanel implements ActionListener
 	// retourne un JLabel avec l'image Titre.png
 	private JLabel creerTitre()
 	{
-		ImageIcon icon    = new ImageIcon("./images/Titre.png");
+		ImageIcon icon    = new ImageIcon("../images/entête/Titre0.png");
 		int       largeur = (int)(this.frameMere.getWidth() * 0.60);
 		int       hauteur = icon.getIconHeight() * largeur / icon.getIconWidth();
 		Image     img     = icon.getImage().getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);

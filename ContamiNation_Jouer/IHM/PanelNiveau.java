@@ -32,6 +32,7 @@ public class PanelNiveau extends JPanel implements ActionListener
 	private JScrollPane scroll;
 
 	private JPanel      panelBoutons;
+	private JPanel      panelCentre;
 
 	private JButton     btnJouer;
 	private JButton     btnRetour;
@@ -52,7 +53,6 @@ public class PanelNiveau extends JPanel implements ActionListener
 		this.estMulti  = estMulti;
 
 		this.setLayout(new BorderLayout());
-		this.setBorder(BorderFactory.createEmptyBorder(5, 100, 5, 100));
 
 		this.imgFond = getToolkit().getImage("../images/fond/fond2.png");
 
@@ -60,10 +60,22 @@ public class PanelNiveau extends JPanel implements ActionListener
 		// Création des composants       //
 		//-------------------------------//
 
-		this.panelBoutons = new JPanel(new FlowLayout());
+		this.panelBoutons = new JPanel(new FlowLayout  ());
+		this.panelBoutons.setOpaque(false);
+		
+		this.panelCentre  = new JPanel(new BorderLayout());
+		this.panelCentre.setBorder(BorderFactory.createEmptyBorder(5, 200, 5, 200));
+		this.panelCentre.setOpaque(false);
 
 		this.btnJouer  = new JButton("Jouer" );
 		this.btnRetour = new JButton("Retour");
+
+		JButton[] tabBtn = {this.btnJouer, this.btnRetour};
+		for ( JButton btn : tabBtn )
+		{
+			btn.setBackground(Controleur.COLOR_BACKGROUND);
+			btn.setForeground(Controleur.COLOR_FOREGROUND);
+		}
 
 		this.tabNiveau = new JTable(this.getFichier("../niveaux/"), new String[]{"nom"});
 
@@ -80,9 +92,11 @@ public class PanelNiveau extends JPanel implements ActionListener
 
 		this.panelBoutons.add(this.btnJouer );
 		this.panelBoutons.add(this.btnRetour);
+		this.panelCentre.add(this.scroll);
 
-		this.add(this.scroll , BorderLayout.CENTER);
-		this.add(panelBoutons, BorderLayout.SOUTH );
+		this.add(this.frameMere.creerTitre(0), BorderLayout.NORTH);
+		this.add(this.panelCentre            , BorderLayout.CENTER);
+		this.add(this.panelBoutons           , BorderLayout.SOUTH );
 
 		//-------------------------------//
 		// Activation des composants     //
@@ -193,7 +207,7 @@ public class PanelNiveau extends JPanel implements ActionListener
 				super.getTableCellRendererComponent(t, value, isSelected, hasFocus, row, col);
 				
 				if (isSelected)
-					setBackground(new Color (127,87,67));
+					setBackground(Controleur.COLO_EST_SELECT);
 				else
 					setBackground(Controleur.COLOR_BACKGROUND);
 				

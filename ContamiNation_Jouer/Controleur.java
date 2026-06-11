@@ -16,6 +16,7 @@ public class Controleur
 {
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134);
 	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230);
+	public static final Color COLO_EST_SELECT  = new Color( 86, 136, 158);
 
 	private JPanel[][]          tabPanel;
 	private FrameJeu            frame;
@@ -165,6 +166,16 @@ public class Controleur
 			for(int lig = 0; lig < this.plateau.length; lig++)
 				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
 		}
+	}
+
+	public void changerCouleurManche(int num)
+	{
+		this.frame.getPanelPlateau().changerCouleurManche(num);
+	}
+
+	public void changerImageBase()
+	{
+		this.frame.getPanelPlateau().changerImageBase();
 	}
 	
 	public void verifSommet(Case caseAVerif, int idJoueur)

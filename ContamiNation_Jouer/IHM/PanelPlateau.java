@@ -4,6 +4,7 @@ import ContamiNation_Jouer.Controleur;
 
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 public class PanelPlateau extends JPanel
@@ -30,6 +31,9 @@ public class PanelPlateau extends JPanel
 		this.tabPanel = new PanelCase[this.lig][this.col];
 
 		this.setLayout(new GridLayout(lig, col, 0, 0));
+		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		
+		this.changerCouleurManche(0);
 
 		for ( int cptLig = 0; cptLig < this.lig; cptLig++ )
 		{
@@ -39,6 +43,18 @@ public class PanelPlateau extends JPanel
 				this.add(this.tabPanel[cptLig][cptCol]);
 			}
 		}
+	}
+
+	public void changerCouleurManche(int num)
+	{
+		this.setBackground(ctrl.getCouleurVirus(this.idJoueur, num));
+	}
+
+	public void changerImageBase()
+	{
+		for ( int lig = 0; lig < this.tabPanel.length; lig++ )
+			for ( int col = 0; col < this.tabPanel[lig].length; col++ )
+				this.tabPanel[lig][col].initImgBase();
 	}
 
 	//--------------//
