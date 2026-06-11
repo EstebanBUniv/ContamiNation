@@ -74,6 +74,12 @@ public class Pioche
 		return true;
 	}
 	
+	public void setCarteTiree(int indice) 
+	{ 
+		this.carteTire = this.pioche.get(indice); 
+		this.pioche.remove(indice);
+	}
+
 	public String toString()
 	{
 		String sRep = "";

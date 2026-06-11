@@ -276,46 +276,32 @@ public class Plateau
 		int lig2 = s2.getLigSommet();
 		int col2 = s2.getColSommet();
 
-		// 1. Vérifier si c'est bien un déplacement diagonal (écart en ligne == écart en colonne)
-		if (Math.abs(lig1 - lig2) != Math.abs(col1 - col2) || Math.abs(lig1 - lig2) == 0) 
-			return false;
+    // Parcourir tous les virus pour voir si l'un d'eux occupe un segment qui croise le nôtre
+    for (int i = 0; i < this.lstVirus.size(); i++)
+    {
+        Virus v = this.lstVirus.get(i);
+        if (v != null && v.getConquis().size() > 1)
+        {
+            LinkedList<Sommet> chemin = v.getConquis();
+            
+            // On regarde chaque segment déjà tracé par ce virus
+            for (int c = 0; c < chemin.size() - 1; c++)
+            {
+                Sommet v1 = chemin.get(c);
+                Sommet v2 = chemin.get(c + 1);
 
-		// 2. Identifier le point le plus haut (ligA) et le point le plus bas (ligB)
-		int ligA = Math.min(lig1, lig2);
-		int ligB = Math.max(lig1, lig2);
-		
-		// Associer les bonnes colonnes
-		int colA = (lig1 < lig2) ? col1 : col2;
-		int colB = (lig1 < lig2) ? col2 : col1;
-
-		// 3. Parcourir tous les virus pour voir si l'un d'eux occupe la diagonale adverse
-		for (int i = 0; i < this.lstVirus.size(); i++)
-		{
-			Virus v = this.lstVirus.get(i);
-			if (v != null && v.getConquis().size() > 1)
-			{
-				LinkedList<Sommet> chemin = v.getConquis();
-				
-				// On regarde chaque segment du chemin du virus
-				for (int c = 0; c < chemin.size() - 1; c++)
-				{
-					Sommet v1 = chemin.get(c);
-					Sommet v2 = chemin.get(c + 1);
-
-					boolean conditionDirecte = (v1.getLigSommet() == ligA && v1.getColSommet() == colB && 
-												v2.getLigSommet() == ligB && v2.getColSommet() == colA);
-												
-					boolean conditionInverse = (v2.getLigSommet() == ligA && v2.getColSommet() == colB && 
-												v1.getLigSommet() == ligB && v1.getColSommet() == colA);
-
-					if (conditionDirecte || conditionInverse)
-						return true;
-				}
-			}
-		}
-		return false;
-	}
-
+                // est-ce que le nouveau coup [(lig1,col1) -> (lig2,col2)] croise le segment existant [v1 -> v2] ?
+                if (seCroisentStrictement(lig1, col1, lig2, col2, 
+                                          v1.getLigSommet(), v1.getColSommet(), 
+                                          v2.getLigSommet(), v2.getColSommet()))
+                {
+                    return true; // Croisement interdit détecté !
+                }
+            }
+        }
+    }
+    return false;
+}
 
 	private boolean arreteDejaColoree(Sommet s1, Sommet s2)
 	{
@@ -366,11 +352,46 @@ public class Plateau
 		if (caseAVerif == null || carteTire == null || !caseAVerif.getAUnSommet()) 
 			return false;
 
+		if (this.arreteDejaColoree    (this.ctrl.getCaseSelectionnee().getSommet(), caseAVerif.getSommet())
+									|| this.estCroisementInterdit(this.ctrl.getCaseSelectionnee().getSommet(), caseAVerif.getSommet()))
+								return false;
+		
+
 		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		Sommet s = caseAVerif.getSommet();
 
 		return virusActuel.estVoisinDeLExtremite(s) &&
 			   !s.getContamine() &&
 			   (carteTire.getSymbole().equals(s.getSymbole()) || carteTire.getSymbole().equals("Epidemie"));
+	}
+
+	/**
+	 * Vérifie si le segment [AB] et le segment [CD] se croisent strictement.
+	 */
+	private boolean seCroisentStrictement(int ligA, int colA, int ligB, int colB, 
+										int ligC, int colC, int ligD, int colD)
+	{
+		int o1 = orientation(ligA, colA, ligB, colB, ligC, colC);
+		int o2 = orientation(ligA, colA, ligB, colB, ligD, colD);
+		int o3 = orientation(ligC, colC, ligD, colD, ligA, colA);
+		int o4 = orientation(ligC, colC, ligD, colD, ligB, colB);
+
+		// Les segments se croisent si et seulement si :
+		// - C et D sont de côtés opposés de la droite (AB) (l'un est horaire, l'autre anti-horaire)
+		// - A et B sont de côtés opposés de la droite (CD)
+		return ((o1 == 1 && o2 == 2) || (o1 == 2 && o2 == 1)) &&
+			((o3 == 1 && o4 == 2) || (o3 == 2 && o4 == 1));
+	}
+
+	/**
+	 * Détermine l'orientation de trois points (1 = Horaire, 2 = Anti-horaire, 0 = Alignés)
+	 */
+	private int orientation(int lig1, int col1, int lig2, int col2, int lig3, int col3)
+	{
+		// Calcul du produit en croix (en considérant col comme X et lig comme Y)
+		long val = (long)(lig2 - lig1) * (col3 - col2) - (long)(col2 - col1) * (lig3 - lig2);
+		
+		if (val == 0) return 0; // Les points sont alignés
+		return (val > 0) ? 1 : 2; // 1 = Sens horaire, 2 = Sens anti-horaire
 	}
 }

@@ -157,7 +157,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 				this.g2.setColor(new Color(255, 200, 0, 150));
 				this.g2.fillRect(0, 0, getWidth(), getHeight());
 			}
-			else if (ctrl.estVoisinAtteignableMulti(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur))
+			else if (this.ctrl.estVoisinAtteignableMulti(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur))
 			{
 				// Les chemins cibles légaux s'allument en Vert
 				this.g2.setColor(new Color(0, 220, 80, 120));

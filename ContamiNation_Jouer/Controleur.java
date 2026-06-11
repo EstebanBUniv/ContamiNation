@@ -163,7 +163,8 @@ public class Controleur
 		} 
 		else 
 		{
-			System.out.println("Fin de tout le jeu. Score J1 : " + this.plateau[0].getPointTotal());
+			for(int lig = 0; lig < this.plateau.length; lig++)
+				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
 		}
 	}
 
@@ -245,7 +246,22 @@ private void verifierFinDeTourCollectif()
 	// Méthode de Pioche
 	public void initierPioche ()        { this.pioche = new Pioche()           ; }
 	public void melangerPioche()        { this.pioche.melanger()               ; }
-	public Carte tirerCarte(int indice) { return this.pioche.tirerCarte(indice); }
+
+
+	public void tirerCarte(int indice) 
+	{ 
+		this.pioche.setCarteTiree(indice);
+		if (this.frameChoixCarte != null) 
+		{
+			this.frameChoixCarte.dispose();
+			this.frameChoixCarte = null;
+			this.frameChoixCarte = new FrameChoixCarte(this);
+		}
+		if (this.frame != null) this.frame.carteChoisie();
+
+	}
+
+	public Carte getCarteTiree() { return this.pioche.getCarteTire(); }
 	public Carte premiereCarte()        { return this.pioche.premiereCarte()   ; }
 	public boolean verifFinManche()     { return this.pioche.verifFinManche()  ; }
 
