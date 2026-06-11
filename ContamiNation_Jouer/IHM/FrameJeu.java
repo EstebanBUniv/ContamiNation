@@ -54,9 +54,6 @@ public class FrameJeu extends JFrame
 	/*----------------------------*/
 
 
-	//----------------//
-	//    Getters     //
-	//----------------//
 	public PanelPlateau getPanelPlateau()
 	{
 		return this.panelPlateau;
@@ -71,10 +68,6 @@ public class FrameJeu extends JFrame
 	/*----------------------------*/
 	/*  Méthodes                  */
 	/*----------------------------*/
-
-	//---------------//
-	//    Méthodes   //
-	//---------------//
 
 	// Méthode permettant de changer le panel de la frame avec celui rentré en paramètre
 	public void changerPanel(JPanel panel)
