@@ -3,6 +3,7 @@ package ContamiNation_Jouer.IHM;
 import ContamiNation_Jouer.Controleur;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -25,6 +26,9 @@ public class FrameJeu extends JFrame
 
 	private PanelPlateau[] panelPlateau;
 	private PanelPioche    panelPioche;
+
+	private CardLayout cardLayout;     
+	private JPanel     conteneurPlateaux;  
 
 
 	/*----------------------------*/
@@ -98,10 +102,9 @@ public class FrameJeu extends JFrame
 	{
 		this.setLayout(new BorderLayout());
 
-		// Layout adaptatif : 1 ligne si 2 joueurs, 2 lignes si 3 ou 4 joueurs
-		int lignesIHM   = (nbJoueurs <= 2) ? 1 : 2;
-		int colonnesIHM = 2;
-		JPanel conteneurPlateaux = new JPanel(new GridLayout(lignesIHM, colonnesIHM, 10, 10));
+		this.cardLayout = new CardLayout();
+		this.conteneurPlateaux = new JPanel(this.cardLayout);
+
 
 		this.panelPlateau = new PanelPlateau[nbJoueurs];
 		
@@ -132,12 +135,27 @@ public class FrameJeu extends JFrame
 			});
 
 			splitPanel.add(panelArrete);
-			splitPanel.add(this.panelPlateau[i]);
-			conteneurPlateaux.add(splitPanel);
+			splitPanel.add(panelPlateau);
+			
+			conteneurPlateaux.add(splitPanel, "joueur" + i);
 		}
 
 		this.changerPanel(conteneurPlateaux);
 		this.add(this.panelPioche, BorderLayout.WEST); // La pioche reste partagée sur le côté
+		
+	}
+
+	public void afficherPlateauJoueur(int idJoueurActuel)
+	{
+		if (this.cardLayout != null && this.conteneurPlateaux != null) 
+		{
+			// On demande au CardLayout d'afficher le panneau correspondant à l'identifiant
+			this.cardLayout.show(this.conteneurPlateaux, "joueur" + idJoueurActuel);
+			this.add(new JLabel("joueur" + (idJoueurActuel + 1)), BorderLayout.NORTH);
+			
+			this.conteneurPlateaux.revalidate();
+			this.conteneurPlateaux.repaint();
+		}
 	}
 
 	// Permet de mettre a jour l'affichage de la pioche
@@ -186,6 +204,11 @@ public class FrameJeu extends JFrame
 				javax.swing.JOptionPane.DEFAULT_OPTION, 
 				javax.swing.JOptionPane.PLAIN_MESSAGE, 
 				null, null, null);
+	}
+
+	public void incrNbPasse()
+	{
+		this.panelPioche.incrNbPasse();
 	}
 
 }

@@ -6,6 +6,7 @@ import ContamiNation_Jouer.Metier.*;
 import java.awt.Color;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 import java.io.File;
 
@@ -30,6 +31,7 @@ public class Controleur
 	private int                 nbJoueurs;
 	private boolean             modeDebiche = false;
 	private boolean[]           aJoueCeTour;
+	private boolean             modeMulti;
 	private boolean             fin         = false;
 	private ServeurJeu          serveurJeu;
 	private ClientJoueur        clientJoueur; 
@@ -47,18 +49,21 @@ public class Controleur
 	/*   getters  */
 	/*------------*/
 	
-	public Plateau getPlateau    (int idJoueur)                   { return this.plateau[idJoueur]                        ; }
-	public int     getTailleCase ()                               { return this.frame.getPanelPlateau(0).getTailleCase() ; }
-	public int     getLig        ()                               { return this.plateau[0].getLig()                      ; }
-	public int     getCol        ()                               { return this.plateau[0].getCol()                      ; }
-	public Case    getCase       (int lig, int col, int idJoueur) { return this.plateau[idJoueur].getCase(lig, col)      ; }
-	public JPanel  getPanel      (int lig, int col, int idJoueur) { return this.frame.getTabPanel(idJoueur)[lig][col]    ; }
-	public Virus   getVirus      (int idJoueur)                   { return this.plateau[idJoueur].getVirusActif()        ; }
-	public Map<Integer, Color>   getCouleurZone  ()               { return this.couleursZones                            ; }
-	public Case    getCaseSelectionnee()                          { return this.caseSelectionnee                         ; }
-	public Carte   getCarte(int indice)                           { return this.pioche.getCarte(indice)                  ; }
-	public int     getTaillePioche ()                             { return this.pioche.getTaillePioche()                 ; }
-	public boolean getModeDebiche  ()                             { return this.modeDebiche                              ; }
+	public Plateau getPlateau    (int idJoueur)                   { return this.plateau[idJoueur]                       ; }
+	public int     getTailleCase ()                               { return this.frame.getPanelPlateau().getTailleCase() ; }
+	public int     getLig        ()                               { return this.plateau[0].getLig()                     ; }
+	public int     getCol        ()                               { return this.plateau[0].getCol()                     ; }
+	public Case    getCase       (int lig, int col, int idJoueur) { return this.plateau[idJoueur].getCase(lig, col)     ; }
+	public JPanel  getPanel      (int lig, int col)               { return this.frame.getTabPanel()[lig][col]           ; }
+	public Virus   getVirus      (int idJoueur)                   { return this.plateau[idJoueur].getVirusActif()       ; }
+	public Map<Integer, Color>   getCouleurZone  ()               { return this.couleursZones                           ; }
+	public Case    getCaseSelectionnee()                          { return this.caseSelectionnee                        ; }
+	public Carte   getCarte(int indice)                           { return this.pioche.getCarte(indice)                 ; }
+	public int     getTaillePioche ()                             { return this.pioche.getTaillePioche()                ; }
+	public boolean getModeDebiche  ()                             { return this.modeDebiche                             ; }
+	public boolean getModeMulti    ()                             {return  this.modeMulti                               ; }
+	public int     getNbJoueur     ()                             {return  this.nbJoueurs                               ; }
+
 	
 	public boolean possedeSommet(int lig, int col, int idJoueur) 
 	{
@@ -153,17 +158,21 @@ public class Controleur
 		this.nbJoueurs   = nbJoueurs;
 		this.plateau     = new Plateau[nbJoueurs];
 		this.aJoueCeTour = new boolean[nbJoueurs];
+		this.modeMulti   = true;
 		
 		for (int i = 0; i < nbJoueurs; i++) 
 			this.plateau[i] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, i, this);
 		
 		this.initierPioche();
 		this.melangerPioche();
+		this.tirerCarte(0);
 		
 		this.attribuerVirusDepart();
 		
 		this.frame.reinitierPanelPioche();
 	}
+
+
 
 	public void resetCouleurs() 
 	{ 
@@ -243,6 +252,8 @@ public class Controleur
 			if (plateauActif.verifSommet(caseAVerif, carteActive, choixForce))
 			{
 				this.aJoueCeTour[idJoueur] = true;
+				this.changerPlateau((idJoueur + 1) % this.nbJoueurs);
+				this.frame.incrNbPasse();
 				this.verifierFinDeTourCollectif();
 			}
 		}
@@ -252,6 +263,7 @@ public class Controleur
 		this.frame.SommetClique();
 		this.frame.repaint     ();
 	}
+	
 	
 	public boolean estVoisinAtteignableMulti(Case caseAVerif, int idJoueur) 
 	{
@@ -264,13 +276,23 @@ public class Controleur
 		return false;
 	}
 
-private void verifierFinDeTourCollectif() 
+	private void verifierFinDeTourCollectif() 
 	{
+		// On vérifie si au moins un joueur n'a pas encore agi
 		for (boolean aJoue : aJoueCeTour) 
 			if (!aJoue) return; 
 		
+		// Si tout le monde a fini son action (coup valide ou passe) :
 		for (int i = 0; i < nbJoueurs; i++) 
-			aJoueCeTour[i] = false;
+			aJoueCeTour[i] = false; // Réinitialisation pour le nouveau tour de table
+		
+		// pour qu'il puisse jouer avec la nouvelle carte qui va être piochée
+		if (this.frame != null)
+		{
+			this.changerPlateau(0);
+		}
+
+		// On met à jour la pioche et on tire la nouvelle carte
 		this.frame.reinitierPanelPioche();
 	}
 	
@@ -304,16 +326,65 @@ private void verifierFinDeTourCollectif()
 	{
 		if (this.aJoueCeTour == null) return;
 
+		// 1. Trouver quel joueur est actuellement en train de regarder son écran (le joueur actif)
+		int joueurQuiPasse = 0;
 		for (int i = 0; i < this.nbJoueurs; i++) 
 		{
-			this.aJoueCeTour[i] = false;
+			// Le joueur actif est celui qui n'a pas encore joué et dont le plateau devrait être affiché
+			if (!this.aJoueCeTour[i]) 
+			{
+				joueurQuiPasse = i;
+				break;
+			}
 		}
 
+		// 2. On marque ce joueur comme ayant terminé son action pour ce tour
+		this.aJoueCeTour[joueurQuiPasse] = true;
+
+		// 3. Trouver le joueur suivant qui doit encore jouer ce tour-ci
+		int prochainJoueur = (joueurQuiPasse + 1) % this.nbJoueurs;
+		while (this.aJoueCeTour[prochainJoueur] && prochainJoueur != joueurQuiPasse) 
+		{
+			prochainJoueur = (prochainJoueur + 1) % this.nbJoueurs;
+		}
+
+		// 4. On change de plateau visuellement vers le joueur suivant
 		if (this.frame != null) 
 		{
-			this.frame.reinitierPanelPioche();
+			this.frame.afficherPlateauJoueur(prochainJoueur);
+			this.frame.incrNbPasse(); // Incrémente le compteur de passes nécessaires à la pioche
+		}
+
+		// 5. On vérifie si tout le monde a fini (si oui, piochera une nouvelle carte)
+		this.verifierFinDeTourCollectif();
+		
+		if (this.frame != null) 
+		{
 			this.frame.repaint();
 		}
+	}
+
+	/**
+	 * Change le plateau visible après un petit temps d'attente autonome
+	 */
+	private void changerPlateau(int prochainJoueur) 
+	{
+		// On crée un Timer Swing qui attend 1500 ms (1.5 seconde)
+		javax.swing.Timer timer = new javax.swing.Timer(500, new java.awt.event.ActionListener() 
+		{
+			@Override
+			public void actionPerformed(java.awt.event.ActionEvent e) 
+			{
+				if (frame != null) 
+				{
+					// L'action s'exécute après le délai
+					frame.afficherPlateauJoueur(prochainJoueur);
+				}
+			}
+		});
+		
+		timer.setRepeats(false); // TRÈS IMPORTANT : Le timer ne doit s'exécuter qu'une seule fois !
+		timer.start();           // On lance le compte à rebours
 	}
 
 	public static void main (String[] args) 

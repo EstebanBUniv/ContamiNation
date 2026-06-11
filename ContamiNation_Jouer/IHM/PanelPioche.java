@@ -31,6 +31,7 @@ public class PanelPioche extends JPanel implements ActionListener
 
 	private int     cptManche;
 	
+	private int     nbPasse;
 
 	public PanelPioche(Controleur ctrl)
 	{
@@ -61,12 +62,6 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.lblPioche      = new JLabel("");
 		this.btnPasser        = new JButton( "Passer");
 
-		/*
-		this.lblPioche.setOpaque           (false);
-		this.lblPioche.setContentAreaFilled(false);
-		this.lblPioche.setBorderPainted    (false);
-		this.lblPioche.setFocusPainted     (false);
-		*/
 		this.cptManche = 1;
 
 		this.lblCarteActive  = new JLabel( "Carte active");
@@ -79,10 +74,10 @@ public class PanelPioche extends JPanel implements ActionListener
 		//-------------------------------//
 		
 		panelGauche.add(this.lblCarteActive                           );
-		panelGauche.add(this.lblPioche                               );
-		panelGauche.add(this.btnPasser);
+		panelGauche.add(this.lblPioche                                );
+		panelGauche.add(this.btnPasser                                );
 		
-		this       .add(scrollDefausse   , BorderLayout.SOUTH     );
+		this       .add(scrollDefausse   ,    BorderLayout.SOUTH      );
 		this       .add(this.lblManche       ,BorderLayout.NORTH      );
 		this       .add(panelGauche          ,BorderLayout.WEST       );
 
@@ -95,20 +90,33 @@ public class PanelPioche extends JPanel implements ActionListener
 	}
 
 	// Méthode qui s'occupe du déroulement de la pioche
+	// Méthode qui s'occupe du déroulement de la pioche
 	public void passerTour()
 	{
+		
 		if (!this.ctrl.verifFinManche())
 		{
-			if (!this.ctrl.getModeDebiche())
+			if (!this.ctrl.getModeDebiche() && !this.ctrl.getModeMulti())
 			{
 				this.ctrl.tirerCarte(0);
 			}
 			else
 			{
-				// La carte a déjà été choisie via FrameChoixCarte
-				// On prépare le tour suivant
-				this.ctrl.appelerChoixCarte();
-			}
+				if(!this.ctrl.getModeDebiche() && this.ctrl.getModeMulti())
+				{	
+					// Si tout le monde a effectué son action (coup ou passe)
+					if(this.nbPasse >= ctrl.getNbJoueur())
+					{
+						this.ctrl.tirerCarte(0);
+						this.afficherCarteActive();
+						this.nbPasse = 0; // On remet à zéro pour le tour suivant
+					}
+				}
+				else
+				{
+					this.ctrl.appelerChoixCarte();
+				}
+			}	
 		}
 		else
 		{
@@ -163,6 +171,11 @@ public class PanelPioche extends JPanel implements ActionListener
 		{
 			this.ctrl.forcerPassageTourCollectif();
 		}
+	}
+
+	public void incrNbPasse()
+	{
+		this.nbPasse++;
 	}
 }
 
