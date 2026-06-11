@@ -131,6 +131,9 @@ public class Controleur
 		
 		this.initierPioche();
 		this.melangerPioche();
+		
+		this.attribuerVirusDepart();
+		
 		this.frame.reinitierPanelPioche();
 		if (this.getModeDebiche()) this.appelerChoixCarte();
 	}
@@ -146,6 +149,9 @@ public class Controleur
 		
 		this.initierPioche();
 		this.melangerPioche();
+		
+		this.attribuerVirusDepart();
+		
 		this.frame.reinitierPanelPioche();
 	}
 
@@ -288,5 +294,26 @@ private void verifierFinDeTourCollectif()
 		
 		symboles.add("Epidemie");
 		return symboles.toArray(new String[0]);
+	}
+	
+	public void attribuerVirusDepart() 
+	{
+		if (this.plateau == null || this.plateau.length == 0 || this.plateau[0] == null) return;
+
+		int nbVirusSurCarte = this.plateau[0].getNbVirus();
+		java.util.List<Integer> chapeauNumeros = new java.util.ArrayList<>();
+		
+		for (int i = 0; i < nbVirusSurCarte; i++) 
+		{
+			chapeauNumeros.add(i);
+		}
+
+		java.util.Collections.shuffle(chapeauNumeros);
+
+		for (int i = 0; i < this.nbJoueurs; i++) 
+		{
+			int numeroTire = chapeauNumeros.get(i % chapeauNumeros.size());
+			this.plateau[i].setIndexVirusActif(numeroTire);
+		}
 	}
 }

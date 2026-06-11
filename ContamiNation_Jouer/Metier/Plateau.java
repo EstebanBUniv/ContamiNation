@@ -370,4 +370,14 @@ public class Plateau
 			   !s.getContamine() &&
 			   (carteTire.getSymbole().equals(s.getSymbole()) || carteTire.getSymbole().equals("Epidemie"));
 	}
+	
+	public void setIndexVirusActif(int indexChoisi) 
+	{
+		if (this.lstVirus != null && indexChoisi > 0 && indexChoisi < this.lstVirus.size()) 
+		{
+			Virus temp = this.lstVirus.get(0);
+			this.lstVirus.set(0, this.lstVirus.get(indexChoisi));
+			this.lstVirus.set(indexChoisi, temp);
+		}
+	}
 }
