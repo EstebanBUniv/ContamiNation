@@ -30,6 +30,9 @@ public class Controleur
 	private int                 nbJoueurs;
 	private boolean             modeDebiche = false;
 	private boolean[]           aJoueCeTour;
+	private boolean             fin         = false;
+	private ServeurJeu          serveurJeu;
+	private ClientJoueur        clientJoueur; 
 
 	// Variables pour le système de sélection
 	private boolean estClique        = false;
@@ -196,6 +199,7 @@ public class Controleur
 		{
 			for(int lig = 0; lig < this.plateau.length; lig++)
 				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
+			this.partieTerminee(true);
 		}
 	}
 
@@ -349,4 +353,25 @@ private void verifierFinDeTourCollectif()
 			this.plateau[i].setIndexVirusActif(numeroTire);
 		}
 	}
+
+	public void partieTerminee(boolean fin)
+	{
+		this.fin = true;
+	}
+
+	public boolean getFin()
+	{
+		return this.fin;
+	}
+
+	public void lancerServeur()
+	{
+		this.serveurJeu = new ServeurJeu(this);
+	}
+
+	public void lancerClient()
+	{
+		this.clientJoueur = new ClientJoueur(this);
+	}
+
 }
