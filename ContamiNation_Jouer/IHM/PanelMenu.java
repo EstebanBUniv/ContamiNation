@@ -93,6 +93,7 @@ public class PanelMenu extends JPanel implements ActionListener
 
 		if ( e.getSource() == this.btnMulti )
 			this.frameMere.changerPanel(new PanelNiveau(this.frameMere, this.ctrl, true));
+		
 
 		if ( e.getSource() == this.btnQuitter )
 			this.frameMere.dispose();
