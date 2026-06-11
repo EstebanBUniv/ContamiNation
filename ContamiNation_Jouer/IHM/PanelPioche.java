@@ -37,7 +37,6 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.ctrl = ctrl;
 
 		this.setLayout(new BorderLayout());
-		this.ctrl.initierPioche();
 		
 		JPanel panelGauche;
 		
@@ -59,12 +58,7 @@ public class PanelPioche extends JPanel implements ActionListener
 
 		panelGauche.setLayout(new GridLayout(3,1));
 		
-		ImageIcon iconOriginal = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
-		Image img50            = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
-		ImageIcon icon50       = new ImageIcon(img50);
-		
-
-		this.lblPioche      = new JLabel(icon50);
+		this.lblPioche      = new JLabel("");
 		this.btnPasser        = new JButton( "Passer");
 
 		/*
@@ -147,7 +141,7 @@ public class PanelPioche extends JPanel implements ActionListener
 		
 		if(e.getSource() == this.btnPasser)
 		{
-			this.passerTour();
+			this.ctrl.forcerPassageTourCollectif();
 		}
 	}
 }

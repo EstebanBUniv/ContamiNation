@@ -43,6 +43,7 @@ public class Case
 	public Sommet  getSommet     () { return this.sommet      ; }
 	public boolean getAUnSommet  () { return this.sommet != null   ; }
 	public boolean getEstTraverse() { return this.estTraverse ; }
+	public String  getSymbole    () { return this.sommet.getSymbole(); }
 	
 	/*----------------------------*/
 	/*  Setter                    */

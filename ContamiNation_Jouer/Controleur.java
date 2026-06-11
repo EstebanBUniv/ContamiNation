@@ -11,6 +11,8 @@ import java.io.File;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Controleur
 {
@@ -29,8 +31,8 @@ public class Controleur
 	private boolean[]           aJoueCeTour;
 
 	// Variables pour le système de sélection
-	private boolean estClique = false;
-	private Case caseSelectionnee = null;
+	private boolean estClique        = false;
+	private Case    caseSelectionnee = null;
 
 	public Controleur() 
 	{ 
@@ -43,8 +45,8 @@ public class Controleur
 	
 	public Plateau getPlateau    (int idJoueur)                   { return this.plateau[idJoueur]                       ; }
 	public int     getTailleCase ()                               { return this.frame.getPanelPlateau().getTailleCase() ; }
-	public int     getLig        ()                               { return plateau[0].getLig()                          ; }
-	public int     getCol        ()                               { return plateau[0].getCol()                          ; }
+	public int     getLig        ()                               { return this.plateau[0].getLig()                     ; }
+	public int     getCol        ()                               { return this.plateau[0].getCol()                     ; }
 	public Case    getCase       (int lig, int col, int idJoueur) { return this.plateau[idJoueur].getCase(lig, col)     ; }
 	public JPanel  getPanel      (int lig, int col)               { return this.frame.getTabPanel()[lig][col]           ; }
 	public Virus   getVirus      (int idJoueur)                   { return this.plateau[idJoueur].getVirusActif()       ; }
@@ -54,40 +56,49 @@ public class Controleur
 	public int     getTaillePioche ()                             { return this.pioche.getTaillePioche()                ; }
 	public boolean getModeDebiche  ()                             { return this.modeDebiche                             ; }
 	
-	public boolean possedeSommet(int lig, int col, int idJoueur) {
+	public boolean possedeSommet(int lig, int col, int idJoueur) 
+	{
 		return this.plateau[idJoueur].getCase(lig, col).getSommet() != null;
 	}
 
-	public boolean possedeVoisin(int lig, int col, int direction, int idJoueur) {
+	public boolean possedeVoisin(int lig, int col, int direction, int idJoueur) 
+	{
 		return this.plateau[idJoueur].getCase(lig, col).getSommet().getLstVoisin()[direction] != null;
 	}
 
-	public int getLigVoisin(int lig, int col, int direction, int idJoueur) {
+	public int getLigVoisin(int lig, int col, int direction, int idJoueur)
+	{
 		return this.plateau[idJoueur].getCase(lig, col).getSommet().getLstVoisin()[direction].getLigSommet();
 	}
 
-	public int getColVoisin(int lig, int col, int direction, int idJoueur) {
+	public int getColVoisin(int lig, int col, int direction, int idJoueur) 
+	{
 		return this.plateau[idJoueur].getCase(lig, col).getSommet().getLstVoisin()[direction].getColSommet();
 	}
 
-	public int getNbVirus(int idJoueur) {
+	public int getNbVirus(int idJoueur) 
+	{
 		return this.plateau[idJoueur].getNbVirus();
 	}
 
-	public int getTailleCheminVirus(int idJoueur, int indexVirus) {
+	public int getTailleCheminVirus(int idJoueur, int indexVirus) 
+	{
 		Virus v = this.plateau[idJoueur].getVirus(indexVirus); 
 		return (v != null && v.getConquis() != null) ? v.getConquis().size() : 0;
 	}
 
-	public Color getCouleurVirus(int idJoueur, int indexVirus) {
+	public Color getCouleurVirus(int idJoueur, int indexVirus) 
+	{
 		return this.plateau[idJoueur].getVirus(indexVirus).getCouleur();
 	}
 
-	public int getLigChemin(int idJoueur, int indexVirus, int indexChemin) {
+	public int getLigChemin(int idJoueur, int indexVirus, int indexChemin) 
+	{
 		return this.plateau[idJoueur].getVirus(indexVirus).getConquis().get(indexChemin).getLigSommet();
 	}
 
-	public int getColChemin(int idJoueur, int indexVirus, int indexChemin) {
+	public int getColChemin(int idJoueur, int indexVirus, int indexChemin) 
+	{
 		return this.plateau[idJoueur].getVirus(indexVirus).getConquis().get(indexChemin).getColSommet();
 	}
 
@@ -117,6 +128,10 @@ public class Controleur
 		this.plateau     = new Plateau[1];
 		this.aJoueCeTour = new boolean[1];
 		this.plateau[0] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
+		
+		this.initierPioche();
+		this.melangerPioche();
+		this.frame.reinitierPanelPioche();
 		if (this.getModeDebiche()) this.appelerChoixCarte();
 	}
 	
@@ -128,6 +143,10 @@ public class Controleur
 		
 		for (int i = 0; i < nbJoueurs; i++) 
 			this.plateau[i] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, this);
+		
+		this.initierPioche();
+		this.melangerPioche();
+		this.frame.reinitierPanelPioche();
 	}
 
 	public void resetCouleurs() 
@@ -232,14 +251,42 @@ private void verifierFinDeTourCollectif()
 	public void appelerChoixCarte()   { this.frameChoixCarte = new FrameChoixCarte(this); }
 	
 	// Méthode de Pioche
-	public void initierPioche ()        { this.pioche = new Pioche()           ; }
+	public void initierPioche ()        { this.pioche = new Pioche(this.getSymbole())           ; }
 	public void melangerPioche()        { this.pioche.melanger()               ; }
 	public Carte tirerCarte(int indice) { return this.pioche.tirerCarte(indice); }
 	public Carte premiereCarte()        { return this.pioche.premiereCarte()   ; }
 	public boolean verifFinManche()     { return this.pioche.verifFinManche()  ; }
+	
+	public void forcerPassageTourCollectif() 
+	{
+		if (this.aJoueCeTour == null) return;
+
+		for (int i = 0; i < this.nbJoueurs; i++) 
+		{
+			this.aJoueCeTour[i] = false;
+		}
+
+		if (this.frame != null) 
+		{
+			this.frame.reinitierPanelPioche();
+			this.frame.repaint();
+		}
+	}
 
 	public static void main (String[] args) 
 	{ 
 		new Controleur(); 
+	}
+	
+	public String[] getSymbole()
+	{
+		List<String> symboles = new ArrayList<>();
+		for (int lig = 0; lig < this.getLig(); lig++ )
+			for (int col = 0; col < this.getCol(); col++)
+				if ( this.plateau[0].getCase(lig, col).getAUnSommet() && !symboles.contains(this.plateau[0].getCase(lig, col).getSymbole()))
+						symboles.add(this.plateau[0].getCase(lig, col).getSymbole());
+		
+		symboles.add("Epidemie");
+		return symboles.toArray(new String[0]);
 	}
 }

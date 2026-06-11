@@ -44,8 +44,6 @@ public class FrameJeu extends JFrame
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-		this.ctrl.melangerPioche();
-		this.panelPioche.passerTour();
 	}
 
 
@@ -53,10 +51,6 @@ public class FrameJeu extends JFrame
 	/*  Getters                   */
 	/*----------------------------*/
 
-
-	//----------------//
-	//    Getters     //
-	//----------------//
 	public PanelPlateau getPanelPlateau()
 	{
 		return this.panelPlateau;
@@ -71,10 +65,6 @@ public class FrameJeu extends JFrame
 	/*----------------------------*/
 	/*  Méthodes                  */
 	/*----------------------------*/
-
-	//---------------//
-	//    Méthodes   //
-	//---------------//
 
 	// Méthode permettant de changer le panel de la frame avec celui rentré en paramètre
 	public void changerPanel(JPanel panel)

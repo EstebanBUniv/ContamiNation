@@ -12,22 +12,27 @@ public class Pioche
 	
 	private List<Carte> pioche;
 	private Carte       carteTire;
-	private String[]    nomSymboles = {"Aeroport", "Entrepot", "Hopital", "Laboratoire", "Ville", "Epidemie"};
+	private String[]    nomSymboles;
 	
-	public Pioche ()
+	public Pioche (String [] nomSymboles)
 	{
-		int nbCarte = 12;
+		
+		this.nomSymboles = nomSymboles;
+		
+		int nbCarte = this.nomSymboles.length * 2;
 		this.pioche = new ArrayList<>();
 		this.carteTire = null;
 		for (int cpt = 0 ; cpt < nbCarte ; cpt++)
 		{
-			if( cpt%2 == 1)
+			int indexSymbole = (cpt / 2) % this.nomSymboles.length;
+
+			if (cpt % 2 == 1)
 			{
-				this.pioche.add(new Carte(this.nomSymboles[(cpt % nbCarte/2)], true));
+				this.pioche.add(new Carte(this.nomSymboles[indexSymbole], true));
 			}
 			else
 			{
-				this.pioche.add(new Carte(this.nomSymboles[(cpt % nbCarte/2)], false));
+				this.pioche.add(new Carte(this.nomSymboles[indexSymbole], false));
 			}
 		}
 	}
