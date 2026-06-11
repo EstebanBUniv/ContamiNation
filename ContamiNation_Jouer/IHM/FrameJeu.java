@@ -5,11 +5,14 @@ import ContamiNation_Jouer.Controleur;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Image;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
@@ -76,6 +79,22 @@ public class FrameJeu extends JFrame
 		this.repaint();
 	}
 
+	// Méthode qui renvoi un JLabel contenant le titre sous forme d'image
+	public JLabel creerTitre(int num)
+	{
+		String chemin = "../images/entête/Titre" + num + ".png";
+		
+		ImageIcon icon    = new ImageIcon(chemin);
+		int       largeur = (int)(this.getWidth() * 0.60);
+		int       hauteur = icon.getIconHeight() * largeur / icon.getIconWidth();
+		Image     img     = icon.getImage().getScaledInstance(largeur, hauteur, Image.SCALE_SMOOTH);
+
+		JLabel label = new JLabel(new ImageIcon(img));
+   		label.setAlignmentX(CENTER_ALIGNMENT);
+
+		return label;
+	}
+
 	public void afficherPlateauMulti(int nbJoueurs)
 	{
 		this.setLayout(new BorderLayout());
@@ -97,7 +116,6 @@ public class FrameJeu extends JFrame
 			};
 
 			// Gestion des redimensionnements par plateau individuel
-			final int id = i;
 			splitPanel.addComponentListener(new ComponentAdapter() 
 			{
 				public void componentResized(ComponentEvent e) 
@@ -111,6 +129,9 @@ public class FrameJeu extends JFrame
 				}
 			});
 
+			this.panelPlateau = panelPlateau;
+			this.panelArrete  = panelArrete;
+			
 			splitPanel.add(panelArrete);
 			splitPanel.add(panelPlateau);
 			
@@ -152,6 +173,11 @@ public class FrameJeu extends JFrame
 	public void SommetClique()
 	{
 		this.repaint();
+	}
+
+	public void carteChoisie()
+	{
+		this.panelPioche.carteChoisie();
 	}
 
 	public void nouvelleManche()

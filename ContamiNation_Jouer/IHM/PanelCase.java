@@ -1,7 +1,6 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
-import ContamiNation_Jouer.Metier.Case;
 
 import java.awt.AlphaComposite;
 import java.awt.BorderLayout;
@@ -43,6 +42,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.setBorder(null);
 
 		this.initImgFond();
+		this.initImgBase();
 
 		if (this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null)
 		{
@@ -115,7 +115,19 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 				numeroCase.append(cptDir);
 
 		this.imgFond = getToolkit().getImage("../images/fond/case/fond_case_" + numeroCase + ".png");
-		this.imgBase = getToolkit().getImage("../images/fond/case/base.png");
+	}
+
+	public void initImgBase()
+	{
+		String chemin = "../images/fond/case/base";
+
+		if ( this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null)
+			if ( this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getEstBase() == this.ctrl.getPlateau(idJoueur).getNumManche() )
+				chemin += "Actuelle";
+
+		chemin += ".png";
+
+		this.imgBase = getToolkit().getImage(chemin);
 	}
 
 	public void paintComponent(Graphics g)
@@ -143,7 +155,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 				this.g2.setColor(new Color(255, 200, 0, 150));
 				this.g2.fillRect(0, 0, getWidth(), getHeight());
 			}
-			else if (ctrl.estVoisinAtteignableMulti(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur))
+			else if (this.ctrl.estVoisinAtteignableMulti(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur))
 			{
 				// Les chemins cibles légaux s'allument en Vert
 				this.g2.setColor(new Color(0, 220, 80, 120));
@@ -168,6 +180,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		if (this.imgSymbole != null)
 		{
 			int   taille = (int)(this.getTailleCase() * 0.3);
+			if (taille <= 0) return;
 			Image img    = this.imgSymbole.getScaledInstance(taille, taille, Image.SCALE_SMOOTH);
 			this.btnCase.setIcon(new ImageIcon(img));
 			this.revalidate();

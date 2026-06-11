@@ -18,6 +18,7 @@ public class Controleur
 {
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134);
 	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230);
+	public static final Color COLO_EST_SELECT  = new Color( 86, 136, 158);
 
 	private JPanel[][]          tabPanel;
 	private FrameJeu            frame;
@@ -187,8 +188,19 @@ public class Controleur
 		} 
 		else 
 		{
-			System.out.println("Fin de tout le jeu. Score J1 : " + this.plateau[0].getPointTotal());
+			for(int lig = 0; lig < this.plateau.length; lig++)
+				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
 		}
+	}
+
+	public void changerCouleurManche(int num)
+	{
+		this.frame.getPanelPlateau().changerCouleurManche(num);
+	}
+
+	public void changerImageBase()
+	{
+		this.frame.getPanelPlateau().changerImageBase();
 	}
 	
 	public void verifSommet(Case caseAVerif, int idJoueur)
@@ -259,7 +271,22 @@ private void verifierFinDeTourCollectif()
 	// Méthode de Pioche
 	public void initierPioche ()        { this.pioche = new Pioche(this.getSymbole())           ; }
 	public void melangerPioche()        { this.pioche.melanger()               ; }
-	public Carte tirerCarte(int indice) { return this.pioche.tirerCarte(indice); }
+
+
+	public void tirerCarte(int indice) 
+	{ 
+		this.pioche.setCarteTiree(indice);
+		if (this.frameChoixCarte != null) 
+		{
+			this.frameChoixCarte.dispose();
+			this.frameChoixCarte = null;
+			this.frameChoixCarte = new FrameChoixCarte(this);
+		}
+		if (this.frame != null) this.frame.carteChoisie();
+
+	}
+
+	public Carte getCarteTiree() { return this.pioche.getCarteTire(); }
 	public Carte premiereCarte()        { return this.pioche.premiereCarte()   ; }
 	public boolean verifFinManche()     { return this.pioche.verifFinManche()  ; }
 	
