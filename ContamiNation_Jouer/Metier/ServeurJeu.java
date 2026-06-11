@@ -16,13 +16,11 @@ public class ServeurJeu
 
 	private Controleur ctrl;
 	
-	public ServeurJeu(Controleur ctrl)
+	public ServeurJeu(Controleur ctrl, int ip)
 	{
 		this.ctrl = ctrl;
 
-		System.out.println("Sur quel port voulez-vous être ?");
-		int port = Clavier.lire_int(); //Création du serveur
-		try (ServerSocket ss = new ServerSocket(port)) 
+		try (ServerSocket ss = new ServerSocket(ip)) 
 		{
 			while (! this.ctrl.getFin()) //Boucle While pour laisser le serveur allumé
 			{

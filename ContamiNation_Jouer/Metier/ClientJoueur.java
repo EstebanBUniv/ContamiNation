@@ -16,11 +16,11 @@ public class ClientJoueur
 
 	private Controleur ctrl;
 
-	public ClientJoueur(Controleur ctrl)
+	public ClientJoueur(Controleur ctrl, int ip)
 	{
 		this.ctrl = ctrl;
 
-		int port = 9000;
+		int port = ip;
 
 		
 		

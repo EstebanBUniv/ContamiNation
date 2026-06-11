@@ -138,6 +138,8 @@ public class Controleur
 		this.aJoueCeTour = new boolean[1];
 		this.plateau[0]  = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, 0, this);
 		
+		this.frame.afficherPlateauMulti(1);
+		
 		this.initierPioche();
 		this.melangerPioche();
 		
@@ -435,14 +437,16 @@ public class Controleur
 		return this.fin;
 	}
 
-	public void lancerServeur()
+	public void lancerServeur(int ip) 
 	{
-		this.serveurJeu = new ServeurJeu(this);
+	new Thread(() -> {
+		this.serveurJeu = new ServeurJeu(this, ip);
+	}).start();
 	}
 
-	public void lancerClient()
+	public void lancerClient(int ip)
 	{
-		this.clientJoueur = new ClientJoueur(this);
+		this.clientJoueur = new ClientJoueur(this, ip);
 	}
 
 }

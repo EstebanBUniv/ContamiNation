@@ -126,11 +126,6 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 			int estBase    = this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getEstBase();
 			int virusActif = this.ctrl.getPlateau(this.idJoueur).getVirusActif().getId();
 
-			 System.out.println("joueur=" + this.idJoueur 
-                         + " estBase=" + estBase 
-                         + " virusActif=" + virusActif);
-
-
 			if (estBase == virusActif)
 				chemin += "Actuelle";
 		}

@@ -120,7 +120,6 @@ public class PanelPioche extends JPanel implements ActionListener
 		}
 		else
 		{
-			System.out.println("Fin de Manche");
 			this.cptManche++;
 			this.lblManche.setText("Manche n°" + this.cptManche);
 			this.panelDefausse.removeAll();

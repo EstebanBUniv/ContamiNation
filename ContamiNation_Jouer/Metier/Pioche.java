@@ -60,7 +60,7 @@ public class Pioche
 	{
 		Carte carteTire;
 		
-		if (indiceCarte < 0 || indiceCarte > this.pioche.size())
+		if (indiceCarte < 0 || indiceCarte >= this.pioche.size())
 			return null;
 		
 		this.carteTire = this.pioche.get(indiceCarte);
