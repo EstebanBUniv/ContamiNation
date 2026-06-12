@@ -10,18 +10,19 @@ import java.util.List;
 
 public class Plateau
 {
-	private Controleur  ctrl;
-	private int         col;
-	private int         lig;
-	private int         nbVirus;
-	private int         idJoueur;
-	private int         numManche;
-	private int         pointTotal;
-	private String      nom;
-	private Case[][]    tabCases; 
-	private File        fichierSource = null;
-	private List<Virus> lstVirus;
-	private int         offsetVirus = 0;
+	private Controleur      ctrl;
+	private int             col;
+	private int             lig;
+	private int             nbVirus;
+	private int             idJoueur;
+	private int             numManche;
+	private int             pointTotal;
+	private String          nom;
+	private Case[][]        tabCases; 
+	private File            fichierSource = null;
+	private List<Virus>     lstVirus;
+	private List<Integer>   lstPointParManche;
+	private int             offsetVirus = 0;
 
 	private boolean     modeDebiche = false;
 
@@ -33,16 +34,17 @@ public class Plateau
 
 	private Plateau(int lig, int col, int nbVirus, String nom, Controleur ctrl, int idJoueur) 
 	{
-		this.ctrl     = ctrl;
-		this.col      = col;
-		this.lig      = lig;
-		this.nom      = nom;
-		this.nbVirus  = nbVirus;
-		this.idJoueur = idJoueur;
-		this.lstVirus = new ArrayList<>();
-		this.tabCases = new Case[lig][col];
-		this.numManche = 1;
-		this.pointTotal = 0;
+		this.ctrl              = ctrl;
+		this.col               = col;
+		this.lig               = lig;
+		this.nom               = nom;
+		this.nbVirus           = nbVirus;
+		this.idJoueur          = idJoueur;
+		this.lstVirus          = new ArrayList<>();
+		this.lstPointParManche = new ArrayList<>();
+		this.tabCases          = new Case[lig][col];
+		this.numManche         = 1;
+		this.pointTotal        = 0;
 
 		for (int i = 0; i < lig; i++) 
 			for (int j = 0; j < col; j++)
@@ -52,17 +54,18 @@ public class Plateau
 			this.ctrl.appelerChoixCarte();
 	}
 
-	public int    getLig           ()       { return this.lig                              ; }
-	public int    getCol           ()       { return this.col                              ; }
-	public int    getNbVirus       ()       { return this.nbVirus                          ; }
-	public String getNom           ()       { return this.nom                              ; }
-	public File   getFichierSource ()       { return this.fichierSource                    ; }
-	public Case   getCase(int lig, int col) { return this.tabCases[lig][col]               ; }
-	public Virus  getVirus(int index)       { return this.lstVirus.get(index)              ; }
-	public int    getPointTotal    ()       { return this.pointTotal                       ; }
-	public int    getNumManche     ()       { return this.numManche                        ; }
-	public int    getIdJouer       ()       { return this.idJoueur                         ; }
-	public int    getOffsetVirus   ()       { return this.offsetVirus                      ; }
+	public int    getLig           ()          { return this.lig                              ; }
+	public int    getCol           ()          { return this.col                              ; }
+	public int    getNbVirus       ()          { return this.nbVirus                          ; }
+	public String getNom           ()          { return this.nom                              ; }
+	public File   getFichierSource ()          { return this.fichierSource                    ; }
+	public Case   getCase(int lig, int col)    { return this.tabCases[lig][col]               ; }
+	public Virus  getVirus(int index)          { return this.lstVirus.get(index)              ; }
+	public List   getnbPointManche ()          { return this.lstPointParManche                ; }
+	public int    getPointTotal    ()          { return this.pointTotal                       ; }
+	public int    getNumManche     ()          { return this.numManche                        ; }
+	public int    getIdJouer       ()          { return this.idJoueur                         ; }
+	public int    getOffsetVirus   ()          { return this.offsetVirus                      ; }
 
 	public Virus getVirusActif() 
 	{ 
@@ -99,6 +102,7 @@ public class Plateau
 	public boolean mancheSuivante() 
 	{
 		this.pointTotal += this.calculManche();
+		this.lstPointParManche.add(this.calculManche());
 		if (this.numManche < this.lstVirus.size()) 
 		{
 			this.numManche++;
@@ -136,7 +140,7 @@ public class Plateau
 	private void chercherVoisins(int lig, int col, Sommet sommetCourant) 
 	{
 		int[][] directions = { {-1, 0 }, {1, 0 }, {0, -1}, {0, 1},
-							   {-1, -1}, {-1, 1}, {1, -1}, {1, 1} };
+			                   {-1, -1}, {-1, 1}, {1, -1}, {1, 1} };
 
 		for (int i = 0; i < directions.length; i++) 
 		{
@@ -175,7 +179,7 @@ public class Plateau
 	{
 		int nbSommetParZone = 0;
 		ArrayList<Integer> zonesVisitees = new ArrayList<>();
-		Virus virusActuel = this.getVirusActif();
+		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 
 		for (int lig = 0; lig < this.lig; lig++) 
 		{
@@ -229,7 +233,7 @@ public class Plateau
 	{
 		if (!this.estCoupValide(caseAVerif, carteTire)) return false;
 
-		Virus virusActuel = this.getVirusActif();
+		Virus  virusActuel   = this.lstVirus.get(this.numManche - 1);
 		Sommet nouveauSommet = caseAVerif.getSommet();
 
 		if (virusActuel == null || nouveauSommet == null) return false;
@@ -281,38 +285,36 @@ public class Plateau
 
 	public boolean estCroisementInterdit(Sommet s1, Sommet s2)
 	{
-		if (s1 == null || s2 == null) return false;
-		
 		int lig1 = s1.getLigSommet();
 		int col1 = s1.getColSommet();
 		int lig2 = s2.getLigSommet();
 		int col2 = s2.getColSommet();
 
-	// Parcourir tous les virus pour voir si l'un d'eux occupe un segment qui croise le nôtre
-	for (int i = 0; i < this.lstVirus.size(); i++)
-	{
-		Virus v = this.lstVirus.get(i);
-		if (v != null && v.getConquis().size() > 1)
-		{
-			LinkedList<Sommet> chemin = v.getConquis();
-			
-			// On regarde chaque segment déjà tracé par ce virus
-			for (int c = 0; c < chemin.size() - 1; c++)
-			{
-				Sommet v1 = chemin.get(c);
-				Sommet v2 = chemin.get(c + 1);
+    // Parcourir tous les virus pour voir si l'un d'eux occupe un segment qui croise le nôtre
+    for (int i = 0; i < this.lstVirus.size(); i++)
+    {
+        Virus v = this.lstVirus.get(i);
+        if (v != null && v.getConquis().size() > 1)
+        {
+            LinkedList<Sommet> chemin = v.getConquis();
+            
+            // On regarde chaque segment déjà tracé par ce virus
+            for (int c = 0; c < chemin.size() - 1; c++)
+            {
+                Sommet v1 = chemin.get(c);
+                Sommet v2 = chemin.get(c + 1);
 
-				// est-ce que le nouveau coup [(lig1,col1) -> (lig2,col2)] croise le segment existant [v1 -> v2] ?
-				if (seCroisentStrictement(lig1, col1, lig2, col2, 
-										  v1.getLigSommet(), v1.getColSommet(), 
-										  v2.getLigSommet(), v2.getColSommet()))
-				{
-					return true; // Croisement interdit détecté !
-				}
-			}
-		}
-	}
-	return false;
+                // est-ce que le nouveau coup [(lig1,col1) -> (lig2,col2)] croise le segment existant [v1 -> v2] ?
+                if (seCroisentStrictement(lig1, col1, lig2, col2, 
+                                          v1.getLigSommet(), v1.getColSommet(), 
+                                          v2.getLigSommet(), v2.getColSommet()))
+                {
+                    return true; // Croisement interdit détecté !
+                }
+            }
+        }
+    }
+    return false;
 }
 
 	private boolean arreteDejaColoree(Sommet s1, Sommet s2)
@@ -338,7 +340,7 @@ public class Plateau
 
 	public void preparerNouvelleManche() 
 	{
-		Virus virusActuel = this.getVirusActif();
+		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 
 		for (int l = 0; l < this.lig; l++) 
 			for (int c = 0; c < this.col; c++) 
@@ -370,7 +372,7 @@ public class Plateau
 								return false;
 		
 
-		Virus virusActuel = this.getVirusActif();
+		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
 		Sommet s = caseAVerif.getSommet();
 
 		return virusActuel.estVoisinDeLExtremite(s) &&
@@ -380,13 +382,7 @@ public class Plateau
 
 	public void setIndexVirusActif(int index)
 	{
-		/*if (this.lstVirus != null && indexChoisi > 0 && indexChoisi < this.lstVirus.size()) 
-		{
-			Virus temp = this.lstVirus.get(0);
-			this.lstVirus.set(0, this.lstVirus.get(indexChoisi));
-			this.lstVirus.set(indexChoisi, temp);
-		}*/
-
+		
 		this.offsetVirus = index; 
 	}
 
