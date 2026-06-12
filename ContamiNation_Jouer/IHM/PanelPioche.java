@@ -108,7 +108,6 @@ public class PanelPioche extends JPanel implements ActionListener
 					if(this.nbPasse >= ctrl.getNbJoueur())
 					{
 						this.ctrl.tirerCarte(0);
-						this.afficherCarteActive();
 						this.nbPasse = 0; // On remet à zéro pour le tour suivant
 					}
 				}
