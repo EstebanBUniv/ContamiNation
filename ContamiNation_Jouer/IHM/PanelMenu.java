@@ -36,7 +36,6 @@ public class PanelMenu extends JPanel implements ActionListener
 	public PanelMenu(Controleur ctrl, FrameJeu frame)
 	{
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		this.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		this.imgFond = getToolkit().getImage("../images/fond/fond2.png");
 		
 		this.frameMere = frame;

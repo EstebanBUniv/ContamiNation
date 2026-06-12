@@ -11,6 +11,7 @@ import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -94,6 +95,7 @@ public class FrameJeu extends JFrame
 
 		JLabel label = new JLabel(new ImageIcon(img));
    		label.setAlignmentX(CENTER_ALIGNMENT);
+		label.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
 
 		return label;
 	}
@@ -151,8 +153,9 @@ public class FrameJeu extends JFrame
 		{
 			// On demande au CardLayout d'afficher le panneau correspondant à l'identifiant
 			this.cardLayout.show(this.conteneurPlateaux, "joueur" + idJoueurActuel);
-			this.add(new JLabel("joueur" + (idJoueurActuel + 1)), BorderLayout.NORTH);
-			
+			//this.panelPlateau[idJoueurActuel].add(new JLabel("joueur" + (idJoueurActuel + 1)), BorderLayout.NORTH);
+			//this.panelPlateau[idJoueurActuel].ajouterLabelJouer();
+
 			this.conteneurPlateaux.revalidate();
 			this.conteneurPlateaux.repaint();
 		}

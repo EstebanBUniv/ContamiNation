@@ -2,10 +2,13 @@ package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class PanelPlateau extends JPanel
 {
@@ -14,6 +17,9 @@ public class PanelPlateau extends JPanel
 	private Controleur ctrl;
 
 	private PanelCase[][] tabPanel;
+
+	private JPanel        panelCase;
+	private JLabel        lbJoueur;
 
 	private int lig;
 	private int col;
@@ -25,12 +31,25 @@ public class PanelPlateau extends JPanel
 		this.ctrl      = ctrl;
 		this.idJoueur  = idJoueur;
 
+		this.setLayout(new BorderLayout(5, 5));
+
 		this.lig = this.ctrl.getLig();
 		this.col = this.ctrl.getCol();
 
 		this.tabPanel = new PanelCase[this.lig][this.col];
 
-		this.setLayout(new GridLayout(lig, col, 0, 0));
+		this.panelCase = new JPanel(new GridLayout(lig, col, 0, 0));
+
+		if ( this.ctrl.getModeMulti() )
+		{
+			this.lbJoueur = new JLabel("Jouer " + (this.idJoueur+1));
+			this.lbJoueur.setHorizontalAlignment(SwingConstants.CENTER);
+			this.add(this.lbJoueur, BorderLayout.NORTH);
+		}
+		
+
+
+		//this.setLayout(new GridLayout(lig, col, 0, 0));
 		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		int indexVirusActif = ctrl.getPlateau(idJoueur).getOffsetVirus() % ctrl.getPlateau(idJoueur).getNbVirus();
@@ -41,9 +60,11 @@ public class PanelPlateau extends JPanel
 			for ( int cptCol = 0; cptCol < this.col; cptCol++ )
 			{
 				this.tabPanel[cptLig][cptCol] = new PanelCase(cptLig, cptCol, this.ctrl, this.idJoueur);
-				this.add(this.tabPanel[cptLig][cptCol]);
+				this.panelCase.add(this.tabPanel[cptLig][cptCol]);
 			}
 		}
+
+		this.add(this.panelCase);
 	}
 
 	public void changerCouleurManche(int num)
