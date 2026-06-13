@@ -8,7 +8,6 @@ import java.awt.Font;
 
 
 import javax.swing.JPanel;
-import javax.swing.Timer;
 
 import java.io.File;
 
@@ -36,7 +35,6 @@ public class Controleur
 	private int                 nbJoueurs;
 	private boolean             modeDebiche = false;
 	private boolean[]           aJoueCeTour;
-	private boolean             modeMulti;
 	private boolean             fin         = false;
 	private ServeurJeu          serveurJeu;
 	private ClientJoueur        clientJoueur; 
@@ -66,9 +64,6 @@ public class Controleur
 	public Carte   getCarte(int indice)                           { return this.pioche.getCarte(indice)                  ; }
 	public int     getTaillePioche ()                             { return this.pioche.getTaillePioche()                 ; }
 	public boolean getModeDebiche  ()                             { return this.modeDebiche                              ; }
-	public boolean getModeMulti    ()                             { return  this.modeMulti                               ; }
-	public int     getNbJoueur     ()                             { return  this.nbJoueurs                               ; }
-
 	
 	public boolean possedeSommet(int lig, int col, int idJoueur) 
 	{
@@ -139,16 +134,15 @@ public class Controleur
 		this.nbJoueurs   = nbJoueurs;
 		this.plateau     = new Plateau[nbJoueurs];
 		this.aJoueCeTour = new boolean[nbJoueurs];
-		
+
 		if ( nbJoueurs > 1 )
-			this.modeMulti = true;
+			this.modeMulti = true;  
 		
 		for (int i = 0; i < nbJoueurs; i++) 
 			this.plateau[i] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, i, this);
 		
 		this.initierPioche();
 		this.melangerPioche();
-		this.tirerCarte(0);
 		
 		this.attribuerVirusDepart();
 		
@@ -185,9 +179,67 @@ public class Controleur
 		} 
 		else 
 		{
+			int nbMax          = 1;
+			int maxManche      = 0;
+			int Joueur         = 0;
 			for(int lig = 0; lig < this.plateau.length; lig++)
+			{
 				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
-			this.partieTerminee(true);
+				if (this.plateau[lig].getPointTotal() >= maxManche)
+				{
+					if (this.plateau[lig].getPointTotal() == maxManche)
+						nbMax++;
+					else
+					{
+						Joueur = lig;
+						nbMax = 1;
+						maxManche = this.plateau[lig].getPointTotal();
+					}
+				}				
+			}
+
+			if (nbMax == 1)
+			{
+				this.partieTerminee(true);
+				System.out.println("Le joueur " + (Joueur+1) + " a gagné avec " + maxManche + " points !");
+			}
+			else
+			{
+				int maxTour         = 0;
+				int joueur      = 0;
+				boolean egalite = false;
+				for(int lig = 0; lig < this.plateau.length; lig++)
+				{
+					for (int cpt = 0 ; cpt < this.plateau[lig].getnbPointManche().size() ; cpt++)
+					{
+						if ((int)(this.plateau[lig].getnbPointManche().get(cpt)) > maxTour)
+						{
+							egalite = false;
+							maxTour = (int)(this.plateau[lig].getnbPointManche().get(cpt));
+							joueur = lig;
+						}
+						else
+						{
+							if ((int)(this.plateau[lig].getnbPointManche().get(cpt)) == maxTour)
+							{
+								egalite = true;
+							}
+						}
+					}
+				}
+
+				if( egalite == true)
+				{
+					this.partieTerminee(true);
+					System.out.println(" Egalité parfaite avec " + maxTour + " en une manche chacun !");
+				}
+				else
+				{
+					this.partieTerminee(true);
+					System.out.println("Le joueur" + (joueur+1) + " a gagné la partie avec " + maxTour + " en une manche !");
+				}
+			}
+			
 		}
 	}
 
@@ -236,8 +288,6 @@ public class Controleur
 			if (plateauActif.verifSommet(caseAVerif, carteActive, choixForce))
 			{
 				this.aJoueCeTour[idJoueur] = true;
-				this.changerPlateau((idJoueur + 1) % this.nbJoueurs);
-				this.frame.incrNbPasse();
 				this.verifierFinDeTourCollectif();
 			}
 		}
@@ -247,7 +297,6 @@ public class Controleur
 		this.frame.SommetClique();
 		this.frame.repaint     ();
 	}
-	
 	
 	public boolean estVoisinAtteignableMulti(Case caseAVerif, int idJoueur) 
 	{
@@ -260,23 +309,13 @@ public class Controleur
 		return false;
 	}
 
-	private void verifierFinDeTourCollectif() 
+private void verifierFinDeTourCollectif() 
 	{
-		// On vérifie si au moins un joueur n'a pas encore agi
 		for (boolean aJoue : aJoueCeTour) 
 			if (!aJoue) return; 
 		
-		// Si tout le monde a fini son action (coup valide ou passe) :
 		for (int i = 0; i < nbJoueurs; i++) 
-			aJoueCeTour[i] = false; // Réinitialisation pour le nouveau tour de table
-		
-		// pour qu'il puisse jouer avec la nouvelle carte qui va être piochée
-		if (this.frame != null)
-		{
-			this.changerPlateau(0);
-		}
-
-		// On met à jour la pioche et on tire la nouvelle carte
+			aJoueCeTour[i] = false;
 		this.frame.reinitierPanelPioche();
 	}
 	
@@ -309,40 +348,14 @@ public class Controleur
 	{
 		if (this.aJoueCeTour == null) return;
 
-		// 1. Trouver quel joueur est actuellement en train de regarder son écran (le joueur actif)
-		int joueurQuiPasse = 0;
 		for (int i = 0; i < this.nbJoueurs; i++) 
 		{
-			// Le joueur actif est celui qui n'a pas encore joué et dont le plateau devrait être affiché
-			if (!this.aJoueCeTour[i]) 
-			{
-				joueurQuiPasse = i;
-				break;
-			}
+			this.aJoueCeTour[i] = false;
 		}
 
-		// 2. On marque ce joueur comme ayant terminé son action pour ce tour
-		this.aJoueCeTour[joueurQuiPasse] = true;
-
-		// 3. Trouver le joueur suivant qui doit encore jouer ce tour-ci
-		int prochainJoueur = (joueurQuiPasse + 1) % this.nbJoueurs;
-		while (this.aJoueCeTour[prochainJoueur] && prochainJoueur != joueurQuiPasse) 
-		{
-			prochainJoueur = (prochainJoueur + 1) % this.nbJoueurs;
-		}
-
-		// 4. On change de plateau visuellement vers le joueur suivant
 		if (this.frame != null) 
 		{
-			this.frame.afficherPlateauJoueur(prochainJoueur);
-			this.frame.incrNbPasse(); // Incrémente le compteur de passes nécessaires à la pioche
-		}
-
-		// 5. On vérifie si tout le monde a fini (si oui, piochera une nouvelle carte)
-		this.verifierFinDeTourCollectif();
-		
-		if (this.frame != null) 
-		{
+			this.frame.reinitierPanelPioche();
 			this.frame.repaint();
 		}
 	}
@@ -368,7 +381,7 @@ public class Controleur
 		
 		timer.setRepeats(false); // TRÈS IMPORTANT : Le timer ne doit s'exécuter qu'une seule fois !
 		timer.start();           // On lance le compte à rebours
-	}
+  }
 	
 	public String[] getSymbole()
 	{
@@ -413,16 +426,16 @@ public class Controleur
 		return this.fin;
 	}
 
-	public void lancerServeur(int ip) 
+	public void lancerServeur()
 	{
 		new Thread(() -> {
-			this.serveurJeu = new ServeurJeu(this, ip);
+			this.serveurJeu = new ServeurJeu(this);
 		}).start();
 	}
 
-	public void lancerClient(int ip)
+	public void lancerClient()
 	{
-		this.clientJoueur = new ClientJoueur(this, ip);
+		this.clientJoueur = new ClientJoueur(this);
 	}
 
 	public static void main (String[] args) 
