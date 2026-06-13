@@ -28,7 +28,7 @@ public class FrameJeu extends JFrame
 	private PanelPlateau[] panelPlateau;
 	private PanelPioche    panelPioche;
 
-	private CardLayout cardLayout;     
+	private CardLayout cardLayout;
 	private JPanel     conteneurPlateaux;  
 
 
@@ -40,19 +40,17 @@ public class FrameJeu extends JFrame
 	{
 		this.ctrl = ctrl;
 		this.setTitle("ContamiNation");
-		this.setSize(900, 600);
+		this.setSize (900, 600);
 		this.setMinimumSize(new Dimension(600, 300));
 		this.setLocationRelativeTo(null);
 
-		this.panelPioche = new PanelPioche(this.ctrl);
-		this.panel       = new PanelMenu(this.ctrl, this);
+		this.panel = new PanelMenu  (this, this.ctrl);
 
 		this.add(this.panel);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
-
 
 	/*----------------------------*/
 	/*  Getters                   */
@@ -68,6 +66,16 @@ public class FrameJeu extends JFrame
 		return this.panelPlateau[idJoueur].getTabPanel();
 	}
 
+	/*----------------------------*/
+	/*  Setters                   */
+	/*----------------------------*/
+
+	public void setPanelPioche(PanelPioche panel)
+	{
+		if ( this.panelPioche != null )
+			this.remove(this.panelPioche);
+		this.panelPioche = new PanelPioche(this, ctrl);
+	}
 
 	/*----------------------------*/
 	/*  Méthodes                  */
@@ -100,7 +108,7 @@ public class FrameJeu extends JFrame
 		return label;
 	}
 
-	public void afficherPlateauMulti(int nbJoueurs)
+	public void afficherPlateau(int nbJoueurs)
 	{
 		this.setLayout(new BorderLayout());
 
@@ -153,9 +161,7 @@ public class FrameJeu extends JFrame
 		{
 			// On demande au CardLayout d'afficher le panneau correspondant à l'identifiant
 			this.cardLayout.show(this.conteneurPlateaux, "joueur" + idJoueurActuel);
-			//this.panelPlateau[idJoueurActuel].add(new JLabel("joueur" + (idJoueurActuel + 1)), BorderLayout.NORTH);
-			//this.panelPlateau[idJoueurActuel].ajouterLabelJouer();
-
+			
 			this.conteneurPlateaux.revalidate();
 			this.conteneurPlateaux.repaint();
 		}

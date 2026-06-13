@@ -33,13 +33,15 @@ public class PanelMenu extends JPanel implements ActionListener
 	private Image      imgFond;
 	private Graphics2D g2;
 	
-	public PanelMenu(Controleur ctrl, FrameJeu frame)
+	public PanelMenu(FrameJeu frameMere, Controleur ctrl)
 	{
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.imgFond = getToolkit().getImage("../images/fond/fond2.png");
 		
-		this.frameMere = frame;
+		this.frameMere = frameMere;
 		this.ctrl      = ctrl;
+
+		this.frameMere.setPanelPioche(new PanelPioche(this.frameMere, this.ctrl));
 
 		this.setOpaque(false);
 
@@ -56,6 +58,7 @@ public class PanelMenu extends JPanel implements ActionListener
 		{
 			btn.setBackground(Controleur.COLOR_BACKGROUND);
 			btn.setForeground(Controleur.COLOR_FOREGROUND);
+			btn.setFont      (Controleur.POLICE_TEXTE    );
 		}
 
 		this.panelBouton = new JPanel(new GridLayout(3, 1, 0, 15));

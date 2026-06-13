@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 public class PanelPlateau extends JPanel
 {
 	// Attribut d'instance
-	private FrameJeu frameMere;
+	private FrameJeu   frameMere;
 	private Controleur ctrl;
 
 	private PanelCase[][] tabPanel;
@@ -39,18 +39,18 @@ public class PanelPlateau extends JPanel
 		this.tabPanel = new PanelCase[this.lig][this.col];
 
 		this.panelCase = new JPanel(new GridLayout(lig, col, 0, 0));
+		this.panelCase.setOpaque(false);
 
 		if ( this.ctrl.getModeMulti() )
-		{
-			this.lbJoueur = new JLabel("Jouer " + (this.idJoueur+1));
-			this.lbJoueur.setHorizontalAlignment(SwingConstants.CENTER);
-			this.add(this.lbJoueur, BorderLayout.NORTH);
-		}
+			this.lbJoueur = new JLabel("Joueur " + (this.idJoueur+1) + " - Propagation de " + this.ctrl.getVirus(this.idJoueur));
+		else
+			this.lbJoueur = new JLabel("Propagation de " + this.ctrl.getVirus(this.idJoueur));
+
+		this.lbJoueur.setFont(Controleur.POLICE_TEXTE);
+		this.lbJoueur.setHorizontalAlignment(SwingConstants.CENTER);
+		this.add(this.lbJoueur, BorderLayout.NORTH);
 		
-
-
-		//this.setLayout(new GridLayout(lig, col, 0, 0));
-		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		this.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
 		
 		int indexVirusActif = ctrl.getPlateau(idJoueur).getOffsetVirus() % ctrl.getPlateau(idJoueur).getNbVirus();
    		this.changerCouleurManche(indexVirusActif);
@@ -65,6 +65,14 @@ public class PanelPlateau extends JPanel
 		}
 
 		this.add(this.panelCase);
+	}
+
+	public void changerLabelPropagation()
+	{
+		if ( this.ctrl.getModeMulti())
+			this.lbJoueur.setText("Jouer " + (this.idJoueur+1) + " - Propagation de " + this.ctrl.getVirus(this.idJoueur));
+		else
+			this.lbJoueur.setText("Propagation de " + this.ctrl.getVirus(this.idJoueur));
 	}
 
 	public void changerCouleurManche(int num)
@@ -82,6 +90,7 @@ public class PanelPlateau extends JPanel
 	//--------------//
 	//    getters   //
 	//--------------//
+
 	public int getTailleCase()
 	{
 		if ( this.tabPanel != null )

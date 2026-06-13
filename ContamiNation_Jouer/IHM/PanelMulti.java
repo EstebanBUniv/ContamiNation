@@ -41,7 +41,6 @@ public class PanelMulti extends JPanel implements ActionListener
 		this.ctrl = ctrl;
 		this.frameMere = frameMere;
 
-		//this.setLayout(new GridLayout(4,1,10,10));
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.imgFond = getToolkit().getImage("../images/fond/fond2.png");
 
@@ -112,7 +111,7 @@ public class PanelMulti extends JPanel implements ActionListener
 				this.ctrl.lancerServeur(Integer.parseInt(this.txtServeurClient.getText()));
 
 		if ( e.getSource() == this.btnRetour )
-			this.frameMere.changerPanel(new PanelMenu(this.ctrl, this.frameMere));
+			this.frameMere.changerPanel(new PanelMenu(this.frameMere, this.ctrl));
 	}
 
 	public void paintComponent(Graphics g)

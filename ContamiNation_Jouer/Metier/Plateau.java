@@ -358,6 +358,7 @@ public class Plateau
 		int indexVirusActif = (this.offsetVirus + this.numManche - 1) % this.lstVirus.size();
 		this.ctrl.changerCouleurManche(indexVirusActif, this.idJoueur);
 		this.ctrl.changerImageBase(this.idJoueur);
+		this.ctrl.changerLabelPropagation(this.idJoueur);
 	}
 
 	public boolean estCoupValide(Case caseAVerif, Carte carteTire) 

@@ -4,6 +4,8 @@ import ContamiNation_Jouer.IHM.*;
 import ContamiNation_Jouer.Metier.*;
 
 import java.awt.Color;
+import java.awt.Font;
+
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -20,6 +22,9 @@ public class Controleur
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134);
 	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230);
 	public static final Color COLO_EST_SELECT  = new Color( 86, 136, 158);
+
+	public static final Font POLICE_TITRE = new Font("Arial", Font.BOLD, 16);
+	public static final Font POLICE_TEXTE = new Font("Arial", Font.BOLD, 12);
 
 	private JPanel[][]          tabPanel;
 	private FrameJeu            frame;
@@ -114,9 +119,7 @@ public class Controleur
 	public Sommet  getVoisin       (int indice) 
 	{
 		if (this.caseSelectionnee != null && this.caseSelectionnee.getSommet() != null) 
-			{
 			return this.caseSelectionnee.getSommet().getVoisin(indice);
-			}
 		return null;
 	}
 	
@@ -130,37 +133,15 @@ public class Controleur
 		}
 		return this.couleursZones.get(numZone);
 	}
-
-	public void chargerNiveau(File fichier) 
-	{
-		this.nbJoueurs   = 1;
-		this.plateau     = new Plateau[1];
-		this.aJoueCeTour = new boolean[1];
-		this.plateau[0]  = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, 0, this);
-		
-		this.frame.afficherPlateauMulti(1);
-		
-		this.initierPioche();
-		this.melangerPioche();
-		
-		this.attribuerVirusDepart();
-		
-		for (int i = 0; i < nbJoueurs; i++)
-		{
-			int indexVirusActif = (this.plateau[i].getOffsetVirus()) % this.plateau[i].getNbVirus();
-			this.frame.getPanelPlateau(i).changerCouleurManche(indexVirusActif);
-		}
-
-		this.frame.reinitierPanelPioche();
-		if (this.getModeDebiche()) this.appelerChoixCarte();
-	}
 	
-	public void chargerNiveauMulti(File fichier, int nbJoueurs) 
+	public void chargerNiveau(File fichier, int nbJoueurs) 
 	{
 		this.nbJoueurs   = nbJoueurs;
 		this.plateau     = new Plateau[nbJoueurs];
 		this.aJoueCeTour = new boolean[nbJoueurs];
-		this.modeMulti   = true;
+		
+		if ( nbJoueurs > 1 )
+			this.modeMulti = true;
 		
 		for (int i = 0; i < nbJoueurs; i++) 
 			this.plateau[i] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, i, this);
@@ -171,10 +152,8 @@ public class Controleur
 		
 		this.attribuerVirusDepart();
 		
-		this.frame.reinitierPanelPioche();
+		this.frame.afficherPlateau(nbJoueurs);
 	}
-
-
 
 	public void resetCouleurs() 
 	{ 
@@ -183,8 +162,6 @@ public class Controleur
 		this.g = 0; 
 		this.b = 0; 
 	}
-	
-	
 	
 	public void nouvelleManche() 
 	{
@@ -212,6 +189,11 @@ public class Controleur
 				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
 			this.partieTerminee(true);
 		}
+	}
+
+	public void changerLabelPropagation(int idJoueur)
+	{
+		this.frame.getPanelPlateau(idJoueur).changerLabelPropagation();
 	}
 
 	public void changerCouleurManche(int num, int idJoueur)
@@ -299,13 +281,12 @@ public class Controleur
 	}
 	
 	// Méthode de triche
-	public void setModeDebiche()      { this.modeDebiche = true; }
-	public void appelerChoixCarte()   { this.frameChoixCarte = new FrameChoixCarte(this); }
+	public void setModeDebiche   () { this.modeDebiche = true                          ; }
+	public void appelerChoixCarte() { this.frameChoixCarte = new FrameChoixCarte(this) ; }
 	
 	// Méthode de Pioche
-	public void initierPioche ()        { this.pioche = new Pioche(this.getSymbole())           ; }
-	public void melangerPioche()        { this.pioche.melanger()               ; }
-
+	public void initierPioche () { this.pioche = new Pioche(this.getSymbole())         ; }
+	public void melangerPioche() { this.pioche.melanger()                              ; }
 
 	public void tirerCarte(int indice) 
 	{ 
@@ -320,9 +301,9 @@ public class Controleur
 
 	}
 
-	public Carte getCarteTiree() { return this.pioche.getCarteTire(); }
-	public Carte premiereCarte()        { return this.pioche.premiereCarte()   ; }
-	public boolean verifFinManche()     { return this.pioche.verifFinManche()  ; }
+	public Carte getCarteTiree   () { return this.pioche.getCarteTire  ()  ; }
+	public Carte premiereCarte   () { return this.pioche.premiereCarte ()  ; }
+	public boolean verifFinManche() { return this.pioche.verifFinManche()  ; }
 	
 	public void forcerPassageTourCollectif() 
 	{
@@ -388,11 +369,6 @@ public class Controleur
 		timer.setRepeats(false); // TRÈS IMPORTANT : Le timer ne doit s'exécuter qu'une seule fois !
 		timer.start();           // On lance le compte à rebours
 	}
-
-	public static void main (String[] args) 
-	{ 
-		new Controleur(); 
-	}
 	
 	public String[] getSymbole()
 	{
@@ -439,14 +415,19 @@ public class Controleur
 
 	public void lancerServeur(int ip) 
 	{
-	new Thread(() -> {
-		this.serveurJeu = new ServeurJeu(this, ip);
-	}).start();
+		new Thread(() -> {
+			this.serveurJeu = new ServeurJeu(this, ip);
+		}).start();
 	}
 
 	public void lancerClient(int ip)
 	{
 		this.clientJoueur = new ClientJoueur(this, ip);
+	}
+
+	public static void main (String[] args) 
+	{ 
+		new Controleur(); 
 	}
 
 }
