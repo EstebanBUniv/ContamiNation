@@ -75,6 +75,7 @@ public class PanelNiveau extends JPanel implements ActionListener
 		{
 			btn.setBackground(Controleur.COLOR_BACKGROUND);
 			btn.setForeground(Controleur.COLOR_FOREGROUND);
+			btn.setFont      (Controleur.POLICE_TEXTE    );
 		}
 
 		this.tabNiveau = new JTable(this.getFichier("../niveaux/"), new String[]{"nom"});
@@ -153,23 +154,24 @@ public class PanelNiveau extends JPanel implements ActionListener
 				
 				if (!this.estMulti) 
 				{
-					this.ctrl.chargerNiveau(fichierLvl);
-					this.frameMere.afficherPlateauMulti(1); 
+					this.ctrl.chargerNiveau(fichierLvl, 1);
 				} 
 				else 
 				{
 					Object[] options = {"2 Joueurs", "3 Joueurs", "4 Joueurs"};
-					int choix = javax.swing.JOptionPane.showOptionDialog(this, 
-							"Combien de joueurs vont s'affronter ?", 
-							"Configuration Multijoueur", 
-							javax.swing.JOptionPane.DEFAULT_OPTION, 
-							javax.swing.JOptionPane.QUESTION_MESSAGE, 
-							null, options, options[0]);
+					int choix = javax.swing.JOptionPane.showOptionDialog
+					(
+						this, 
+						"Combien de joueurs vont s'affronter ?", 
+						"Configuration Multijoueur", 
+						javax.swing.JOptionPane.DEFAULT_OPTION, 
+						javax.swing.JOptionPane.QUESTION_MESSAGE, 
+						null, options, options[0]
+					);
 						if (choix != javax.swing.JOptionPane.CLOSED_OPTION) 
 						{
 							int nbJoueurs = choix + 2;
-							this.ctrl.chargerNiveauMulti(fichierLvl, nbJoueurs);
-							this.frameMere.afficherPlateauMulti(nbJoueurs);
+							this.ctrl.chargerNiveau(fichierLvl, nbJoueurs);
 						}
 
 				}
@@ -178,12 +180,7 @@ public class PanelNiveau extends JPanel implements ActionListener
 
 		if ( e.getSource() == this.btnRetour )
 		{
-			this.frameMere.changerPanel(new PanelMenu(this.ctrl, this.frameMere));
-		}
-
-		if ( e.getSource() == this.btnRetour )
-		{
-			this.frameMere.changerPanel(new PanelMenu(this.ctrl, this.frameMere));
+			this.frameMere.changerPanel(new PanelMenu(this.frameMere, this.ctrl));
 		}
 	}
 
@@ -212,6 +209,7 @@ public class PanelNiveau extends JPanel implements ActionListener
 					setBackground(Controleur.COLOR_BACKGROUND);
 				
 				setForeground(Controleur.COLOR_FOREGROUND);
+				setFont      (Controleur.POLICE_TEXTE    );
 				
 				
 				return this;
