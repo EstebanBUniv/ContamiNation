@@ -198,10 +198,18 @@ public class Controleur
 		if (suite) 
 		{
 			initierPioche();
-			melangerPioche();
-			this.frame.nouvelleManche();
-			this.frame.reinitierPanelPioche();
-			if (this.frame != null) this.frame.repaint();
+			if (suite) 
+			{
+				initierPioche();
+				if (this.estServeurReseau || this.estClientReseau) 
+					this.pioche.melangerReseau(this.gameSeed);
+				else 
+					this.melangerPioche();
+
+				this.frame.nouvelleManche();
+				this.frame.reinitierPanelPioche();
+				if (this.frame != null) this.frame.repaint();
+			}
 		} 
 		else 
 		{
