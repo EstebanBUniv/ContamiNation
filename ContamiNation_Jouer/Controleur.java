@@ -293,11 +293,15 @@ public class Controleur
 
 		if (!this.receptionReseauEnCours)
 		{
-			if (this.estServeurReseau && idJoueur != 0) {
-				return;
-			}
-			if (this.estClientReseau  && idJoueur != 1) {
-				return;
+			// Appliquer le filtre réseau seulement si on est vraiment en mode réseau
+			if (this.estServeurReseau || this.estClientReseau)
+			{
+				if (this.estServeurReseau && idJoueur != 0) {
+					return;
+				}
+				if (this.estClientReseau  && idJoueur != 1) {
+					return;
+				}
 			}
 		}
 

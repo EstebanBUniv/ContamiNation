@@ -213,12 +213,9 @@ public class PanelPioche extends JPanel implements ActionListener
 			else
 			{
 				if(!this.ctrl.getModeDebiche() && this.ctrl.getModeMulti())
-				{   
-					if(this.nbPasse >= ctrl.getNbJoueur())
-					{
-						this.ctrl.tirerCarte(0);
-						this.nbPasse = 0; 
-					}
+				{
+					this.ctrl.tirerCarte(0);
+					this.nbPasse = 0;
 				}
 				else
 				{
