@@ -45,12 +45,19 @@ public class PanelNiveau extends JPanel implements ActionListener
 	private Image      imgFond;
 	
 	private boolean    estMulti;
-
+	private boolean estServeurReseau;
+	
 	public PanelNiveau(FrameJeu frameMere, Controleur ctrl, boolean estMulti)
+	{
+		this(frameMere, ctrl, estMulti, false);
+	}
+	
+	public PanelNiveau(FrameJeu frameMere, Controleur ctrl, boolean estMulti, boolean estServeurReseau)
 	{
 		this.frameMere = frameMere;
 		this.ctrl      = ctrl;
 		this.estMulti  = estMulti;
+		this.estServeurReseau = estServeurReseau;
 
 		this.setLayout(new BorderLayout());
 
@@ -152,11 +159,17 @@ public class PanelNiveau extends JPanel implements ActionListener
 			{
 				File fichierLvl = this.fichiersDossier.get(lignes[0]);
 				
+				if (this.estServeurReseau) 
+				{
+					System.out.println(">>> Démarrage de la partie réseau !");
+					this.ctrl.envoyerCarteAuClient(fichierLvl); // Envoie le .data
+					this.ctrl.chargerNiveau(fichierLvl, 2);     // Charge pour 2 joueurs
+				}
 				if (!this.estMulti) 
 				{
 					this.ctrl.chargerNiveau(fichierLvl, 1);
 				} 
-				else 
+				else if (!this.estServeurReseau)
 				{
 					Object[] options = {"2 Joueurs", "3 Joueurs", "4 Joueurs"};
 					int choix = javax.swing.JOptionPane.showOptionDialog

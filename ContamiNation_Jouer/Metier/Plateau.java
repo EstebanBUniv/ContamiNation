@@ -179,7 +179,8 @@ public class Plateau
 	{
 		int nbSommetParZone = 0;
 		ArrayList<Integer> zonesVisitees = new ArrayList<>();
-		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		Virus virusActuel = this.getVirusActif();
+
 
 		for (int lig = 0; lig < this.lig; lig++) 
 		{
@@ -233,7 +234,8 @@ public class Plateau
 	{
 		if (!this.estCoupValide(caseAVerif, carteTire)) return false;
 
-		Virus  virusActuel   = this.lstVirus.get(this.numManche - 1);
+		Virus virusActuel = this.getVirusActif();
+
 		Sommet nouveauSommet = caseAVerif.getSommet();
 
 		if (virusActuel == null || nouveauSommet == null) return false;
@@ -340,7 +342,7 @@ public class Plateau
 
 	public void preparerNouvelleManche() 
 	{
-		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		Virus virusActuel = this.getVirusActif();
 
 		for (int l = 0; l < this.lig; l++) 
 			for (int c = 0; c < this.col; c++) 
@@ -373,7 +375,7 @@ public class Plateau
 								return false;
 		
 
-		Virus virusActuel = this.lstVirus.get(this.numManche - 1);
+		Virus virusActuel = this.getVirusActif();
 		Sommet s = caseAVerif.getSommet();
 
 		return virusActuel.estVoisinDeLExtremite(s) &&

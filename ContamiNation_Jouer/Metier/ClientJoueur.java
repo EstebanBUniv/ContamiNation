@@ -1,56 +1,133 @@
 package ContamiNation_Jouer.Metier;
 
 import ContamiNation_Jouer.Controleur;
+import java.net.*;
+import java.io.*;
+import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
 
-import iut.algo.*;
-
-import java.net.Socket;
-import java.net.UnknownHostException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
-public class ClientJoueur
+public class ClientJoueur implements Runnable
 {
+	private Controleur  ctrl;
+	private String      ip;
+	private int         portSecret;
+	private PrintWriter out;
+	private boolean     enLigne;
+	private java.util.List<String> lignesCarte = new java.util.ArrayList<>();
 
-	private Controleur ctrl;
-
-	public ClientJoueur(Controleur ctrl, int ip)
+	public ClientJoueur(Controleur ctrl, String ip, int portSecret)
 	{
-		this.ctrl = ctrl;
+		this.ctrl       = ctrl;
+		this.ip         = ip;
+		this.portSecret = portSecret;
+		this.enLigne    = true;
+	}
 
-		int port = ip;
-
-		
-		
-
-		try
+	@Override
+	public void run()
+	{
+		try 
 		{
-			Socket toServer = new Socket("test", port); //Connection au serveur
-
-			PrintWriter out = new PrintWriter(toServer.getOutputStream(), true); //out pour envoyer
-			BufferedReader in = new BufferedReader(new InputStreamReader(toServer.getInputStream())); //in pour recevoir
-
-			String message = "";
-
-			String banniere = in.readLine(); //Lecture du message serveur
-			System.out.println("Message reçu du serveur: " + banniere);
-
-			do //Boucle Do While pour lire le clavier et envoyer le message le temp qu'il est différent d'une chaine vide
-			{
-				message = Clavier.lireString();
-				out.println(message);
-			} while (!message.isEmpty());
-
-			//Fermeture de la connexion
+			System.out.println(">>> Tentative de connexion à " + ip + ":" + portSecret);
+			Socket toServer = new Socket(this.ip, this.portSecret);
 			
-			in.close();
+			this.out = new PrintWriter(toServer.getOutputStream(), true);
+			BufferedReader in = new BufferedReader(new InputStreamReader(toServer.getInputStream()));
+
+			this.out.println("AUTH:" + this.portSecret);
+			
+			String reponse = in.readLine();
+			if ("AUTH_OK".equals(reponse)) 
+			{
+				System.out.println(">>> Connexion acceptée ! En attente du niveau...");
+				SwingUtilities.invokeLater(() -> {
+					JOptionPane.showMessageDialog(this.ctrl.getFrame(), 
+						"Connecté avec succès ! \nEn attente que l'hôte choisisse la carte...", 
+						"Connexion Réussie", JOptionPane.INFORMATION_MESSAGE);
+				});
+			} 
+			else 
+			{
+				System.out.println(">>> Connexion refusée par l'hôte.");
+				toServer.close();
+				return;
+			}
+
+			String msg;
+			while (this.enLigne && (msg = in.readLine()) != null) 
+			{
+				System.out.println(">>> Reçu du Serveur : " + msg);
+				traiterMessage(msg);
+			}
+
 			toServer.close();
-		} catch (UnknownHostException e) {
-			System.err.println("Serveur introuvable");
-		} catch (IOException e) {
-			System.err.println("Erreur de connexion");
+		} 
+		catch (IOException e) 
+		{
+			System.err.println(">>> Serveur introuvable ou injoignable.");
+			SwingUtilities.invokeLater(() -> {
+				JOptionPane.showMessageDialog(this.ctrl.getFrame(), 
+					"Impossible de trouver la partie.\nVérifiez l'IP et le Code secret.", 
+					"Erreur de Connexion", JOptionPane.ERROR_MESSAGE);
+			});
 		}
+	}
+
+	private void traiterMessage(String msg) 
+	{
+		if (msg.startsWith("SEED:")) 
+		{
+			// LE CLIENT RÉCUPÈRE LA GRAINE DU SERVEUR
+			long seed = Long.parseLong(msg.split(":")[1]);
+			this.ctrl.setGameSeed(seed);
+			System.out.println(">>> Graine reçue, synchronisation parfaite prête !");
+		}
+		else if (msg.startsWith("CARTE_DATA:")) 
+		{
+			this.lignesCarte.add(msg.substring(11));
+		}
+		else if (msg.equals("CARTE_FIN"))
+		{
+			System.out.println(">>> Réception de la carte terminée.");
+			try 
+			{
+				File tmp = File.createTempFile("carte_reseau_", ".data");
+				tmp.deleteOnExit(); 
+
+				try (PrintWriter pw = new PrintWriter(new java.io.FileWriter(tmp))) 
+				{
+					for (String ligne : this.lignesCarte) pw.println(ligne);
+				}
+				
+				SwingUtilities.invokeLater(() -> {
+					java.awt.Window[] windows = java.awt.Window.getWindows();
+					for (java.awt.Window window : windows) {
+						if (window instanceof javax.swing.JDialog) window.dispose();
+					}
+					this.ctrl.recevoirCarteDuServeur(tmp);
+				});
+			} 
+			catch (IOException e) { e.printStackTrace(); }
+		}
+		else if (msg.startsWith("COUP:"))
+		{
+			String[] parts = msg.split(":");
+			int ligDep = Integer.parseInt(parts[1]);
+			int colDep = Integer.parseInt(parts[2]);
+			int ligArr = Integer.parseInt(parts[3]);
+			int colArr = Integer.parseInt(parts[4]);
+
+			this.ctrl.recevoirCoupReseau(ligDep, colDep, ligArr, colArr);
+		}
+		else if (msg.equals("PASSER")) 
+		{
+			System.out.println(">>> L'adversaire a passé son tour !");
+			this.ctrl.recevoirPasserReseau();
+		}
+	}
+
+	public void envoyerMessage(String msg) 
+	{
+		if (this.out != null) this.out.println(msg);
 	}
 }

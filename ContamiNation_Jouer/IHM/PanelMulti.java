@@ -28,6 +28,7 @@ public class PanelMulti extends JPanel implements ActionListener
 	private JPanel     panelCentre;
 
 	private JTextField txtServeurClient;
+	private JTextField txtIpServeur;
 	private JButton    btnLocal;
 	private JButton    btnReseauClient;
 	private JButton    btnReseauServeur;
@@ -50,13 +51,14 @@ public class PanelMulti extends JPanel implements ActionListener
 		/* création des composants */
 		/*-------------------------*/
 
-		this.panelCentre = new JPanel(new GridLayout(6, 1, 0, 15));
+		this.panelCentre = new JPanel(new GridLayout(8, 1, 0, 15));
 		this.panelCentre.setBorder(BorderFactory.createEmptyBorder(0, (int)(this.frameMere.getWidth()*0.2),
 		                                                           0, (int)(this.frameMere.getWidth()*0.2)
 															      ));
 		this.panelCentre.setOpaque(false);
 
 		this.txtServeurClient = new JTextField(10);
+		this.txtIpServeur     = new JTextField("localhost", 10);
 		
 		this.btnLocal         = new JButton("Jouer sur un PC");
 		this.btnReseauClient  = new JButton("Etre Client"    );
@@ -79,6 +81,8 @@ public class PanelMulti extends JPanel implements ActionListener
 		this.panelCentre.add(this.btnReseauClient );
 		this.panelCentre.add(new JLabel("Entrez un port de connexion :"));
 		this.panelCentre.add(this.txtServeurClient);
+		this.panelCentre.add(new JLabel("Adresse IP de l'hôte : "));
+		this.panelCentre.add(this.txtIpServeur    );
 		this.panelCentre.add(this.btnRetour       );
 
 		this.add(this.frameMere.creerTitre(2));
@@ -97,22 +101,75 @@ public class PanelMulti extends JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		
-		if(e.getSource() == this.btnLocal )
+		if (e.getSource() == this.btnLocal)
 		{
 			this.frameMere.changerPanel(new PanelNiveau(this.frameMere, this.ctrl, true));
 		}
-		if (e.getSource() == this.btnReseauClient )
-			if (this.txtServeurClient.getText().matches("[0-9]+"))
-				this.ctrl.lancerClient(Integer.parseInt(this.txtServeurClient.getText()));
-		
-		if (e.getSource() == this.btnReseauServeur )
-			if (this.txtServeurClient.getText().matches("[0-9]+"))
-				this.ctrl.lancerServeur(Integer.parseInt(this.txtServeurClient.getText()));
 
-		if ( e.getSource() == this.btnRetour )
+		if (e.getSource() == this.btnReseauClient)
+		{
+			String portTxt = this.txtServeurClient.getText().trim();
+			String ipTxt   = this.txtIpServeur.getText().trim();
+
+			if (portTxt.matches("[0-9]+") && !ipTxt.isEmpty())
+			{
+				this.ctrl.lancerClient(ipTxt, Integer.parseInt(portTxt));
+			}
+			else
+			{
+				javax.swing.JOptionPane.showMessageDialog(
+					this,
+					"Entre une adresse IP et un port valides.",
+					"Connexion impossible",
+					javax.swing.JOptionPane.WARNING_MESSAGE
+				);
+			}
+		}
+
+		if (e.getSource() == this.btnReseauServeur)
+		{
+			String portTxt = this.txtServeurClient.getText().trim();
+
+			if (portTxt.matches("[0-9]+"))
+			{
+				int port = Integer.parseInt(portTxt);
+				this.ctrl.lancerServeur(port);
+
+				String ipLocale;
+				try
+				{
+					ipLocale = java.net.InetAddress.getLocalHost().getHostAddress();
+				}
+				catch (java.net.UnknownHostException ex)
+				{
+					ipLocale = "IP introuvable";
+				}
+
+				javax.swing.JOptionPane.showMessageDialog(
+					this.frameMere,
+					"Serveur lancé !\n\nAdresse IP : " + ipLocale + "\nPort : " + port,
+					"Informations de connexion",
+					javax.swing.JOptionPane.INFORMATION_MESSAGE
+				);
+			}
+			else
+			{
+				javax.swing.JOptionPane.showMessageDialog(
+					this,
+					"Entre un numéro de port valide (ex: 12345).",
+					"Port invalide",
+					javax.swing.JOptionPane.WARNING_MESSAGE
+				);
+			}
+		}
+
+		if (e.getSource() == this.btnRetour)
+		{
 			this.frameMere.changerPanel(new PanelMenu(this.frameMere, this.ctrl));
+		}
 	}
+	
+
 
 	public void paintComponent(Graphics g)
 	{

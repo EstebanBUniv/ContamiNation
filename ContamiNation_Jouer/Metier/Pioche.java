@@ -3,6 +3,7 @@ package ContamiNation_Jouer.Metier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class Pioche
 {
@@ -54,6 +55,12 @@ public class Pioche
 	public void melanger()
 	{
 		Collections.shuffle(this.pioche);
+	}
+	
+	//pour la synchronisation réseau
+	public void melangerReseau(long seed)
+	{
+		Collections.shuffle(this.pioche, new Random(seed));
 	}
 	
 	public Carte tirerCarte(int indiceCarte)
