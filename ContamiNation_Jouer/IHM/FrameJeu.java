@@ -173,28 +173,6 @@ public class FrameJeu extends JFrame
 		this.panelPioche.passerTour();
 	}
 	
-	public int demanderChoixBoucle()
-	{
-		Object[] options = {"Côté Tête", "Côté Queue"};
-		int reponse = javax.swing.JOptionPane.showOptionDialog(this, 
-				"Votre virus forme une boucle ! De quel côté voulez-vous vous brancher ?", 
-				"Choix de connexion", 
-				javax.swing.JOptionPane.YES_NO_OPTION, 
-				javax.swing.JOptionPane.QUESTION_MESSAGE, 
-				null, options, options[1]);
-				
-		if (reponse == 0) return 1; // 1 = Tête
-		if (reponse == 1) return 2; // 2 = Queue
-		return 0; // Au cas où on ferme la fenêtre sans répondre
-	}
-
-	/*
-	 * Appelée par le Controleur quand un sommet-extrémité est cliqué.
-	 * estClique   : true = on entre en mode sélection, false = on en sort
-	 * caseCliquee : la case dont le sommet vient d'être sélectionné
-	 * Le repaint() global suffit : chaque PanelCase interroge
-	 * ctrl.getCaseSelectionnee() dans son paintComponent.
-	 */
 	public void SommetClique()
 	{
 		this.repaint();
@@ -213,6 +191,11 @@ public class FrameJeu extends JFrame
 				javax.swing.JOptionPane.DEFAULT_OPTION, 
 				javax.swing.JOptionPane.PLAIN_MESSAGE, 
 				null, null, null);
+	}
+	
+	public void afficherEcranFin(String message)
+	{
+		this.changerPanel(new PanelFin(this, this.ctrl, message));
 	}
 
 	public void incrNbPasse()

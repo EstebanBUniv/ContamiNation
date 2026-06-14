@@ -198,31 +198,30 @@ public class Controleur
 		if (suite) 
 		{
 			initierPioche();
-			if (suite) 
-			{
-				initierPioche();
-				if (this.estServeurReseau || this.estClientReseau) 
-					this.pioche.melangerReseau(this.gameSeed);
-				else 
-					this.melangerPioche();
+			if (this.estServeurReseau || this.estClientReseau) 
+				this.pioche.melangerReseau(this.gameSeed);
+			else 
+				this.melangerPioche();
 
-				this.frame.nouvelleManche();
-				this.frame.reinitierPanelPioche();
-				if (this.frame != null) this.frame.repaint();
-			}
+			this.frame.nouvelleManche();
+			this.frame.reinitierPanelPioche();
+			if (this.frame != null) this.frame.repaint();
 		} 
 		else 
 		{
 			int nbMax          = 1;
 			int maxManche      = 0;
 			int Joueur         = 0;
+			
 			for(int lig = 0; lig < this.plateau.length; lig++)
 			{
 				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
 				if (this.plateau[lig].getPointTotal() >= maxManche)
 				{
 					if (this.plateau[lig].getPointTotal() == maxManche)
+					{
 						nbMax++;
+					}
 					else
 					{
 						Joueur = lig;
@@ -235,13 +234,15 @@ public class Controleur
 			if (nbMax == 1)
 			{
 				this.partieTerminee(true);
-				System.out.println("Le joueur " + (Joueur+1) + " a gagné avec " + maxManche + " points !");
+				String msg = "Le joueur " + (Joueur+1) + " a gagné avec " + maxManche + " points !";
+				this.frame.afficherEcranFin(msg);
 			}
 			else
 			{
 				int maxTour         = 0;
-				int joueur      = 0;
-				boolean egalite = false;
+				int joueur          = 0;
+				boolean egalite     = false;
+				
 				for(int lig = 0; lig < this.plateau.length; lig++)
 				{
 					for (int cpt = 0 ; cpt < this.plateau[lig].getnbPointManche().size() ; cpt++)
@@ -252,28 +253,26 @@ public class Controleur
 							maxTour = (int)(this.plateau[lig].getnbPointManche().get(cpt));
 							joueur = lig;
 						}
-						else
+						else if ((int)(this.plateau[lig].getnbPointManche().get(cpt)) == maxTour)
 						{
-							if ((int)(this.plateau[lig].getnbPointManche().get(cpt)) == maxTour)
-							{
-								egalite = true;
-							}
+							egalite = true;
 						}
 					}
 				}
 
-				if( egalite == true)
+				if(egalite == true)
 				{
 					this.partieTerminee(true);
-					System.out.println(" Egalité parfaite avec " + maxTour + " en une manche chacun !");
+					String msg = "Egalité parfaite avec " + maxTour + " points maximum en une manche !";
+					this.frame.afficherEcranFin(msg);
 				}
 				else
 				{
 					this.partieTerminee(true);
-					System.out.println("Le joueur" + (joueur+1) + " a gagné la partie avec " + maxTour + " en une manche !");
+					String msg = "Le joueur " + (joueur+1) + " a gagné avec " + maxTour + " points en une manche !";
+					this.frame.afficherEcranFin(msg);
 				}
 			}
-			
 		}
 	}
 
@@ -341,7 +340,15 @@ public class Controleur
 		{
 			int choixForce = 0;
 			if (s != null && v.getTailleChemin() > 1 && v.toucheTete(s) && v.toucheQueue(s))
-				choixForce = this.frame.demanderChoixBoucle();
+			{
+				// On identifie l'origine choisie par le joueur lors de son 1er clic
+				Sommet origine = this.caseSelectionnee.getSommet();
+				
+				if (origine == v.getConquis().getFirst()) 
+					choixForce = 1; // Il veut s'étendre depuis la tête
+				else if (origine == v.getConquis().getLast()) 
+					choixForce = 2; // Il veut s'étendre depuis la queue
+			}
 
 			boolean resultat = plateauActif.verifSommet(caseAVerif, carteActive, choixForce);
 
