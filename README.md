@@ -33,7 +33,7 @@ java ContamiNation_Creer.Controleur
 
 # ContamiNation - Règles et Fonctionnement du Jeu
 
-ContamiNation est un jeu de stratégie et de plateau abstrait où les joueurs incarnent des virus cherchant à propager leur réseau d'infection. En reliant des sommets et en s'étendant à travers différentes zones colorées, chaque joueur tente d'accumuler le plus de points possible au fil des manches.
+ContamiNation est un jeu de stratégie et de plateau où les joueurs incarnent des virus cherchant à propager leur réseau d'infection. En reliant des sommets et en s'étendant à travers différentes zones colorées, chaque joueur tente d'accumuler le plus de points possible au fil des manches.
 
 ---
 
