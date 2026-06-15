@@ -1,7 +1,6 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
-import ContamiNation_Jouer.Metier.Plateau;
 
 import java.awt.Component;
 import java.awt.Graphics;
@@ -21,6 +20,10 @@ import javax.swing.JPanel;
 
 public class PanelFin extends JPanel implements ActionListener
 {
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+
 	private FrameJeu   frameMere;
 	private Controleur ctrl;
 	private Image      imgFond;
@@ -54,6 +57,10 @@ public class PanelFin extends JPanel implements ActionListener
 		
 		panelContenu.setMaximumSize(new Dimension(550, 400));
 
+		/*----------------------------*/
+		/*  Création des composants   */
+		/*----------------------------*/
+
 		JLabel labelFin = new JLabel(text);
 		labelFin.setFont(Controleur.POLICE_TITRE);
 		labelFin.setForeground(Controleur.COLOR_FOREGROUND);
@@ -72,9 +79,8 @@ public class PanelFin extends JPanel implements ActionListener
 
 		for (int i = 0; i < this.ctrl.getNbJoueur(); i++)
 		{
-			Plateau p = this.ctrl.getPlateau(i);
-			String nomVirus = (p.getVirusActif() != null) ? p.getVirusActif().getNom() : "Inconnu";
-			String detailScore = "Joueur " + (i + 1) + " : " + p.getPointTotal() + " points";
+			String nomVirus = (this.ctrl.getPlateau(i).getVirusActif() != null) ? this.ctrl.getPlateau(i).getVirusActif().getNom() : "Inconnu";
+			String detailScore = "Joueur " + (i + 1) + " : " + this.ctrl.getPlateau(i).getPointTotal() + " points";
 			
 			JLabel lblJoueurScore = new JLabel(detailScore);
 			lblJoueurScore.setFont(Controleur.POLICE_TEXTE);

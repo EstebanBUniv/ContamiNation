@@ -17,6 +17,12 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class ClientJoueur implements Runnable
 {
 	private Controleur  ctrl;
@@ -84,6 +90,7 @@ public class ClientJoueur implements Runnable
 		}
 	}
 
+	//permet la récuperation du plateau et des cartes et les actions
 	private void traiterMessage(String msg) 
 	{
 		if (msg.startsWith("SEED:")) 

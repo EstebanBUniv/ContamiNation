@@ -18,8 +18,18 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class PanelCase extends JPanel implements ComponentListener, ActionListener
 {
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private Controleur ctrl;
 	
 	private JButton    btnCase;
@@ -43,7 +53,11 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 
 		this.initImgFond();
 		this.initImgBase();
-
+		
+		/*-------------------------------*/
+		/* Création des composants       */
+		/*-------------------------------*/
+		
 		if (this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null)
 		{
 			this.btnCase = new JButton();
@@ -62,8 +76,17 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 		this.btnCase.setContentAreaFilled(false);
 		this.btnCase.setBorderPainted(false);
 		this.btnCase.setFocusPainted(false);
-
+		
+		/*-------------------------------*/
+		/* positionnement des composants */
+		/*-------------------------------*/
+		
 		this.add(this.btnCase, BorderLayout.CENTER);
+		
+		/* ------------------------------ */
+		/* Activation des composants      */
+		/* ------------------------------ */
+		
 		this.addComponentListener(this);
 		this.btnCase.addActionListener(this);
 	}
@@ -72,7 +95,118 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	{
 		return Math.max(this.getWidth(), this.getHeight());
 	}
+	
+	/*----------------------------*/
+	/*  Méthodes de l'IHM         */
+	/*----------------------------*/
+	
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		this.g2 = (Graphics2D) g.create();
 
+		//Dessin de la couleur de zone
+		this.g2.setColor(this.ctrl.getCouleurZone(this.ctrl.getCase(this.lig, this.col, this.idJoueur).getZone()));
+		this.g2.fillRect(0, 0, getWidth(), getHeight());
+
+		//Image de fond texturée
+		if (this.imgFond != null)
+		{
+			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
+			this.g2.drawImage(this.imgFond, 0, 0, getWidth(), getHeight(), this);
+			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
+		}
+
+		if (ctrl.getCaseSelectionnee() != null && this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null)
+		{
+			if (this.ctrl.getCase(this.lig, this.col, this.idJoueur) == ctrl.getCaseSelectionnee())
+			{
+				// Premier clic : la case sélectionnée s'allume en Jaune
+				this.g2.setColor(new Color(255, 200, 0, 150));
+				this.g2.fillRect(0, 0, getWidth(), getHeight());
+			}
+			else if (this.ctrl.estVoisinAtteignableMulti(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur))
+			{
+				// Les chemins cibles légaux s'allument en Vert
+				this.g2.setColor(new Color(0, 220, 80, 120));
+				this.g2.fillRect(0, 0, getWidth(), getHeight());
+			}
+		}
+
+		//Dessin de la base du virus colorée
+		if (this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null && this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getEstBase() > 0)
+		{
+			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
+			Image baseTeintee = this.teinteImage(this.imgBase, getWidth(), getHeight(),
+								this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getVirus().getCouleur());
+			this.g2.drawImage(baseTeintee, 0, 0, getWidth(), getHeight(), this);
+		}
+
+		this.g2.dispose();
+	}
+
+	public void componentResized(ComponentEvent e)
+	{
+		if (this.imgSymbole != null)
+		{
+			int   taille = (int)(this.getTailleCase() * 0.5);
+			if (taille <= 0) return;
+			Image img    = this.imgSymbole.getScaledInstance(taille, taille, Image.SCALE_SMOOTH);
+			this.btnCase.setIcon(new ImageIcon(img));
+			this.revalidate();
+			this.repaint();
+		}
+	}
+
+	public void componentHidden(ComponentEvent e) {}
+	public void componentShown (ComponentEvent e) {}
+	public void componentMoved (ComponentEvent e) {}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == this.btnCase)
+		{
+			this.ctrl.verifSommet(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur);
+		}
+	}
+	
+	public void initImgBase()
+	{
+		String chemin = "../images/fond/case/base";
+
+		if (this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null)
+		{
+			int estBase    = this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getEstBase();
+			int virusActif = this.ctrl.getPlateau(this.idJoueur).getVirusActif().getId();
+
+			if (estBase == virusActif)
+				chemin += "Actuelle";
+		}
+
+		chemin += ".png";
+		this.imgBase = getToolkit().getImage(chemin);
+		this.repaint();
+	}
+	
+	
+	/*----------------------------*/
+	/*  Méthodes de l'Image       */
+	/*----------------------------*/
+	
+	private Image teinteImage(Image img, int w, int h, Color couleur)
+	{
+		BufferedImage imgRet = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D    g2     = imgRet.createGraphics();
+
+		g2.drawImage(img, 0, 0, w, h, null);
+		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1f));
+		g2.setColor(couleur);
+		g2.fillRect(0, 0, w, h);
+
+		g2.dispose();
+		return imgRet;
+	}
+	
 	private void initImgFond()
 	{
 		int[][] directions =
@@ -115,107 +249,5 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 				numeroCase.append(cptDir);
 
 		this.imgFond = getToolkit().getImage("../images/fond/case/fond_case_" + numeroCase + ".png");
-	}
-
-	public void initImgBase()
-	{
-		String chemin = "../images/fond/case/base";
-
-		if (this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null)
-		{
-			int estBase    = this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getEstBase();
-			int virusActif = this.ctrl.getPlateau(this.idJoueur).getVirusActif().getId();
-
-			if (estBase == virusActif)
-				chemin += "Actuelle";
-		}
-
-		chemin += ".png";
-		this.imgBase = getToolkit().getImage(chemin);
-		this.repaint();
-	}
-
-	public void paintComponent(Graphics g)
-	{
-		super.paintComponent(g);
-		this.g2 = (Graphics2D) g.create();
-
-		// 1. Dessin de la couleur de zone
-		this.g2.setColor(this.ctrl.getCouleurZone(this.ctrl.getCase(this.lig, this.col, this.idJoueur).getZone()));
-		this.g2.fillRect(0, 0, getWidth(), getHeight());
-
-		// 2. Image de fond texturée
-		if (this.imgFond != null)
-		{
-			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-			this.g2.drawImage(this.imgFond, 0, 0, getWidth(), getHeight(), this);
-			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1.0f));
-		}
-
-		if (ctrl.getCaseSelectionnee() != null && this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null)
-		{
-			if (this.ctrl.getCase(this.lig, this.col, this.idJoueur) == ctrl.getCaseSelectionnee())
-			{
-				// Premier clic : la case sélectionnée s'allume en Jaune
-				this.g2.setColor(new Color(255, 200, 0, 150));
-				this.g2.fillRect(0, 0, getWidth(), getHeight());
-			}
-			else if (this.ctrl.estVoisinAtteignableMulti(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur))
-			{
-				// Les chemins cibles légaux s'allument en Vert
-				this.g2.setColor(new Color(0, 220, 80, 120));
-				this.g2.fillRect(0, 0, getWidth(), getHeight());
-			}
-		}
-
-		// 4. Dessin de la base du virus colorée
-		if (this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet() != null && this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getEstBase() > 0)
-		{
-			this.g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f));
-			Image baseTeintee = this.teinteImage(this.imgBase, getWidth(), getHeight(),
-								this.ctrl.getCase(this.lig, this.col, this.idJoueur).getSommet().getVirus().getCouleur());
-			this.g2.drawImage(baseTeintee, 0, 0, getWidth(), getHeight(), this);
-		}
-
-		this.g2.dispose();
-	}
-
-	public void componentResized(ComponentEvent e)
-	{
-		if (this.imgSymbole != null)
-		{
-			int   taille = (int)(this.getTailleCase() * 0.5);
-			if (taille <= 0) return;
-			Image img    = this.imgSymbole.getScaledInstance(taille, taille, Image.SCALE_SMOOTH);
-			this.btnCase.setIcon(new ImageIcon(img));
-			this.revalidate();
-			this.repaint();
-		}
-	}
-
-	public void componentHidden(ComponentEvent e) {}
-	public void componentShown (ComponentEvent e) {}
-	public void componentMoved (ComponentEvent e) {}
-
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == this.btnCase)
-		{
-			this.ctrl.verifSommet(this.ctrl.getCase(this.lig, this.col, this.idJoueur), this.idJoueur);
-		}
-	}
-
-	private Image teinteImage(Image img, int w, int h, Color couleur)
-	{
-		BufferedImage imgRet = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
-		Graphics2D    g2     = imgRet.createGraphics();
-
-		g2.drawImage(img, 0, 0, w, h, null);
-		g2.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP, 1f));
-		g2.setColor(couleur);
-		g2.fillRect(0, 0, w, h);
-
-		g2.dispose();
-		return imgRet;
 	}
 }

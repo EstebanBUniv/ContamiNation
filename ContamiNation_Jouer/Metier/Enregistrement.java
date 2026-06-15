@@ -4,7 +4,14 @@ import ContamiNation_Jouer.Controleur;
 
 import java.io.File;
 import java.io.FileInputStream;
+
 import java.util.Scanner;
+
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
 
 public class Enregistrement
 {

@@ -5,6 +5,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class Pioche
 {
 	/*----------------------------*/
@@ -63,10 +69,10 @@ public class Pioche
 		Collections.shuffle(this.pioche, new Random(seed));
 	}
 	
+	//permet de retirer la carte tirer de la pioche 
 	public Carte tirerCarte(int indiceCarte)
 	{
-		Carte carteTire;
-		
+	
 		if (indiceCarte < 0 || indiceCarte >= this.pioche.size())
 			return null;
 		
@@ -77,6 +83,7 @@ public class Pioche
 		return this.carteTire;
 	}
 	
+	//vérifie s'il reste des cartes foncé dans la pioche
 	public boolean verifFinManche ()
 	{
 		for ( Carte c : pioche)

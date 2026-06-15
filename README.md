@@ -29,3 +29,56 @@ cd ./ContamiNation_Creer
 javac "@compile.list" -d ../class
 cd ../class
 java ContamiNation_Creer.Controleur
+```
+
+# ContamiNation - Règles et Fonctionnement du Jeu
+
+ContamiNation est un jeu de stratégie et de plateau abstrait où les joueurs incarnent des virus cherchant à propager leur réseau d'infection. En reliant des sommets et en s'étendant à travers différentes zones colorées, chaque joueur tente d'accumuler le plus de points possible au fil des manches.
+
+---
+
+## But du Jeu
+
+Le vainqueur est le joueur qui cumule le plus de points totaux à la fin de la partie. Les points sont calculés à la fin de chaque manche en fonction de la longueur et de la structure du réseau de propagation tracé par votre virus.
+
+---
+
+## Déroulement d'une Partie
+
+Une partie se divise en plusieurs manches successives.
+
+### 1. Structure du Plateau et Zones
+* Le plateau est composé d'une grille de cases réparties dans différentes zones de couleurs.
+* Certaines cases contiennent des sommets.
+* Chaque joueur possède sa propre base de départ (le point initial d'infection de son virus).
+
+### 2. Le Tour de Jeu
+À chaque tour, une carte active est visible par tous les joueurs. Cette carte dicte les conditions ou les symboles autorisés pour ce tour-ci. 
+Un joueur peut effectuer deux actions principales :
+
+* **Sélectionner et Relier (Se propager) :**
+1. Le joueur clique sur un sommet valide.
+2. L'interface met en évidence les sommets voisins atteignables et légaux .
+3. En cliquant sur un voisin, un lien physique (une arête colorée aux couleurs du virus) est tracé.
+* **Passer son tour :** Si un joueur ne peut pas ou ne souhaite pas jouer, il peut cliquer sur "Passer le Tour".
+
+### 3. Les Modes de Pioche
+Selon la configuration de la partie, le tirage des cartes s'effectue de deux manières :
+* **Mode Classique / Multi :** La carte suivante de la pile est automatiquement révélée et devient la carte active du tour.
+---
+
+## Fin de Manche et Défausse
+
+* Chaque carte utilisée est envoyée dans la pile de défausse, dont l'historique reste visible en bas de l'écran.
+* Lorsqu'une condition de fin de manche est atteinte (par exemple, si la pioche est vide ou que toutes les cartes foncés on été tirée) :
+1. Les scores de la manche actuelle sont calculés.
+2. la défausse est vidée, et une nouvelle manche commence avec un changement du virus actif.
+
+---
+
+## Fin de Partie et Classement
+
+Une fois toutes les manches terminées, le jeu affiche un écran de fin contenant :
+1. Le nom du vainqueur.
+2. Le classement final détaillé affichant les points cumulés de chaque joueur.
+3. Un bouton permettant de quitter proprement les connexions réseau et de retourner au menu principal.

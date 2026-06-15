@@ -18,9 +18,18 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class PanelMenu extends JPanel implements ActionListener
 {
-	// Attribut d'instance
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private FrameJeu   frameMere;
 	private Controleur ctrl;
 
@@ -32,6 +41,10 @@ public class PanelMenu extends JPanel implements ActionListener
 
 	private Image      imgFond;
 	private Graphics2D g2;
+	
+	/*----------------------------*/
+	/*  Constructeur              */
+	/*----------------------------*/
 	
 	public PanelMenu(FrameJeu frameMere, Controleur ctrl)
 	{
@@ -45,9 +58,9 @@ public class PanelMenu extends JPanel implements ActionListener
 
 		this.setOpaque(false);
 
-		//-------------------------//
-		// création des composants //
-		//-------------------------//
+		/*-------------------------------*/
+		/* Création des composants       */
+		/*-------------------------------*/
 
 		this.btnSolo    = new JButton("Solo");
 		this.btnMulti   = new JButton("Multijoueur");
@@ -67,9 +80,9 @@ public class PanelMenu extends JPanel implements ActionListener
 															      ));
 		this.panelBouton.setOpaque(false);
 
-		//-------------------------------//
-		// positionnement des composants //
-		//-------------------------------//
+		/*-------------------------------*/
+		/* positionnement des composants */
+		/*-------------------------------*/
 
 		for ( JButton btn : tabBtn )
 			this.panelBouton.add(btn);
@@ -80,9 +93,9 @@ public class PanelMenu extends JPanel implements ActionListener
 		this.add(this.panelBouton);
 		this.add(Box.createVerticalGlue());
 
-		//---------------------------//
-		// activation des composants //
-		//---------------------------//
+		/* ------------------------------ */
+		/* Activation des composants      */
+		/* ------------------------------ */
 
 		for ( JButton btn : tabBtn )
 			btn.addActionListener(this);

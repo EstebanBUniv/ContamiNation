@@ -18,13 +18,27 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.awt.event.ActionListener;
+
 import javax.swing.SwingUtilities;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import java.util.Collections;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class Controleur
 {
+	
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134);
 	public static final Color COLOR_FOREGROUND = new Color(230, 230, 230);
 	public static final Color COLO_EST_SELECT  = new Color( 86, 136, 158);
@@ -37,50 +51,64 @@ public class Controleur
 	private Plateau[]           plateau;
 	private Pioche              pioche;
 	private FrameChoixCarte     frameChoixCarte;
-	private Map<Integer, Color> couleursZones = new HashMap<>();
+	private Map<Integer, Color> couleursZones;
 	private int                 r, g, b;
 	private int                 nbJoueurs;
-	private boolean             modeDebiche = false;
+	private boolean             modeDebiche;
 	private boolean[]           aJoueCeTour;
-	private boolean             fin         = false;
+	private boolean             fin;
 	
 	private ServeurJeu          serveurJeu;
 	private ClientJoueur        clientJoueur; 
-	private boolean             modeMulti              = false;
-	private boolean             estServeurReseau       = false;
-	private boolean             estClientReseau        = false;
-	private boolean             receptionReseauEnCours = false;
-	private long                gameSeed               = 0; // La fameuse graine !
+	private boolean             modeMulti;
+	private boolean             estServeurReseau;
+	private boolean             estClientReseau;
+	private boolean             receptionReseauEnCours;
+	private long                gameSeed;
 
 	// Variables pour le système de sélection
-	private boolean estClique        = false;
-	private Case    caseSelectionnee = null;
-
+	private boolean estClique;
+	private Case    caseSelectionnee;
+	
+	/*----------------------------*/
+	/*  Constructeur de la classe */
+	/*----------------------------*/
+	
 	public Controleur() 
 	{ 
+		this.modeDebiche            = false;
+		this.fin                    = false;
+		this.modeMulti              = false;
+		this.estServeurReseau       = false;
+		this.estClientReseau        = false;
+		this.receptionReseauEnCours = false;
+		this.couleursZones          = new HashMap<>();
+		this.gameSeed               = 0;
+		this.estClique              = false;
+		this.caseSelectionnee       = null;
+		
 		this.frame = new FrameJeu(this); 
 	}
 	
-	/*------------*/
-	/*   getters  */
-	/*------------*/
+	/*----------------------------*/
+	/*  Getters                   */
+	/*----------------------------*/
 	
-	public Plateau getPlateau    (int idJoueur)                   { return this.plateau[idJoueur]                        ; }
-	public int     getTailleCase ()                               { return this.frame.getPanelPlateau(0).getTailleCase() ; }
-	public int     getLig        ()                               { return this.plateau[0].getLig()                      ; }
-	public int     getCol        ()                               { return this.plateau[0].getCol()                      ; }
-	public Case    getCase       (int lig, int col, int idJoueur) { return this.plateau[idJoueur].getCase(lig, col)      ; }
-	public JPanel  getPanel      (int lig, int col, int idJoueur) { return this.frame.getTabPanel(idJoueur)[lig][col]    ; }
-	public Virus   getVirus      (int idJoueur)                   { return this.plateau[idJoueur].getVirusActif()        ; }
-	public Map<Integer, Color>   getCouleurZone  ()               { return this.couleursZones                            ; }
-	public Case    getCaseSelectionnee()                          { return this.caseSelectionnee                         ; }
-	public Carte   getCarte(int indice)                           { return this.pioche.getCarte(indice)                  ; }
-	public int     getTaillePioche ()                             { return this.pioche.getTaillePioche()                 ; }
-	public boolean getModeDebiche  ()                             { return this.modeDebiche                              ; }
-	public int     getNbJoueur()                                  { return this.nbJoueurs;                               }
-	public FrameJeu getFrame()                                    { return this.frame;                                   }
-	public void    setGameSeed(long s)                            { this.gameSeed = s;                                   }
-	public boolean getModeMulti()   { return this.modeMulti; }
+	public Plateau  getPlateau    (int idJoueur)                   { return this.plateau[idJoueur]                        ; }
+	public int      getTailleCase ()                               { return this.frame.getPanelPlateau(0).getTailleCase() ; }
+	public int      getLig        ()                               { return this.plateau[0].getLig()                      ; }
+	public int      getCol        ()                               { return this.plateau[0].getCol()                      ; }
+	public Case     getCase       (int lig, int col, int idJoueur) { return this.plateau[idJoueur].getCase(lig, col)      ; }
+	public JPanel   getPanel      (int lig, int col, int idJoueur) { return this.frame.getTabPanel(idJoueur)[lig][col]    ; }
+	public Virus    getVirus      (int idJoueur)                   { return this.plateau[idJoueur].getVirusActif()        ; }
+	public Map<Integer, Color>   getCouleurZone  ()                { return this.couleursZones                            ; }
+	public Case     getCaseSelectionnee()                          { return this.caseSelectionnee                         ; }
+	public Carte    getCarte(int indice)                           { return this.pioche.getCarte(indice)                  ; }
+	public int      getTaillePioche ()                             { return this.pioche.getTaillePioche()                 ; }
+	public boolean  getModeDebiche  ()                             { return this.modeDebiche                              ; }
+	public int      getNbJoueur     ()                             { return this.nbJoueurs                                ; }
+	public FrameJeu getFrame        ()                             { return this.frame                                    ; }
+	public boolean  getModeMulti    ()                             { return this.modeMulti                                ; }
 	
 	public boolean possedeSommet(int lig, int col, int idJoueur) 
 	{
@@ -146,6 +174,14 @@ public class Controleur
 		return this.couleursZones.get(numZone);
 	}
 	
+	// Permet d'avoir la seed / Graine pour l'aléatoire de la pioche et des Virus en réseau
+	public void    setGameSeed(long s) { this.gameSeed = s ; }
+	
+	/*----------------------------*/
+	/*  Méthodes                  */
+	/*----------------------------*/
+	
+	// Charge le niveau par rapport à son .data et si c'est en solo / multi / réseau
 	public void chargerNiveau(File fichier, int nbJoueurs) 
 	{
 		this.nbJoueurs   = nbJoueurs;
@@ -156,7 +192,7 @@ public class Controleur
 			this.modeMulti = true;  
 		
 		for (int i = 0; i < nbJoueurs; i++) 
-			this.plateau[i] = ContamiNation_Jouer.Metier.Enregistrement.Recuperer(fichier, i, this);
+			this.plateau[i] = Enregistrement.Recuperer(fichier, i, this);
 		
 		this.attribuerVirusDepart();
 		
@@ -174,9 +210,8 @@ public class Controleur
 		this.frame.reinitierPanelPioche();
 		if (this.frame != null) this.frame.repaint();
 	}
-
-
-
+	
+	// Permet de reset les couleurs entre les différentes parties
 	public void resetCouleurs() 
 	{ 
 		this.couleursZones.clear(); 
@@ -185,17 +220,16 @@ public class Controleur
 		this.b = 0; 
 	}
 	
+	// Permet d'initialisé une nouvelle manche ou d'afficher l'écran de fin
 	public void nouvelleManche() 
 	{
 		boolean suite = false;
 		for (Plateau p : this.plateau) 
-		{
 			if (p.mancheSuivante()) 
 			{
 				p.preparerNouvelleManche();
 				suite = true;
 			}
-		}
 
 		if (suite) 
 		{
@@ -217,20 +251,17 @@ public class Controleur
 			
 			for(int lig = 0; lig < this.plateau.length; lig++)
 			{
-				System.out.println("Fin de tout le jeu. Score J" + (lig+1) + ": " + this.plateau[lig].getPointTotal());
 				if (this.plateau[lig].getPointTotal() >= maxManche)
 				{
 					if (this.plateau[lig].getPointTotal() == maxManche)
-					{
 						nbMax++;
-					}
 					else
 					{
 						Joueur = lig;
 						nbMax = 1;
 						maxManche = this.plateau[lig].getPointTotal();
 					}
-				}				
+				}
 			}
 
 			if (nbMax == 1)
@@ -256,9 +287,7 @@ public class Controleur
 							joueur = lig;
 						}
 						else if ((int)(this.plateau[lig].getnbPointManche().get(cpt)) == maxTour)
-						{
 							egalite = true;
-						}
 					}
 				}
 
@@ -293,24 +322,22 @@ public class Controleur
 		this.frame.getPanelPlateau(idJoueur).changerImageBase();
 	}
 	
+	// Regarde toute les conditions pour propager son virus
 	public void verifSommet(Case caseAVerif, int idJoueur)
 	{
 
-		if (caseAVerif == null || this.aJoueCeTour[idJoueur]) {
+		if (caseAVerif == null || this.aJoueCeTour[idJoueur])
 			return;
-		}
 
 		if (!this.receptionReseauEnCours)
 		{
 			// Appliquer le filtre réseau seulement si on est vraiment en mode réseau
 			if (this.estServeurReseau || this.estClientReseau)
 			{
-				if (this.estServeurReseau && idJoueur != 0) {
+				if (this.estServeurReseau && idJoueur != 0)
 					return;
-				}
-				if (this.estClientReseau  && idJoueur != 1) {
+				if (this.estClientReseau  && idJoueur != 1)
 					return;
-				}
 			}
 		}
 
@@ -376,6 +403,7 @@ public class Controleur
 		this.frame.repaint();
 	}
 	
+	// Permet de vérifier si on peut cliquer sur une case après avoir cliqué sur une extrémité
 	public boolean estVoisinAtteignableMulti(Case caseAVerif, int idJoueur) 
 	{
 		if (this.caseSelectionnee == null || caseAVerif == null || caseAVerif.getSommet() == null) return false;
@@ -389,11 +417,29 @@ public class Controleur
 
 	
 	// Méthode de triche
-	public void setModeDebiche   () { this.modeDebiche = true                          ; }
-	public void appelerChoixCarte() { this.frameChoixCarte = new FrameChoixCarte(this) ; }
+	// Met le mode de triche
+	public void setModeDebiche   () { this.modeDebiche = true ; }
+	// Ouvre la frame de triche
+	public void appelerChoixCarte() 
+	{ 
+		if (this.frameChoixCarte != null)
+			this.frameChoixCarte.dispose();
+		this.frameChoixCarte = new FrameChoixCarte(this) ; 
+	}
 	
-	public void melangerPioche() { this.pioche.melanger()                              ; }
-
+	// Méthode de la pioche
+	// Affiche la carte tiré
+	public Carte   getCarteTiree    () { return this.pioche.getCarteTire         ()  ; }
+	//Affiche la première carte
+	public Carte   premiereCarte    () { return this.pioche.premiereCarte        ()  ; }
+	// Regarde si c'est la fin d'une manche
+	public boolean verifFinManche   () { return this.pioche.verifFinManche       ()  ; }
+	// Créer une nouvelle Pioche
+	public void    initierPioche    () { this.pioche = new Pioche(this.getSymbole()) ; }
+	//Mélange la pioche
+	public void    melangerPioche   () { this.pioche.melanger                    ()  ; }
+	
+	// Tire une carte
 	public void tirerCarte(int indice) 
 	{ 
 		this.pioche.setCarteTiree(indice);
@@ -406,15 +452,11 @@ public class Controleur
 		if (this.frame != null) this.frame.carteChoisie();
 
 	}
-
-	public Carte getCarteTiree   () { return this.pioche.getCarteTire         ()  ; }
-	public Carte premiereCarte   () { return this.pioche.premiereCarte        ()  ; }
-	public boolean verifFinManche() { return this.pioche.verifFinManche       ()  ; }
-	public void initierPioche ()    { this.pioche = new Pioche(this.getSymbole()) ; }
 	
+	// Méthode Multi
 	private void verifierFinDeTourCollectif() 
 	{
-		// 1. On vérifie si tout le monde a joué
+		//On vérifie si tout le monde a joué
 		boolean tousJoues = true;
 		for (boolean aJoue : this.aJoueCeTour) {
 			if (!aJoue) { tousJoues = false; break; }
@@ -428,13 +470,13 @@ public class Controleur
 			}
 			if (this.frame != null) {
 				this.frame.reinitierPanelPioche();
-				// Le prochain à jouer est FORCÉMENT le Joueur 0 (Serveur)
+				// Le prochain à jouer est le Joueur 0 (Serveur)
 				this.frame.afficherPlateauJoueur(0);
 			}
 		} 
 		else 
 		{
-			// 2. IL RESTE DES JOUEURS : On cherche le prochain qui n'a pas joué
+			//On cherche le prochain qui n'a pas joué
 			int prochainJoueur = 0;
 			for (int i = 0; i < this.nbJoueurs; i++) {
 				if (!this.aJoueCeTour[i]) {
@@ -442,7 +484,7 @@ public class Controleur
 					break;
 				}
 			}
-			// On bascule la caméra automatiquement sur lui !
+			// On bascule la caméra automatiquement
 			if (this.frame != null) {
 				this.frame.afficherPlateauJoueur(prochainJoueur);
 			}
@@ -484,13 +526,11 @@ public class Controleur
 		this.verifierFinDeTourCollectif();
 	}
 
-	/**
-	 * Change le plateau visible après un petit temps d'attente autonome
-	 */
+	// Change le plateau visible après un petit temps d'attente autonome
 	private void changerPlateau(int prochainJoueur) 
 	{
-		// On crée un Timer Swing qui attend 1500 ms (1.5 seconde)
-		javax.swing.Timer timer = new javax.swing.Timer(500, new java.awt.event.ActionListener() 
+		// On crée un Timer Swing qui attend 500 ms (0.5 seconde)
+		Timer timer = new Timer(500, new ActionListener() 
 		{
 			public void actionPerformed(java.awt.event.ActionEvent e) 
 			{
@@ -506,6 +546,7 @@ public class Controleur
 		timer.start();           // On lance le compte à rebours
   }
 	
+	// Génère le paquet de carte uniquement avec les symboles présents
 	public String[] getSymbole()
 	{
 		List<String> symboles = new ArrayList<>();
@@ -518,6 +559,7 @@ public class Controleur
 		return symboles.toArray(new String[0]);
 	}
 	
+	// Permet d'attribuer aléatoirement une base de départ
 	public void attribuerVirusDepart() 
 	{
 		if (this.plateau == null || this.plateau.length == 0 || this.plateau[0] == null) return;
@@ -528,7 +570,6 @@ public class Controleur
 		for (int i = 0; i < nbVirusSurCarte; i++) 
 			chapeauNumeros.add(i);
 
-		// SYNCHRONISATION : On utilise la graine en réseau, ou le hasard pur en Solo
 		if (this.estServeurReseau || this.estClientReseau) 
 			Collections.shuffle(chapeauNumeros, new java.util.Random(this.gameSeed));
 		else 
@@ -540,21 +581,15 @@ public class Controleur
 			this.plateau[i].setIndexVirusActif(numeroTire);
 		}
 	}
+	
+	// Met la fin de partie
+	public void partieTerminee(boolean fin) { this.fin = true; }
 
-	public void partieTerminee(boolean fin)
-	{
-		this.fin = true;
-	}
+	// Récupère si c'est une fin de partie
+	public boolean getFin() { return this.fin; }
 
-	public boolean getFin()
-	{
-		return this.fin;
-	}
-
-	/* ========================================================== */
-	/* MÉTHODES RÉSEAU (MULTI)                                    */
-	/* ========================================================== */
-
+	// Méthode du serveur
+	// Lance le serveur pour l'host
 	public void lancerServeur(int port)
 	{
 		this.estServeurReseau = true;
@@ -562,18 +597,21 @@ public class Controleur
 		new Thread(this.serveurJeu).start();
 	}
 
+	// Lance le client qui rejoins l'host
 	public void lancerClient(String ip, int port)
 	{
 		this.estClientReseau = true;
 		this.clientJoueur = new ClientJoueur(this, ip, port);
 		new Thread(this.clientJoueur).start();
 	}
-
+	
+	// Permet la sélection du plateau après avoir eu un client de connecté
 	public void clientConnecte()
 	{
 		SwingUtilities.invokeLater(() -> { this.frame.changerPanel(new PanelNiveau(this.frame, this, true, true)); });
 	}
 
+	// Informe le client de l'action de l'host de choisir un plateau
 	public void attenteChoixNiveau()
 	{
 		SwingUtilities.invokeLater(() -> 
@@ -583,7 +621,8 @@ public class Controleur
 				"Connexion", JOptionPane.INFORMATION_MESSAGE);
 		});
 	}
-
+	
+	// Envoi la carte choisi au client
 	public void envoyerCarteAuClient(File fichier)
 	{
 		if (this.serveurJeu != null) 
@@ -596,6 +635,7 @@ public class Controleur
 		}
 	}
 	
+	// Reçois la carte que le serveur a envoyé
 	public void recevoirCarteDuServeur(File fichierTmp)
 	{
 		SwingUtilities.invokeLater(() -> 
@@ -610,7 +650,8 @@ public class Controleur
 			}
 		});
 	}
-
+	
+	// Envoi le coup entre serveur et client
 	public void transmettreCoupReseau(int ligDep, int colDep, int ligArr, int colArr)
 	{
 		String msg = "COUP:" + ligDep + ":" + colDep + ":" + ligArr + ":" + colArr;
@@ -618,6 +659,7 @@ public class Controleur
 		else if (this.estClientReseau && this.clientJoueur != null) this.clientJoueur.envoyerMessage(msg);
 	}
 	
+	// reçois le coup joué entre serveur et client
 	public void recevoirCoupReseau(int ligDep, int colDep, int ligArr, int colArr)
 	{
 		SwingUtilities.invokeLater(() -> 
@@ -634,18 +676,20 @@ public class Controleur
 			this.verifSommet(this.getCase(ligArr, colArr, idAdversaire), idAdversaire);
 
 			// On restaure l'état du joueur local
-			this.estClique = ancienClique;
+			this.estClique        = ancienClique;
 			this.caseSelectionnee = ancienCase;
 			this.receptionReseauEnCours = false; // On remet le bouclier
 		});
 	}
 	
+	// Envoi l'information qu'ils ont passé leur tour
 	public void transmettrePasserReseau()
 	{
-		if (this.estServeurReseau && this.serveurJeu != null)       this.serveurJeu.envoyerMessage("PASSER");
-		else if (this.estClientReseau && this.clientJoueur != null) this.clientJoueur.envoyerMessage("PASSER");
+		if      (this.estServeurReseau && this.serveurJeu   != null) this.serveurJeu  .envoyerMessage("PASSER");
+		else if (this.estClientReseau  && this.clientJoueur != null) this.clientJoueur.envoyerMessage("PASSER");
 	}
-
+	
+	// Récupère l'information qu'ils ont passé leur tour
 	public void recevoirPasserReseau()
 	{
 		SwingUtilities.invokeLater(() -> 
@@ -656,9 +700,10 @@ public class Controleur
 		});
 	}
 	
+	// Réinitialise le controleur si le réseau se ferme avec les bonnes variable
 	public void fermerReseau()
 	{
-		if (this.serveurJeu != null) this.serveurJeu.forcerArret();
+		if (this.serveurJeu   != null) this.serveurJeu.forcerArret();
 		if (this.clientJoueur != null) this.clientJoueur.forcerArret();
 		
 		this.serveurJeu       = null;
