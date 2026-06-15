@@ -1,6 +1,7 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,15 +11,27 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
 import java.awt.Image;
+
 import java.awt.event.*;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class PanelJeu extends JPanel implements ActionListener
 {
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private final String IMGBOUTONS = "../images/boutons/imageBouton.png";
 
 	private FrameJeu   frame;
@@ -34,7 +47,11 @@ public class PanelJeu extends JPanel implements ActionListener
 	private ImageIcon  iconOriginalBouton;
 
 	private Graphics2D g2;
-
+	
+	/*----------------------------*/
+	/*  Constructeur              */
+	/*----------------------------*/
+	
 	public PanelJeu(Controleur ctrl, FrameJeu frame)
 	{
 		this.setLayout(new GridBagLayout());
@@ -48,9 +65,9 @@ public class PanelJeu extends JPanel implements ActionListener
 
 		this.setOpaque(false);
 
-		//-------------------------//
-		// création des composants //
-		//-------------------------//
+		/*-------------------------------*/
+		/* Création des composants       */
+		/*-------------------------------*/
 
 		int largeurBtn  = (int)(this.frame.getWidth()  * 0.30);
 		int longueurBtn = (int)(this.frame.getHeight() * 0.10);
@@ -84,9 +101,9 @@ public class PanelJeu extends JPanel implements ActionListener
 		this.lblMulti.setForeground(Color.RED);
 		this.btnMulti.add(this.lblMulti, BorderLayout.CENTER);
 
-		//-------------------------------//
-		// positionnement des composants //
-		//-------------------------------//
+		/*-------------------------------*/
+		/* positionnement des composants */
+		/*-------------------------------*/
 
 		JPanel conteneurBoutons = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 0));
 		conteneurBoutons.setOpaque(false);
@@ -96,16 +113,17 @@ public class PanelJeu extends JPanel implements ActionListener
 
 		this.add(conteneurBoutons);
 
-		//---------------------------//
-		// activation des composants //
-		//---------------------------//
+		/* ------------------------------ */
+		/* Activation des composants      */
+		/* ------------------------------ */
 
 		this.btnSolo .addActionListener(this);
 		this.btnMulti.addActionListener(this);
 
 		this.initResizeListener();
 	}
-
+	
+	//Choix du mode de jeu
 	public void actionPerformed(ActionEvent e)
 	{
 		if ( e.getSource() == this.btnSolo )
@@ -119,6 +137,7 @@ public class PanelJeu extends JPanel implements ActionListener
 		}
 	}
 
+	// Permet de mettre l'image de jeu
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -130,10 +149,9 @@ public class PanelJeu extends JPanel implements ActionListener
 		{
 			this.g2.drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
 		}
-
-		
 	}
 
+	// Adapte la frame à la taille
 	private void initResizeListener()
 	{
 		this.frame.addComponentListener(new ComponentAdapter() {

@@ -107,7 +107,7 @@ public class PanelMulti extends JPanel implements ActionListener
 		/* ------------------------------ */
 		/* Activation des composants      */
 		/* ------------------------------ */
-        
+		
 		for ( JButton btn : tabBtn )
 			btn.addActionListener(this);
 	}
