@@ -82,3 +82,17 @@ Une fois toutes les manches terminées, le jeu affiche un écran de fin contenan
 1. Le nom du vainqueur.
 2. Le classement final détaillé affichant les points cumulés de chaque joueur.
 3. Un bouton permettant de quitter proprement les connexions réseau et de retourner au menu principal.
+
+## Installation et Exécution
+
+Voici la procédure complète pour compiler les sources et lancer l'interface de création depuis un terminal (nécessite le JDK Java) :
+
+**1. Cloner le dépôt localement :**
+
+```bash
+git clone git@github.com:EstebanBUniv/ContamiNation.git
+cd ./ContamiNation_Jouer
+javac "@compile.list" -d ../class
+cd ../class
+java ContamiNation_Jouer.Controleur
+```
