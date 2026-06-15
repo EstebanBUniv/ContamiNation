@@ -10,7 +10,10 @@ import javax.swing.*;
 
 public class PanelChoixCarte extends JPanel implements ActionListener
 {
-	// Attribut d'instance
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+
 	private Controleur  ctrl;
 	private Image[]     pioche;
 
@@ -25,6 +28,10 @@ public class PanelChoixCarte extends JPanel implements ActionListener
 		this.panelChoixCarte = new JPanel();
 
 		this.setLayout(new GridLayout(1,this.ctrl.getTaillePioche()));
+
+		/*----------------------------*/
+		/*  Création des compostants  */
+		/*----------------------------*/
 
 		this.pioche  = new Image[this.ctrl.getTaillePioche()]; 
 		this.cartes  = new JButton[this.ctrl.getTaillePioche()];
