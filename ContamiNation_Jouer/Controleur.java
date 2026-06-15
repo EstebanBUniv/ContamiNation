@@ -18,6 +18,11 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.SwingUtilities;
+import javax.swing.JOptionPane;
+
+import java.util.Collections;
+
 public class Controleur
 {
 	public static final Color COLOR_BACKGROUND = new Color( 58, 111, 134);
@@ -157,11 +162,8 @@ public class Controleur
 		
 		this.frame.afficherPlateau(nbJoueurs);
 		
-		for (Plateau p : this.plateau) {
-			if (p.mancheSuivante()) {
-				p.preparerNouvelleManche();
-			}
-		}
+		for (Plateau p : this.plateau)
+			p.preparerNouvelleManche();
 		
 		this.initierPioche();
 		if (this.estServeurReseau || this.estClientReseau) 
@@ -209,7 +211,7 @@ public class Controleur
 		} 
 		else 
 		{
-			int nbMax          = 1;
+			int nbMax          = -1;
 			int maxManche      = 0;
 			int Joueur         = 0;
 			
@@ -500,7 +502,7 @@ public class Controleur
 			}
 		});
 		
-		timer.setRepeats(false); // TRÈS IMPORTANT : Le timer ne doit s'exécuter qu'une seule fois !
+		timer.setRepeats(false); //Le timer ne doit s'exécuter qu'une seule fois
 		timer.start();           // On lance le compte à rebours
   }
 	
@@ -521,17 +523,16 @@ public class Controleur
 		if (this.plateau == null || this.plateau.length == 0 || this.plateau[0] == null) return;
 
 		int nbVirusSurCarte = this.plateau[0].getNbVirus();
-		java.util.List<Integer> chapeauNumeros = new java.util.ArrayList<>();
+		List<Integer> chapeauNumeros = new ArrayList<>();
 		
 		for (int i = 0; i < nbVirusSurCarte; i++) 
 			chapeauNumeros.add(i);
 
 		// SYNCHRONISATION : On utilise la graine en réseau, ou le hasard pur en Solo
-		if (this.estServeurReseau || this.estClientReseau) {
-			java.util.Collections.shuffle(chapeauNumeros, new java.util.Random(this.gameSeed));
-		} else {
-			java.util.Collections.shuffle(chapeauNumeros);
-		}
+		if (this.estServeurReseau || this.estClientReseau) 
+			Collections.shuffle(chapeauNumeros, new java.util.Random(this.gameSeed));
+		else 
+			Collections.shuffle(chapeauNumeros);
 
 		for (int i = 0; i < this.nbJoueurs; i++) 
 		{
@@ -570,24 +571,25 @@ public class Controleur
 
 	public void clientConnecte()
 	{
-		javax.swing.SwingUtilities.invokeLater(() -> {
-			this.frame.changerPanel(new PanelNiveau(this.frame, this, true, true));
-		});
+		SwingUtilities.invokeLater(() -> { this.frame.changerPanel(new PanelNiveau(this.frame, this, true, true)); });
 	}
 
 	public void attenteChoixNiveau()
 	{
-		javax.swing.SwingUtilities.invokeLater(() -> {
-			javax.swing.JOptionPane.showMessageDialog(this.frame, 
+		SwingUtilities.invokeLater(() -> 
+		{
+			JOptionPane.showMessageDialog(this.frame, 
 				"Connecté ! \nEn attente de la sélection de la carte...", 
-				"Connexion", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+				"Connexion", JOptionPane.INFORMATION_MESSAGE);
 		});
 	}
 
 	public void envoyerCarteAuClient(File fichier)
 	{
-		if (this.serveurJeu != null) {
-			new Thread(() -> {
+		if (this.serveurJeu != null) 
+		{
+			new Thread(() -> 
+			{
 				try { Thread.sleep(200); } catch (InterruptedException e) {}
 				this.serveurJeu.envoyerFichier(fichier); 
 			}).start();
@@ -596,10 +598,12 @@ public class Controleur
 	
 	public void recevoirCarteDuServeur(File fichierTmp)
 	{
-		javax.swing.SwingUtilities.invokeLater(() -> {
+		SwingUtilities.invokeLater(() -> 
+		{
 			this.chargerNiveau(fichierTmp, 2); 
-			if (this.frame != null) {
-				// FIX 1 : On laisse la caméra sur le Serveur (0) qui joue toujours en premier !
+			if (this.frame != null) 
+			{
+				// On laisse la caméra sur le Serveur (0) qui joue toujours en premier 
 				this.frame.afficherPlateauJoueur(0); 
 				this.frame.revalidate();
 				this.frame.repaint();
@@ -616,7 +620,8 @@ public class Controleur
 	
 	public void recevoirCoupReseau(int ligDep, int colDep, int ligArr, int colArr)
 	{
-		javax.swing.SwingUtilities.invokeLater(() -> {
+		SwingUtilities.invokeLater(() -> 
+		{
 			this.receptionReseauEnCours = true; // On lève le bouclier
 			int idAdversaire = this.estServeurReseau ? 1 : 0;
 
@@ -643,11 +648,24 @@ public class Controleur
 
 	public void recevoirPasserReseau()
 	{
-		javax.swing.SwingUtilities.invokeLater(() -> {
+		SwingUtilities.invokeLater(() -> 
+		{
 			this.receptionReseauEnCours = true;
 			this.forcerPassageTourCollectif(); 
 			this.receptionReseauEnCours = false;
 		});
+	}
+	
+	public void fermerReseau()
+	{
+		if (this.serveurJeu != null) this.serveurJeu.forcerArret();
+		if (this.clientJoueur != null) this.clientJoueur.forcerArret();
+		
+		this.serveurJeu       = null;
+		this.clientJoueur     = null;
+		this.estServeurReseau = false;
+		this.estClientReseau  = false;
+		this.modeMulti        = false;
 	}
 
 	public static void main (String[] args) 

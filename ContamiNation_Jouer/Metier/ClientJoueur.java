@@ -1,10 +1,21 @@
 package ContamiNation_Jouer.Metier;
 
 import ContamiNation_Jouer.Controleur;
-import java.net.*;
-import java.io.*;
-import javax.swing.SwingUtilities;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+
+import java.net.Socket;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 public class ClientJoueur implements Runnable
 {
@@ -13,7 +24,8 @@ public class ClientJoueur implements Runnable
 	private int         portSecret;
 	private PrintWriter out;
 	private boolean     enLigne;
-	private java.util.List<String> lignesCarte = new java.util.ArrayList<>();
+	private List<String> lignesCarte = new ArrayList<>();
+	private Socket toServer;
 
 	public ClientJoueur(Controleur ctrl, String ip, int portSecret)
 	{
@@ -23,13 +35,12 @@ public class ClientJoueur implements Runnable
 		this.enLigne    = true;
 	}
 
-	@Override
 	public void run()
 	{
 		try 
 		{
 			System.out.println(">>> Tentative de connexion à " + ip + ":" + portSecret);
-			Socket toServer = new Socket(this.ip, this.portSecret);
+			this.toServer = new Socket(this.ip, this.portSecret);
 			
 			this.out = new PrintWriter(toServer.getOutputStream(), true);
 			BufferedReader in = new BufferedReader(new InputStreamReader(toServer.getInputStream()));
@@ -77,7 +88,7 @@ public class ClientJoueur implements Runnable
 	{
 		if (msg.startsWith("SEED:")) 
 		{
-			// LE CLIENT RÉCUPÈRE LA GRAINE DU SERVEUR
+			// le client récupère la graine
 			long seed = Long.parseLong(msg.split(":")[1]);
 			this.ctrl.setGameSeed(seed);
 			System.out.println(">>> Graine reçue, synchronisation parfaite prête !");
@@ -129,5 +140,11 @@ public class ClientJoueur implements Runnable
 	public void envoyerMessage(String msg) 
 	{
 		if (this.out != null) this.out.println(msg);
+	}
+	
+	public void forcerArret() 
+	{
+		this.enLigne = false;
+		try { if (this.toServer != null) this.toServer.close(); } catch (Exception e) {}
 	}
 }

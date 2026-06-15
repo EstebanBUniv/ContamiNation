@@ -104,6 +104,7 @@ public class PanelFin extends JPanel implements ActionListener
 	{
 		if (e.getSource() == this.btnMenu)
 		{
+			this.ctrl.fermerReseau();
 			this.frameMere.changerPanel(new PanelMenu(this.frameMere, this.ctrl));
 		}
 	}

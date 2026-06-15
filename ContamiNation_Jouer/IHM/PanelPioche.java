@@ -199,7 +199,10 @@ public class PanelPioche extends JPanel implements ActionListener
 		);
 
 		if (choix == JOptionPane.YES_OPTION)
+		{
+			this.ctrl.fermerReseau();
 			this.frameMere.changerPanel(new PanelMenu(this.frameMere, this.ctrl));
+		}
 	}
 
 	public void passerTour()
