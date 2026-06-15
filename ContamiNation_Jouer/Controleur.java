@@ -269,8 +269,14 @@ public class Controleur
 
 			if (nbMax == 1)
 			{
+				String pts = maxManche + " point" + (maxManche > 1 ? "s" : "");
+
 				this.partieTerminee(true);
-				String msg = "Le joueur " + (Joueur+1) + " a gagné avec " + maxManche + " points !";
+				String msg;
+				if ( this.modeMulti )
+					msg = "Le joueur " + (Joueur+1) + " a gagné avec " + pts + " !";
+				else
+					msg = "Partie terminée avec " + pts + " !";
 				this.frame.afficherEcranFin(msg);
 			}
 			else
@@ -297,6 +303,7 @@ public class Controleur
 					}
 				}
 
+
 				if(egalite == true)
 				{
 					this.partieTerminee(true);
@@ -309,6 +316,8 @@ public class Controleur
 					String msg = "Le joueur " + (joueur+1) + " a gagné avec " + maxTour + " points en une manche !";
 					this.frame.afficherEcranFin(msg);
 				}
+
+				
 			}
 		}
 	}

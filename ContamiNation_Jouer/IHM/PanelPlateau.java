@@ -91,7 +91,7 @@ public class PanelPlateau extends JPanel
 	public void changerLabelPropagation()
 	{
 		if ( this.ctrl.getModeMulti())
-			this.lbJoueur.setText("Jouer " + (this.idJoueur+1) + " - Propagation de " + this.ctrl.getVirus(this.idJoueur));
+			this.lbJoueur.setText("Joueur " + (this.idJoueur+1) + " - Propagation de " + this.ctrl.getVirus(this.idJoueur));
 		else
 			this.lbJoueur.setText("Propagation de " + this.ctrl.getVirus(this.idJoueur));
 	}
