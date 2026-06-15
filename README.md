@@ -57,24 +57,22 @@ Une partie se divise en plusieurs manches successives.
 Un joueur peut effectuer deux actions principales :
 
 * **Sélectionner et Relier (Se propager) :**
-  1. Le joueur clique sur un sommet valide.
-  2. L'interface met en évidence les sommets voisins atteignables et légaux .
-  3. En cliquant sur un voisin, un lien physique (une arête colorée aux couleurs du virus) est tracé.
+1. Le joueur clique sur un sommet valide.
+2. L'interface met en évidence les sommets voisins atteignables et légaux .
+3. En cliquant sur un voisin, un lien physique (une arête colorée aux couleurs du virus) est tracé.
 * **Passer son tour :** Si un joueur ne peut pas ou ne souhaite pas jouer, il peut cliquer sur "Passer le Tour".
 
 ### 3. Les Modes de Pioche
 Selon la configuration de la partie, le tirage des cartes s'effectue de deux manières :
 * **Mode Classique / Multi :** La carte suivante de la pile est automatiquement révélée et devient la carte active du tour.
-* **Mode Débiche :** Une fenêtre de choix s'ouvre, permettant aux joueurs de sélectionner stratégiquement la prochaine carte à activer parmi un choix restreint dans la pioche.
-
 ---
 
 ## Fin de Manche et Défausse
 
 * Chaque carte utilisée est envoyée dans la pile de défausse, dont l'historique reste visible en bas de l'écran.
 * Lorsqu'une condition de fin de manche est atteinte (par exemple, si la pioche est vide ou que toutes les cartes foncés on été tirée) :
-  1. Les scores de la manche actuelle sont calculés.
-  2. la défausse est vidée, et une nouvelle manche commence avec un changement du virus actif.
+1. Les scores de la manche actuelle sont calculés.
+2. la défausse est vidée, et une nouvelle manche commence avec un changement du virus actif.
 
 ---
 
