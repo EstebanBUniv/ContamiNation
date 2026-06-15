@@ -29,6 +29,7 @@ public class ServeurJeu implements Runnable
 	private PrintWriter  out;
 	private boolean      enLigne;
 	private ServerSocket ss;
+	private Socket       toClient;
 
 	public ServeurJeu(Controleur ctrl, int portSecret)
 	{
@@ -43,7 +44,7 @@ public class ServeurJeu implements Runnable
 		{
 			this.ss = new ServerSocket(this.portSecret);
 			System.out.println(">>> Serveur en écoute. Code PIN / Port : " + this.portSecret);
-			Socket toClient = ss.accept(); 
+			this.toClient = ss.accept();
 			System.out.println(">>> Un joueur tente de se connecter...");
 
 			this.out = new PrintWriter(toClient.getOutputStream(), true);
@@ -128,6 +129,10 @@ public class ServeurJeu implements Runnable
 	public void forcerArret() 
 	{
 		this.enLigne = false;
-		try { if (this.ss != null) this.ss.close(); } catch (Exception e) {}
+		try 
+		{ 
+			if (this.ss != null) this.ss.close(); 
+			if (this.toClient != null) this.toClient.close();
+		} catch (Exception e) {}
 	}
 }
