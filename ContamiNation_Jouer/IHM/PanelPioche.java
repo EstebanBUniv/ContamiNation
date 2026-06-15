@@ -24,6 +24,12 @@ import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class PanelPioche extends JPanel implements ActionListener
 {
 	private Controleur ctrl;
@@ -184,6 +190,7 @@ public class PanelPioche extends JPanel implements ActionListener
 			this.demanderConfirmation();
 	}
 
+	// Méthode permettant de sécuriser l'option de quitter la partie
 	private void demanderConfirmation()
 	{
 		Object[] options = {"Oui", "Non"};
@@ -205,6 +212,9 @@ public class PanelPioche extends JPanel implements ActionListener
 		}
 	}
 
+	
+	// Passe le tour si ce n'est pas la fin de la manche en tirant simplement la carte et en vérifiant qu'on est pas en modeDebiche
+	// Sinon passe la manche
 	public void passerTour()
 	{
 		if (!this.ctrl.verifFinManche())
@@ -239,11 +249,14 @@ public class PanelPioche extends JPanel implements ActionListener
 		}
 	}
 
+
+	
 	public void carteChoisie()
 	{
 		this.afficherCarteActive();
 	}
 
+	// Affiche la carte tiree 
 	private void afficherCarteActive()
 	{
 		if (this.ctrl.getCarteTiree() == null) return;

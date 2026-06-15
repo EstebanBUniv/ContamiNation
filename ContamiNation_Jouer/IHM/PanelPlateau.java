@@ -10,9 +10,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class PanelPlateau extends JPanel
 {
-	// Attribut d'instance
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+
 	private FrameJeu   frameMere;
 	private Controleur ctrl;
 
@@ -27,6 +36,10 @@ public class PanelPlateau extends JPanel
 
 	public PanelPlateau(FrameJeu frame, Controleur ctrl, int idJoueur)
 	{
+
+		/*----------------------------*/
+		/*  Création des composants   */
+		/*----------------------------*/
 		this.frameMere = frame;
 		this.ctrl      = ctrl;
 		this.idJoueur  = idJoueur;
@@ -35,6 +48,8 @@ public class PanelPlateau extends JPanel
 
 		this.lig = this.ctrl.getLig();
 		this.col = this.ctrl.getCol();
+
+		
 
 		this.tabPanel = new PanelCase[this.lig][this.col];
 
@@ -48,6 +63,11 @@ public class PanelPlateau extends JPanel
 
 		this.lbJoueur.setFont(Controleur.POLICE_TEXTE);
 		this.lbJoueur.setHorizontalAlignment(SwingConstants.CENTER);
+
+		/*-------------------------------------*/
+		/*  Positionnement des compostants     */
+		/*-------------------------------------*/
+
 		this.add(this.lbJoueur, BorderLayout.NORTH);
 		
 		this.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
@@ -67,6 +87,7 @@ public class PanelPlateau extends JPanel
 		this.add(this.panelCase);
 	}
 
+	// Change le nom du virus à chaque manche passée et prends en compte le mode multijoueur
 	public void changerLabelPropagation()
 	{
 		if ( this.ctrl.getModeMulti())
@@ -75,11 +96,13 @@ public class PanelPlateau extends JPanel
 			this.lbJoueur.setText("Propagation de " + this.ctrl.getVirus(this.idJoueur));
 	}
 
+	// Change la couleur autour du plateau en fonction du virus
 	public void changerCouleurManche(int num)
 	{
 		this.setBackground(ctrl.getCouleurVirus(this.idJoueur, num));
 	}
 
+	// Initie l'image en une image de base pour la différencier
 	public void changerImageBase()
 	{
 		for ( int lig = 0; lig < this.tabPanel.length; lig++ )

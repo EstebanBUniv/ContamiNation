@@ -20,6 +20,10 @@ import javax.swing.JPanel;
 
 public class PanelFin extends JPanel implements ActionListener
 {
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+
 	private FrameJeu   frameMere;
 	private Controleur ctrl;
 	private Image      imgFond;
@@ -52,6 +56,10 @@ public class PanelFin extends JPanel implements ActionListener
 		panelContenu.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		panelContenu.setMaximumSize(new Dimension(550, 400));
+
+		/*----------------------------*/
+		/*  Création des composants   */
+		/*----------------------------*/
 
 		JLabel labelFin = new JLabel(text);
 		labelFin.setFont(Controleur.POLICE_TITRE);
