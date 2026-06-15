@@ -16,6 +16,12 @@ import java.util.Random;
 
 import javax.swing.SwingUtilities;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class ServeurJeu implements Runnable
 {
 	private Controleur   ctrl;
@@ -78,6 +84,7 @@ public class ServeurJeu implements Runnable
 		}
 	}
 
+	//reçois les coups fait par le client
 	private void traiterMessage(String msg) 
 	{
 		if (msg.startsWith("COUP:"))
@@ -102,6 +109,7 @@ public class ServeurJeu implements Runnable
 		if (this.out != null) this.out.println(msg);
 	}
 	
+	//envoyer la carte au client
 	public void envoyerFichier(File fichier)
 	{
 		System.out.println(">>> Début de l'envoi de la carte : " + fichier.getName());

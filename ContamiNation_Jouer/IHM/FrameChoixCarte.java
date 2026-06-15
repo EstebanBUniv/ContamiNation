@@ -17,9 +17,6 @@ public class FrameChoixCarte extends JFrame
 	/*----------------------------*/
 	
 	private Controleur           ctrl;
-	private ImageIcon[]          pioche;
-
-	private JButton[]            cartes;
 
 	private PanelChoixCarte      panelChoixCarte;
 
