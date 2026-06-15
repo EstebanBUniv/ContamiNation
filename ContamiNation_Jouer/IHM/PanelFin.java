@@ -74,7 +74,7 @@ public class PanelFin extends JPanel implements ActionListener
 		{
 			Plateau p = this.ctrl.getPlateau(i);
 			String nomVirus = (p.getVirusActif() != null) ? p.getVirusActif().getNom() : "Inconnu";
-			String detailScore = "Joueur " + (i + 1) + p.getPointTotal() + " points";
+			String detailScore = "Joueur " + (i + 1) + " : " + p.getPointTotal() + " points";
 			
 			JLabel lblJoueurScore = new JLabel(detailScore);
 			lblJoueurScore.setFont(Controleur.POLICE_TEXTE);
