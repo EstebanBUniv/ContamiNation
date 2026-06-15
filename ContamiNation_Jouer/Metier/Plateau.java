@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class Plateau
 {
 	private Controleur      ctrl;
@@ -22,9 +28,13 @@ public class Plateau
 	private File            fichierSource = null;
 	private List<Virus>     lstVirus;
 	private List<Integer>   lstPointParManche;
-	private int             offsetVirus = 0;
+	private int             offsetVirus = 0; // Pour que les joueurs n'est pas le même virus en multi et pour gerer l'affichage des couleurs des virus
 
 	private boolean     modeDebiche = false;
+
+	/*----------------------------*/
+	/*  Constructeur              */
+	/*----------------------------*/
 
 	public static Plateau creerPlateau(int lig, int col, int nbVirus, String nom, Controleur ctrl, int idJoueur) 
 	{
@@ -53,6 +63,10 @@ public class Plateau
 		if (this.modeDebiche) 
 			this.ctrl.appelerChoixCarte();
 	}
+
+	/*----------------------------*/
+	/*  Getters                   */
+	/*----------------------------*/
 
 	public int    getLig           ()          { return this.lig                              ; }
 	public int    getCol           ()          { return this.col                              ; }
@@ -92,7 +106,16 @@ public class Plateau
 		return "";
 	}
 
+	/*----------------------------*/
+	/* Setters                    */
+	/*----------------------------*/
+
 	public void setFichierSource(File fichier) { this.fichierSource = fichier; }
+	public void setIndexVirusActif(int index)  { this.offsetVirus = index;     }
+
+	/*----------------------------*/
+	/* Méthodes                   */
+	/*----------------------------*/
 
 	public void creerVirus(String nom) 
 	{
@@ -230,6 +253,9 @@ public class Plateau
 		return nbSommetParZone * zonesVisitees.size();
 	}
 
+	//permet de vérifier si on va sur un sommet valide (que l'arrête n'est pas déjà coloré, 
+	// que les arrêtes colorés ne se croisent pas et que le sommets est accessible depuis le début ou la fin du chemin
+	//  et que c'est le même sommet que sur la carte)
 	public boolean verifSommet(Case caseAVerif, Carte carteTire, int choixForce)
 	{
 		if (!this.estCoupValide(caseAVerif, carteTire)) return false;
@@ -284,7 +310,7 @@ public class Plateau
 		return true;
 	}
 
-
+	//vérifie si deux arrêtes se croisent
 	public boolean estCroisementInterdit(Sommet s1, Sommet s2)
 	{
 		int lig1 = s1.getLigSommet();
@@ -319,6 +345,7 @@ public class Plateau
     return false;
 }
 
+	// vérifi si un virus est déja sur cette arrête
 	private boolean arreteDejaColoree(Sommet s1, Sommet s2)
 	{
 		if (s1 == null || s2 == null) return false;
@@ -383,15 +410,7 @@ public class Plateau
 			   (carteTire.getSymbole().equals(s.getSymbole()) || carteTire.getSymbole().equals("Epidemie"));
 	}
 
-	public void setIndexVirusActif(int index)
-	{
-		
-		this.offsetVirus = index; 
-	}
-
-	/**
-	 * Vérifie si le segment [AB] et le segment [CD] se croisent strictement.
-	 */
+	//Vérifie si le segment [AB] et le segment [CD] se croisent.
 	private boolean seCroisentStrictement(int ligA, int colA, int ligB, int colB, 
 										int ligC, int colC, int ligD, int colD)
 	{
@@ -407,9 +426,7 @@ public class Plateau
 			((o3 == 1 && o4 == 2) || (o3 == 2 && o4 == 1));
 	}
 
-	/**
-	 * Détermine l'orientation de trois points (1 = Horaire, 2 = Anti-horaire, 0 = Alignés)
-	 */
+	//Détermine l'orientation de trois points (1 = Horaire, 2 = Anti-horaire, 0 = Alignés)
 	private int orientation(int lig1, int col1, int lig2, int col2, int lig3, int col3)
 	{
 		// Calcul du produit en croix (en considérant col comme X et lig comme Y)

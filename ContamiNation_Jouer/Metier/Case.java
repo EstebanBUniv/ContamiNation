@@ -17,8 +17,6 @@ public class Case
 	
 	private Sommet    sommet;
 	private int       zone;
-
-	private boolean   estTraverse;
 	
 	/*----------------------------*/
 	/*  Constructeur de la classe */
@@ -30,7 +28,6 @@ public class Case
 		this.posCol      = col;
 		this.zone        = 0;
 		this.sommet      = null;
-		this.estTraverse = false;
 	}
 	
 	/*----------------------------*/
@@ -42,7 +39,6 @@ public class Case
 	public int     getCol        () { return this.posCol      ; }
 	public Sommet  getSommet     () { return this.sommet      ; }
 	public boolean getAUnSommet  () { return this.sommet != null   ; }
-	public boolean getEstTraverse() { return this.estTraverse ; }
 	public String  getSymbole    () { return this.sommet.getSymbole(); }
 	
 	/*----------------------------*/
