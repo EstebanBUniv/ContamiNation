@@ -69,26 +69,29 @@ public class PanelFin extends JPanel implements ActionListener
 		
 		panelContenu.add(Box.createVerticalStrut(25));
 
-		JLabel lblTableau = new JLabel("--- CLASSEMENT FINAL ---");
-		lblTableau.setFont(Controleur.POLICE_TEXTE);
-		lblTableau.setForeground(Controleur.COLOR_FOREGROUND);
-		lblTableau.setAlignmentX(Component.CENTER_ALIGNMENT);
-		panelContenu.add(lblTableau);
-		
-		panelContenu.add(Box.createVerticalStrut(15));
-
-		for (int i = 0; i < this.ctrl.getNbJoueur(); i++)
+		if ( this.ctrl.getModeMulti() )
 		{
-			String nomVirus = (this.ctrl.getPlateau(i).getVirusActif() != null) ? this.ctrl.getPlateau(i).getVirusActif().getNom() : "Inconnu";
-			String detailScore = "Joueur " + (i + 1) + " : " + this.ctrl.getPlateau(i).getPointTotal() + " points";
+			JLabel lblTableau = new JLabel("--- CLASSEMENT FINAL ---");
+			lblTableau.setFont(Controleur.POLICE_TEXTE);
+			lblTableau.setForeground(Controleur.COLOR_FOREGROUND);
+			lblTableau.setAlignmentX(Component.CENTER_ALIGNMENT);
+			panelContenu.add(lblTableau);
 			
-			JLabel lblJoueurScore = new JLabel(detailScore);
-			lblJoueurScore.setFont(Controleur.POLICE_TEXTE);
-			lblJoueurScore.setForeground(Controleur.COLOR_FOREGROUND);
-			lblJoueurScore.setAlignmentX(Component.CENTER_ALIGNMENT);
-			
-			panelContenu.add(lblJoueurScore);
-			panelContenu.add(Box.createVerticalStrut(10));
+			panelContenu.add(Box.createVerticalStrut(15));
+
+			for (int i = 0; i < this.ctrl.getNbJoueur(); i++)
+			{
+				String nomVirus = (this.ctrl.getPlateau(i).getVirusActif() != null) ? this.ctrl.getPlateau(i).getVirusActif().getNom() : "Inconnu";
+				String detailScore = "Joueur " + (i + 1) + " : " + this.ctrl.getPlateau(i).getPointTotal() + " points";
+				
+				JLabel lblJoueurScore = new JLabel(detailScore);
+				lblJoueurScore.setFont(Controleur.POLICE_TEXTE);
+				lblJoueurScore.setForeground(Controleur.COLOR_FOREGROUND);
+				lblJoueurScore.setAlignmentX(Component.CENTER_ALIGNMENT);
+				
+				panelContenu.add(lblJoueurScore);
+				panelContenu.add(Box.createVerticalStrut(10));
+			}
 		}
 
 		panelContenu.add(Box.createVerticalStrut(20));
