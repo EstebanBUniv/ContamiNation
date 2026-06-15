@@ -20,6 +20,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
@@ -60,7 +61,10 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 		this.setBackground(Controleur.COLOR_BACKGROUND);
 
-		// Entête Numero de manche
+		//--------------------------------//
+		// Entête Numero de manche        //
+		//--------------------------------//
+
 		this.cptManche = 1;
 		this.lblManche = new JLabel("MANCHE N°" + this.cptManche);
 		this.lblManche.setFont(Controleur.POLICE_TITRE);
@@ -81,9 +85,11 @@ public class PanelPioche extends JPanel implements ActionListener
 			p.setOpaque(false);
 		}
 
+		// Balises html pour faire un retour à la ligne
 		JLabel lbPioche = new JLabel("<html><center>Carte<br>suivante</center></html>");
 		JLabel lbActive = new JLabel("<html><center>Carte<br>active</center></html>"  );
 
+		// aligne le label au milieu du panel
 		lbPioche.setHorizontalAlignment(SwingConstants.CENTER);
 		lbActive.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -94,13 +100,18 @@ public class PanelPioche extends JPanel implements ActionListener
 			lb.setAlignmentX(Component.CENTER_ALIGNMENT);
 		}
 		
+		// label qui affiche la pioche
 		this.lbCartePioche = new JLabel("");
 		this.lbCartePioche.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+		// label qui affiche la carte active
 		this.lblCarteActive = new JLabel("");
 		this.lblCarteActive.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-		// Boutons d'actions
+		//--------------------------------//
+		// Boutons d'actions              //
+		//--------------------------------//
+
 		JPanel panelBtn = new JPanel(new GridBagLayout());
 		panelBtn.setOpaque(false);
 
@@ -111,7 +122,7 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.btnPasser  = new JButton("Passer le Tour");
 		this.btnQuitter = new JButton("Quitter");
 
-		for ( JButton btn : new JButton[]{this.btnPasser, this.btnQuitter})
+		for ( JButton btn : new JButton[]{this.btnPasser, this.btnQuitter} )
 		{
 			btn.setFont(Controleur.POLICE_TEXTE);
 			btn.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -121,7 +132,10 @@ public class PanelPioche extends JPanel implements ActionListener
 		this.btnPasser.setBackground(Controleur.COLOR_BACKGROUND.brighter());
 		this.btnQuitter.setBackground(new java.awt.Color(180, 70, 70));
 
-		// Pile de defausse
+		//--------------------------------//
+		// Pile de defausse               //
+		//--------------------------------//
+
 		JPanel panelDefausseGlobal = new JPanel();
 		panelDefausseGlobal.setLayout(new BoxLayout(panelDefausseGlobal, BoxLayout.Y_AXIS));
 		panelDefausseGlobal.setOpaque(false);
@@ -140,6 +154,10 @@ public class PanelPioche extends JPanel implements ActionListener
 		scrollDefausse.setPreferredSize(new Dimension(160, 110)); 
 		scrollDefausse.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
 		scrollDefausse.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+
+		JScrollBar hBar = scrollDefausse.getHorizontalScrollBar();
+		hBar.setUnitIncrement (40);
+		hBar.setBlockIncrement(60);
 
 		//-------------------------------------------//
 		// Positionnement des composants             //
@@ -262,7 +280,7 @@ public class PanelPioche extends JPanel implements ActionListener
 		if (this.ctrl.getCarteTiree() == null) return;
 
 		ImageIcon iconOriginal    = new ImageIcon("../images/cartes/" + this.ctrl.getCarteTiree() + ".png");
-		Image     imgCarteActive  = iconOriginal.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
+		Image     imgCarteActive  = iconOriginal.getImage().getScaledInstance(70, 110, Image.SCALE_SMOOTH);
 		ImageIcon iconCarteActive = new ImageIcon(imgCarteActive);
 
 		// Ajouter l'ancienne carte active à la défausse
@@ -279,7 +297,7 @@ public class PanelPioche extends JPanel implements ActionListener
 		if (!this.ctrl.verifFinManche())
 		{
 			ImageIcon iconPioche = new ImageIcon("../images/cartes/" + this.ctrl.premiereCarte() + ".png");
-			Image     imgPioche  = iconPioche.getImage().getScaledInstance(55, 80, Image.SCALE_SMOOTH);
+			Image     imgPioche  = iconPioche.getImage().getScaledInstance(70, 110, Image.SCALE_SMOOTH);
 			this.lbCartePioche.setIcon(new ImageIcon(imgPioche));
 		}
 		else

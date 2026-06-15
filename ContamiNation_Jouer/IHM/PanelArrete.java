@@ -63,7 +63,8 @@ public class PanelArrete extends JPanel
 
 		// Activation du dessin en 2D et configuration de l'épaisseur des lignes (3 pixels)
 		Graphics2D g2d = (Graphics2D)g;
-		g2d.setStroke(new BasicStroke(3.0f)); 
+		g2d.setStroke(new BasicStroke(1.0f)); 
+
 		
 		// Calcul de la marge (10% de la taille d'une case) pour ne pas coller les lignes au centre
 		this.marge = (int)(this.monPlateau.getTailleCase() * 0.1);
@@ -125,9 +126,11 @@ public class PanelArrete extends JPanel
 			{
 				// On applique la couleur spécifique à ce virus
 				g2d.setColor(ctrl.getCouleurVirus(this.idJoueur, i));
-				
+				g2d.setStroke(new BasicStroke(3.0f));
+
 				// Parcours de chaque segment du chemin
 				for (int c = 0; c < tailleChemin - 1; c++) 
+
 				{
 					// Coordonnées du point actuel (A)
 					int lig1 = ctrl.getLigChemin(this.idJoueur, i, c);
