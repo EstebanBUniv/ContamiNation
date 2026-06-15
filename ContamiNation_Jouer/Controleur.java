@@ -235,7 +235,10 @@ public class Controleur
 		{
 			initierPioche();
 			if (this.estServeurReseau || this.estClientReseau) 
+			{
+				this.gameSeed++;
 				this.pioche.melangerReseau(this.gameSeed);
+			}
 			else 
 				this.melangerPioche();
 
@@ -278,16 +281,19 @@ public class Controleur
 				
 				for(int lig = 0; lig < this.plateau.length; lig++)
 				{
-					for (int cpt = 0 ; cpt < this.plateau[lig].getnbPointManche().size() ; cpt++)
+					if (this.plateau[lig].getPointTotal() == maxManche) 
 					{
-						if ((int)(this.plateau[lig].getnbPointManche().get(cpt)) > maxTour)
+						for (int cpt = 0 ; cpt < this.plateau[lig].getnbPointManche().size() ; cpt++)
 						{
-							egalite = false;
-							maxTour = (int)(this.plateau[lig].getnbPointManche().get(cpt));
-							joueur = lig;
+							if ((int)(this.plateau[lig].getnbPointManche().get(cpt)) > maxTour)
+							{
+								egalite = false;
+								maxTour = (int)(this.plateau[lig].getnbPointManche().get(cpt));
+								joueur = lig;
+							}
+							else if ((int)(this.plateau[lig].getnbPointManche().get(cpt)) == maxTour)
+								egalite = true;
 						}
-						else if ((int)(this.plateau[lig].getnbPointManche().get(cpt)) == maxTour)
-							egalite = true;
 					}
 				}
 
