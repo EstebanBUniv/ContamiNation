@@ -1,7 +1,6 @@
 package ContamiNation_Jouer.IHM;
 
 import ContamiNation_Jouer.Controleur;
-import ContamiNation_Jouer.Metier.Plateau;
 
 import java.awt.Component;
 import java.awt.Graphics;
@@ -72,9 +71,8 @@ public class PanelFin extends JPanel implements ActionListener
 
 		for (int i = 0; i < this.ctrl.getNbJoueur(); i++)
 		{
-			Plateau p = this.ctrl.getPlateau(i);
-			String nomVirus = (p.getVirusActif() != null) ? p.getVirusActif().getNom() : "Inconnu";
-			String detailScore = "Joueur " + (i + 1) + " : " + p.getPointTotal() + " points";
+			String nomVirus = (this.ctrl.getPlateau(i).getVirusActif() != null) ? this.ctrl.getPlateau(i).getVirusActif().getNom() : "Inconnu";
+			String detailScore = "Joueur " + (i + 1) + " : " + this.ctrl.getPlateau(i).getPointTotal() + " points";
 			
 			JLabel lblJoueurScore = new JLabel(detailScore);
 			lblJoueurScore.setFont(Controleur.POLICE_TEXTE);
