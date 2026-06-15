@@ -184,7 +184,7 @@ public class PanelCase extends JPanel implements ComponentListener, ActionListen
 	{
 		if (this.imgSymbole != null)
 		{
-			int   taille = (int)(this.getTailleCase() * 0.3);
+			int   taille = (int)(this.getTailleCase() * 0.5);
 			if (taille <= 0) return;
 			Image img    = this.imgSymbole.getScaledInstance(taille, taille, Image.SCALE_SMOOTH);
 			this.btnCase.setIcon(new ImageIcon(img));

@@ -56,7 +56,7 @@ public class PanelArrete extends JPanel
 		this.arretesColorees.clear();
 
 		Graphics2D g2d = (Graphics2D)g;
-		g2d.setStroke(new BasicStroke(3.0f)); 
+		g2d.setStroke(new BasicStroke(1.0f)); 
 		this.marge = (int)(this.monPlateau.getTailleCase() * 0.1);
 		for (int lig = 0; lig < ctrl.getLig(); lig++)
 		{
@@ -94,6 +94,7 @@ public class PanelArrete extends JPanel
 			if (tailleChemin > 1)
 			{
 				g2d.setColor(ctrl.getCouleurVirus(this.idJoueur, i));
+				g2d.setStroke(new BasicStroke(3.0f));
 				for (int c = 0; c < tailleChemin - 1; c++)
 				{
 					int lig1 = ctrl.getLigChemin(this.idJoueur, i, c);
