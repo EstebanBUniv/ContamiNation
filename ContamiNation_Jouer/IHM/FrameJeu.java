@@ -16,12 +16,20 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 
-
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
 
 public class FrameJeu extends JFrame
 {
-	// Attribut d'instance
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private Controleur   ctrl;
 	private JPanel       panel;
 
@@ -43,9 +51,17 @@ public class FrameJeu extends JFrame
 		this.setSize (900, 600);
 		this.setMinimumSize(new Dimension(600, 300));
 		this.setLocationRelativeTo(null);
-
+		
+		/*-------------------------------*/
+		/* Création des composants       */
+		/*-------------------------------*/
+		
 		this.panel = new PanelMenu  (this, this.ctrl);
-
+		
+		/*-------------------------------*/
+		/* positionnement des composants */
+		/*-------------------------------*/
+		
 		this.add(this.panel);
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -108,6 +124,7 @@ public class FrameJeu extends JFrame
 		return label;
 	}
 
+	// Créer les panels de chaque joueur
 	public void afficherPlateau(int nbJoueurs)
 	{
 		this.setLayout(new BorderLayout());
@@ -154,7 +171,8 @@ public class FrameJeu extends JFrame
 		this.add(this.panelPioche, BorderLayout.WEST); // La pioche reste partagée sur le côté
 		
 	}
-
+	
+	// Affiche le plateau en fonction du joueur qui joue
 	public void afficherPlateauJoueur(int idJoueurActuel)
 	{
 		if (this.cardLayout != null && this.conteneurPlateaux != null) 
@@ -173,31 +191,36 @@ public class FrameJeu extends JFrame
 		this.panelPioche.passerTour();
 	}
 	
+	// Met a jour l'IHM quand un sommet est cliqué
 	public void SommetClique()
 	{
 		this.repaint();
 	}
-
+	
+	//Permet d'afficher la carte choisie par le mode débiche
 	public void carteChoisie()
 	{
 		this.panelPioche.carteChoisie();
 	}
-
+	
+	//Informe l'utilisateur qu'une nouvelle manche commence
 	public void nouvelleManche()
 	{
-		javax.swing.JOptionPane.showOptionDialog(this, 
+		JOptionPane.showOptionDialog(this, 
 				"Une nouvelle manche vient de se lancer !", 
 				"Nouvelle Manche", 
-				javax.swing.JOptionPane.DEFAULT_OPTION, 
-				javax.swing.JOptionPane.PLAIN_MESSAGE, 
+				JOptionPane.DEFAULT_OPTION, 
+				JOptionPane.PLAIN_MESSAGE, 
 				null, null, null);
 	}
 	
+	// Change l'écran pour afficher la fin
 	public void afficherEcranFin(String message)
 	{
 		this.changerPanel(new PanelFin(this, this.ctrl, message));
 	}
 
+	// Vérifie si tout le monde passe
 	public void incrNbPasse()
 	{
 		this.panelPioche.incrNbPasse();
