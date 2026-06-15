@@ -3,9 +3,19 @@ package ContamiNation_Jouer.IHM;
 import ContamiNation_Jouer.Controleur;
 import javax.swing.*;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
+
 public class FrameChoixCarte extends JFrame
 {
-	// Attribut d'instance
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private Controleur           ctrl;
 	private ImageIcon[]          pioche;
 
@@ -13,8 +23,10 @@ public class FrameChoixCarte extends JFrame
 
 	private PanelChoixCarte      panelChoixCarte;
 
-
-
+	/*----------------------------*/
+	/*  Constructeur de la classe */
+	/*----------------------------*/
+	
 	public FrameChoixCarte(Controleur ctrl)
 	{
 		this.ctrl    = ctrl;

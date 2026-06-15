@@ -25,9 +25,18 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class PanelNiveau extends JPanel implements ActionListener
 {
-	// Attribut d'instance
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private JTable      tabNiveau;
 	private JScrollPane scroll;
 
@@ -47,6 +56,10 @@ public class PanelNiveau extends JPanel implements ActionListener
 	private boolean    estMulti;
 	private boolean estServeurReseau;
 	
+	/*----------------------------*/
+	/*  Constructeur de la classe */
+	/*----------------------------*/
+	
 	public PanelNiveau(FrameJeu frameMere, Controleur ctrl, boolean estMulti)
 	{
 		this(frameMere, ctrl, estMulti, false);
@@ -63,9 +76,9 @@ public class PanelNiveau extends JPanel implements ActionListener
 
 		this.imgFond = getToolkit().getImage("../images/fond/fond2.png");
 
-		//-------------------------------//
-		// Création des composants       //
-		//-------------------------------//
+		/*-------------------------------*/
+		/* Création des composants       */
+		/*-------------------------------*/
 
 		this.panelBoutons = new JPanel(new FlowLayout  ());
 		this.panelBoutons.setOpaque(false);
@@ -106,17 +119,17 @@ public class PanelNiveau extends JPanel implements ActionListener
 		this.add(this.panelCentre            , BorderLayout.CENTER);
 		this.add(this.panelBoutons           , BorderLayout.SOUTH );
 
-		//-------------------------------//
-		// Activation des composants     //
-		//-------------------------------//
+		/*-------------------------------*/
+		/* Activation des composants     */
+		/*-------------------------------*/
 
 		this.btnJouer.addActionListener(this);
 		this.btnRetour.addActionListener(this);
 	}
 
-	//-------------//
-	//   getters   //
-	//-------------//
+	/*----------------------------*/
+	/*  Getters                   */
+	/*----------------------------*/
 	public String[][] getFichier(String chemin)
 	{
 		File   dossier  = new File(chemin);
@@ -157,17 +170,17 @@ public class PanelNiveau extends JPanel implements ActionListener
 		{
 			if (lignes.length == 1)
 			{
-				File fichierLvl = this.fichiersDossier.get(lignes[0]);
+				File fichier = this.fichiersDossier.get(lignes[0]);
 				
 				if (this.estServeurReseau) 
 				{
 					System.out.println(">>> Démarrage de la partie réseau !");
-					this.ctrl.envoyerCarteAuClient(fichierLvl); // Envoie le .data
-					this.ctrl.chargerNiveau(fichierLvl, 2);     // Charge pour 2 joueurs
+					this.ctrl.envoyerCarteAuClient(fichier); // Envoie le .data
+					this.ctrl.chargerNiveau(fichier, 2);     // Charge pour 2 joueurs
 				}
 				if (!this.estMulti) 
 				{
-					this.ctrl.chargerNiveau(fichierLvl, 1);
+					this.ctrl.chargerNiveau(fichier, 1);
 				} 
 				else if (!this.estServeurReseau)
 				{
@@ -184,7 +197,7 @@ public class PanelNiveau extends JPanel implements ActionListener
 						if (choix != javax.swing.JOptionPane.CLOSED_OPTION) 
 						{
 							int nbJoueurs = choix + 2;
-							this.ctrl.chargerNiveau(fichierLvl, nbJoueurs);
+							this.ctrl.chargerNiveau(fichier, nbJoueurs);
 						}
 
 				}
@@ -196,7 +209,8 @@ public class PanelNiveau extends JPanel implements ActionListener
 			this.frameMere.changerPanel(new PanelMenu(this.frameMere, this.ctrl));
 		}
 	}
-
+	
+	// Change l'image de fond
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
@@ -206,13 +220,14 @@ public class PanelNiveau extends JPanel implements ActionListener
 		if ( imgFond != null )
 			g2.drawImage ( imgFond, 0 , 0, getWidth(), getHeight(), this );
 	}
-
+	
+	// Modifie l'affichage par défaut du tableau de sélection de niveau
 	private DefaultTableCellRenderer creerRenderer()
 	{
 		return new DefaultTableCellRenderer()
 		{
 			public Component getTableCellRendererComponent(JTable t, Object value,
-					boolean isSelected, boolean hasFocus, int row, int col)
+			       boolean isSelected, boolean hasFocus, int row, int col)
 			{
 				super.getTableCellRendererComponent(t, value, isSelected, hasFocus, row, col);
 				

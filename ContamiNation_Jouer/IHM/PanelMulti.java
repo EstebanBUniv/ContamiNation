@@ -19,8 +19,18 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+/* 
+SAE 2.01 | Développement d'une application 
+* @author  : THEARD Gregory , COURTOIS Rafael , SALMON William , RICHARD Jenny, BIDAUX Esteban 
+* Groupe   : 3
+*/
+
 public class PanelMulti extends JPanel implements ActionListener
 {
+	/*----------------------------*/
+	/*  Attributs de la classe    */
+	/*----------------------------*/
+	
 	private Controleur ctrl;
 	
 	private FrameJeu   frameMere;
@@ -37,6 +47,10 @@ public class PanelMulti extends JPanel implements ActionListener
 	private Image      imgFond;
 	private Graphics2D g2;
 	
+	/*----------------------------*/
+	/*  Constructeur de la classe */
+	/*----------------------------*/
+	
 	public PanelMulti(FrameJeu frameMere, Controleur ctrl)
 	{
 		this.ctrl = ctrl;
@@ -47,9 +61,9 @@ public class PanelMulti extends JPanel implements ActionListener
 
 		this.setOpaque(false);
 		
-		/*-------------------------*/
-		/* création des composants */
-		/*-------------------------*/
+		/*-------------------------------*/
+		/* Création des composants       */
+		/*-------------------------------*/
 
 		this.panelCentre = new JPanel(new GridLayout(8, 1, 0, 15));
 		this.panelCentre.setBorder(BorderFactory.createEmptyBorder(0, (int)(this.frameMere.getWidth()*0.2),
@@ -101,12 +115,12 @@ public class PanelMulti extends JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == this.btnLocal)
+		if (e.getSource() == this.btnLocal) // Demande la sélection de niveau en mettant true au modeMulti
 		{
 			this.frameMere.changerPanel(new PanelNiveau(this.frameMere, this.ctrl, true));
 		}
 
-		if (e.getSource() == this.btnReseauClient)
+		if (e.getSource() == this.btnReseauClient) // Créer le client
 		{
 			String portTxt = this.txtServeurClient.getText().trim();
 			String ipTxt   = this.txtIpServeur.getText().trim();
@@ -126,7 +140,7 @@ public class PanelMulti extends JPanel implements ActionListener
 			}
 		}
 
-		if (e.getSource() == this.btnReseauServeur)
+		if (e.getSource() == this.btnReseauServeur) // Créer le serveur
 		{
 			String portTxt = this.txtServeurClient.getText().trim();
 
@@ -169,8 +183,7 @@ public class PanelMulti extends JPanel implements ActionListener
 		}
 	}
 	
-
-
+	//Change l'image de fond
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
